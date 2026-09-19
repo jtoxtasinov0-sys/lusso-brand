@@ -62,14 +62,12 @@ BotFather'da:
 ## 4. Agar Render'da boshqa nom qo'ysangiz
 
 `miniapp/vercel.json` va `admin/vercel.json` dagi ikkita `destination`
-manzilini yangi manzilga almashtiring, so'ng:
+manzilini yangi manzilga almashtiring va push qiling — Vercel o'zi qayta
+deploy qiladi:
 
 ```bash
-cd miniapp && vercel deploy --prod --yes
-cd ../admin && vercel deploy --prod --yes
+git add -A && git commit -m "backend manzili yangilandi" && git push
 ```
-
----
 
 ## Bepul tarifning ikkita cheklovi
 
@@ -94,11 +92,18 @@ tashqi xizmatga yuklash.
 
 ## Keyingi o'zgarishlar
 
-Vercel loyihalari CLI orqali yaratilgan, ya'ni GitHub'ga push qilinganda
-avtomatik yangilanmaydi. Ikki yo'l bor:
+Ikkala Vercel loyihasi ham GitHub repo'siga ulangan (Root Directory:
+`miniapp` va `admin`). Ya'ni `main` branch'ga har push qilganingizda
+frontend o'zi qayta quriladi. Render ham xuddi shunday ishlaydi.
 
-- **Qo'lda:** `cd miniapp && vercel deploy --prod --yes`
-- **Avtomatik:** Vercel panelida loyiha → Settings → Git → repo'ni ulang va
-  Root Directory ni `miniapp` (admin uchun `admin`) qilib belgilang.
+Demak, odatdagi ish oqimi shunchaki:
 
-Render esa `main` branch'ga har push'da o'zi qayta deploy qiladi.
+```bash
+git add -A && git commit -m "o'zgarish tavsifi" && git push
+```
+
+Qo'lda deploy kerak bo'lsa (masalan commit qilmasdan sinash uchun):
+
+```bash
+vercel deploy --prod --yes --cwd miniapp
+```
