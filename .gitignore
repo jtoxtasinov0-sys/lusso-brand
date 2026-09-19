@@ -1,0 +1,102 @@
+# ============================================
+#  LUSSO BRAND — .gitignore
+#  (backend = Node/Express/Prisma, admin + miniapp = Vite/React)
+# ============================================
+
+# ---- Bog'liqliklar (dependencies) ----
+node_modules/
+.pnp
+.pnp.js
+jspm_packages/
+
+# ---- Maxfiy sozlamalar (HECH QACHON commit qilinmasin!) ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- Build natijalari ----
+dist/
+dist-ssr/
+build/
+out/
+
+# ---- Vite / bundler keshi ----
+.vite/
+.cache/
+.parcel-cache/
+.temp/
+.tmp/
+*.local
+
+# ---- Prisma ----
+# Generatsiya qilingan klient (har `prisma generate` da qayta yaratiladi)
+backend/prisma/generated/
+backend/prisma/migrations/dev.db*
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ---- Yuklangan fayllar ----
+# Mahsulot rasmlari repo'da saqlanadi (seed.js ularga tayanadi).
+# Yuklamalarni chiqarib tashlamoqchi bo'lsangiz, pastdagi 2 qatordan # ni oling:
+# backend/uploads/*
+# !backend/uploads/.gitkeep
+
+# ---- Loglar ----
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ---- Test / coverage ----
+coverage/
+.nyc_output/
+
+# ---- ngrok / tunnel ----
+ngrok.exe
+ngrok.yml
+.ngrok/
+tunnel-url.txt
+
+# ---- Muharrir va IDE ----
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# ---- Operatsion tizim fayllari ----
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+# Linux
+*~
+.directory
+.Trash-*
+
+# ---- Zaxira va vaqtinchalik fayllar ----
+*.bak
+*.old
+*.orig
+*.rej
+*.zip
+*.rar
+*.7z

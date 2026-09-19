@@ -1,0 +1,206 @@
+// Mini App matnlari
+export const dict = {
+  uz: {
+    // Onboarding
+    ob1Title: 'LUSSO BRAND KR',
+    ob1Text: "Koreyadagi erkaklar uchun original oyoq kiyim, ko'zoynak va atirlar",
+    ob2Title: 'Qanday ishlaydi?',
+    ob2Text: "Tanlang → buyurtma bering → 택배 orqali uyingizgacha yetib boradi",
+    ob3Title: '1,000+ mijoz',
+    ob3Text: "Butun Koreya bo'ylab yetkazib beramiz. ₩100,000 dan yuqori xarid — yetkazish BEPUL",
+    start: 'Boshlash',
+    skip: "O'tkazib yuborish",
+
+    // Home
+    hello: 'Assalomu alaykum',
+    welcomeSub: "Bugun nima tanlaymiz?",
+    heroTitle: 'Yangi kolleksiya',
+    heroText: "Eng so'nggi modellar — chegirma bilan",
+    heroBtn: 'Xaridni boshlash',
+    newArrivals: 'Yangi kelganlar',
+    discounted: 'Chegirmada',
+    seeAll: 'Hammasi',
+    storyShop: 'Xarid qilish',
+
+    // Nav
+    navHome: 'Bosh sahifa',
+    navCatalog: 'Katalog',
+    navCart: 'Savat',
+    navProfile: 'Profil',
+
+    // Catalog
+    all: 'Hammasi',
+    search: 'Qidirish...',
+    sortNew: 'Yangi',
+    sortCheap: 'Arzon',
+    sortExpensive: 'Qimmat',
+    nothingFound: 'Hech narsa topilmadi',
+    outOfStock: 'Tugagan',
+
+    // Product
+    chooseSize: "O'lchamni tanlang",
+    chooseOption: 'Variantni tanlang',
+    sizeGuide: "📏 O'lcham jadvali",
+    addToCart: "Savatga qo'shish",
+    inStock: 'ta qoldi',
+    selectFirst: "Avval o'lchamni tanlang",
+
+    // Cart
+    cartTitle: 'Savat',
+    cartEmpty: "Savat bo'sh",
+    cartEmptyText: "Katalogdan mahsulot tanlang",
+    goCatalog: 'Katalogga',
+    subtotal: 'Mahsulotlar',
+    delivery: 'Yetkazib berish',
+    free: 'BEPUL',
+    total: 'Jami',
+    checkout: 'Buyurtmani rasmiylashtirish',
+    freeHint: (n) => `Yana ${n} xarid qilsangiz yetkazish bepul!`,
+
+    // Checkout
+    checkoutTitle: 'Buyurtma',
+    name: 'Ismingiz',
+    phone: 'Telefon (010-...)',
+    street: 'Manzil (주소)',
+    detail: 'Xona, qavat (상세주소)',
+    comment: 'Izoh (ixtiyoriy)',
+    saveAddress: 'Manzilni saqlab qo\'yish',
+    confirm: 'Tasdiqlash',
+    fillAll: "Iltimos, barcha maydonlarni to'ldiring",
+
+    // Payment
+    payTitle: "To'lov",
+    paySuccess: 'Buyurtma qabul qilindi!',
+    payText: "Quyidagi hisobga to'lovni amalga oshiring va chek rasmini yuklang",
+    bank: 'Bank',
+    account: 'Hisob raqam',
+    holder: 'Qabul qiluvchi',
+    amount: 'Summa',
+    copy: 'Nusxalash',
+    copied: 'Nusxalandi ✅',
+    uploadReceipt: '📸 Chek rasmini yuklash',
+    receiptSent: 'Chek yuborildi ✅',
+    done: 'Yopish',
+    laterPay: "Keyinroq to'layman",
+
+    // Profile
+    profile: 'Profil',
+    myOrders: '📜 Mening buyurtmalarim',
+    myAddresses: '📍 Manzillarim',
+    language: '🌐 Til',
+    support: '💬 Yordam',
+    about: 'ℹ️ Biz haqimizda',
+    noOrders: "Hali buyurtma bermagansiz",
+    reorder: 'Yana buyurtma qilish',
+    orderNo: 'Buyurtma',
+    tracking: 'Kuzatuv raqami',
+
+    // Statuslar
+    PENDING_PAYMENT: "To'lov kutilmoqda",
+    RECEIPT_SENT: 'Tekshirilmoqda',
+    CONFIRMED: 'Tasdiqlandi',
+    SHIPPED: "Jo'natildi",
+    DELIVERED: 'Yetkazildi',
+    CANCELLED: 'Bekor qilindi',
+  },
+
+  ru: {
+    ob1Title: 'LUSSO BRAND KR',
+    ob1Text: 'Оригинальная мужская обувь, очки и парфюм в Корее',
+    ob2Title: 'Как это работает?',
+    ob2Text: 'Выберите → закажите → доставим 택배 прямо до двери',
+    ob3Title: '1,000+ клиентов',
+    ob3Text: 'Доставка по всей Корее. При заказе от ₩100,000 — доставка БЕСПЛАТНО',
+    start: 'Начать',
+    skip: 'Пропустить',
+
+    hello: 'Здравствуйте',
+    welcomeSub: 'Что выберем сегодня?',
+    heroTitle: 'Новая коллекция',
+    heroText: 'Свежие модели — со скидкой',
+    heroBtn: 'Начать покупки',
+    newArrivals: 'Новинки',
+    discounted: 'Со скидкой',
+    seeAll: 'Все',
+    storyShop: 'За покупками',
+
+    navHome: 'Главная',
+    navCatalog: 'Каталог',
+    navCart: 'Корзина',
+    navProfile: 'Профиль',
+
+    all: 'Все',
+    search: 'Поиск...',
+    sortNew: 'Новые',
+    sortCheap: 'Дешевле',
+    sortExpensive: 'Дороже',
+    nothingFound: 'Ничего не найдено',
+    outOfStock: 'Нет в наличии',
+
+    chooseSize: 'Выберите размер',
+    chooseOption: 'Выберите вариант',
+    sizeGuide: '📏 Таблица размеров',
+    addToCart: 'В корзину',
+    inStock: 'шт. осталось',
+    selectFirst: 'Сначала выберите размер',
+
+    cartTitle: 'Корзина',
+    cartEmpty: 'Корзина пуста',
+    cartEmptyText: 'Выберите товар в каталоге',
+    goCatalog: 'В каталог',
+    subtotal: 'Товары',
+    delivery: 'Доставка',
+    free: 'БЕСПЛАТНО',
+    total: 'Итого',
+    checkout: 'Оформить заказ',
+    freeHint: (n) => `Ещё ${n} — и доставка бесплатно!`,
+
+    checkoutTitle: 'Заказ',
+    name: 'Ваше имя',
+    phone: 'Телефон (010-...)',
+    street: 'Адрес (주소)',
+    detail: 'Квартира, этаж (상세주소)',
+    comment: 'Комментарий (необязательно)',
+    saveAddress: 'Сохранить адрес',
+    confirm: 'Подтвердить',
+    fillAll: 'Пожалуйста, заполните все поля',
+
+    payTitle: 'Оплата',
+    paySuccess: 'Заказ принят!',
+    payText: 'Оплатите на счёт ниже и загрузите скриншот чека',
+    bank: 'Банк',
+    account: 'Номер счёта',
+    holder: 'Получатель',
+    amount: 'Сумма',
+    copy: 'Копировать',
+    copied: 'Скопировано ✅',
+    uploadReceipt: '📸 Загрузить чек',
+    receiptSent: 'Чек отправлен ✅',
+    done: 'Закрыть',
+    laterPay: 'Оплачу позже',
+
+    profile: 'Профиль',
+    myOrders: '📜 Мои заказы',
+    myAddresses: '📍 Мои адреса',
+    language: '🌐 Язык',
+    support: '💬 Поддержка',
+    about: 'ℹ️ О нас',
+    noOrders: 'Заказов пока нет',
+    reorder: 'Заказать снова',
+    orderNo: 'Заказ',
+    tracking: 'Трек-номер',
+
+    PENDING_PAYMENT: 'Ожидает оплаты',
+    RECEIPT_SENT: 'На проверке',
+    CONFIRMED: 'Подтверждён',
+    SHIPPED: 'Отправлен',
+    DELIVERED: 'Доставлен',
+    CANCELLED: 'Отменён',
+  },
+};
+
+export function money(n) {
+  return '₩' + Number(n || 0).toLocaleString('ko-KR');
+}
+
+export default dict;
