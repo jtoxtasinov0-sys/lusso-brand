@@ -3,9 +3,12 @@
 | Qism | Xizmat | Manzil |
 |---|---|---|
 | Mini App | Vercel | https://lusso-miniapp.vercel.app |
-| Admin panel | Vercel | https://lusso-admin-sand.vercel.app |
+| Admin panel | Vercel | https://lusso-brand-kr-admin.vercel.app |
 | Backend + bot | Render | https://lusso-brand.onrender.com |
 | Baza | Neon.tech | (PostgreSQL) |
+
+> Admin panel odatda **botning ichida** ochiladi: `/panel` → tugma.
+> Yuqoridagi manzil — botga beriladigan manzil (`ADMIN_PANEL_URL`).
 
 Frontend allaqachon deploy qilingan. Qolgani — backend.
 
@@ -29,8 +32,11 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
    | `ADMIN_IDS` | Telegram ID laringiz, vergul bilan |
    | `ADMIN_PASSWORD` | admin panel paroli |
    | `WEB_APP_URL` | `https://lusso-miniapp.vercel.app` |
-   | `ADMIN_PANEL_URL` | `https://lusso-admin-sand.vercel.app` |
+   | `ADMIN_PANEL_URL` | `https://lusso-brand-kr-admin.vercel.app` |
    | `PUBLIC_URL` | `https://lusso-brand.onrender.com` |
+
+   `ADMIN_PANEL_URL` — **eng muhimi**: botdagi `/panel` shu manzilni ochadi.
+   Noto'g'ri yoki bo'sh bo'lsa, panel ochilmaydi.
 
    `JWT_SECRET` ni Render o'zi yaratadi, `SKIP_INITDATA_CHECK` esa `false`
    qilib qo'yilgan — **uni true qilmang**, aks holda API'ni istalgan odam
@@ -58,6 +64,27 @@ BotFather'da:
 
 - `/setmenubutton` → botingiz → `https://lusso-miniapp.vercel.app` → tugma nomi
 - yoki `/newapp` orqali Mini App yarating.
+
+## 3.1 Admin panel havolasi
+
+Panel Vercel'da `lusso-brand-kr-admin` nomi bilan turadi. Nomi boshqacha bo'lsa:
+
+1. Vercel → admin loyihasi → **Settings → General → Project Name** →
+   `lusso-brand-kr-admin` → **Save**. Manzil shu zahoti
+   `https://lusso-brand-kr-admin.vercel.app` bo'ladi.
+   (Domenlarda nuqta va `_` ishlatib bo'lmaydi, shuning uchun tire bilan.)
+2. Render → Environment → `ADMIN_PANEL_URL` ni yangi manzilga almashtiring → **Save**.
+3. Yoki qayta deploy qilmasdan, to'g'ridan-to'g'ri botda:
+   `/panel https://lusso-brand-kr-admin.vercel.app`
+
+**Panel botning ichida ochilishi** uchun qo'shimcha sozlash shart emas —
+`/panel` javobidagi tugma Mini App bo'lib ochadi va adminni parolsiz kiritadi.
+
+Doimiy `t.me/...` havola ham kerak bo'lsa:
+
+1. BotFather → `/newapp` → `@lusso_brand_bot`
+2. Web App URL: `https://lusso-brand-kr-admin.vercel.app`, short name: `admin`
+3. Render → Environment → `ADMIN_MINIAPP_URL` = `https://t.me/lusso_brand_bot/admin`
 
 ## 4. Agar Render'da boshqa nom qo'ysangiz
 

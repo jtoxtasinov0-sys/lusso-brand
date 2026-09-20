@@ -10,6 +10,7 @@ const admin = wrapAll(adminController);
 const router = Router();
 
 // Kirish (himoyasiz)
+router.get('/health', admin.health); // serverni uyg'otish uchun
 router.post('/login', loginLimiter, admin.login);
 
 // Qolgan hammasi token bilan

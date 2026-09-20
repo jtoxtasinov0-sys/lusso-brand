@@ -4,7 +4,7 @@ Koreyadagi erkaklar uchun oyoq kiyim, ko'zoynak va atirlar do'koni.
 Telegram Mini App + Bot + Admin Panel.
 
 **Bot:** [@lusso_brand_bot](https://t.me/lusso_brand_bot)
-**Admin panel:** botda `/panel` · parol: `LussoKR2026`
+**Admin panel:** botda `/panel` → tugmani bosing (panel botning ichida ochiladi)
 
 ---
 
@@ -53,18 +53,37 @@ Almashtirmaguningizcha Boshqaruv panelida sariq ogohlantirish turadi.
 
 ## 📱 Admin panelni telefondan ochish
 
-Botga **`/panel`** deb yozing — bosiladigan `https://` havola va parol keladi.
-Mobil internetda ham, boshqa shaharda ham ochiladi — Wi-Fi shart emas.
+Botga **`/panel`** deb yozing va **🖥 Admin panelni ochish** tugmasini bosing —
+panel Telegramning o'zida ochiladi, brauzerga chiqish va parol yozish shart emas.
+Telegram sizni tanigani uchun panel o'zi kiritadi.
 
-> `localhost` ni Telegram havola qilib bermaydi va u faqat kompyuterda ishlaydi.
-> Shuning uchun bot tunnel manzilini yuboradi.
+Yangi buyurtma haqidagi xabarda ham xuddi shu tugma bo'ladi — bosdingiz, panel ochildi.
+
+> Tugma chiqmasa, panel manzili sozlanmagan. Ikki yo'l bor:
+> Render → Environment → `ADMIN_PANEL_URL`, yoki to'g'ridan-to'g'ri botda:
+> `/panel https://lusso-brand-kr-admin.vercel.app`
+
+### Panelni alohida havola qilib ochish (ixtiyoriy)
+
+BotFather orqali panelga `t.me/lusso_brand_bot/admin` ko'rinishidagi doimiy
+havola berish mumkin:
+
+1. [@BotFather](https://t.me/BotFather) → **`/newapp`** → `@lusso_brand_bot`
+2. Nomi: `LUSSO Admin` · Tavsifi: `Admin panel`
+3. Rasm: 640×360 png · GIF: **Skip**
+4. **Web App URL:** `https://lusso-brand-kr-admin.vercel.app`
+5. **Short name:** `admin` → havola tayyor: `t.me/lusso_brand_bot/admin`
+6. Shu havolani Render → Environment → `ADMIN_MINIAPP_URL` ga yozing —
+   `/panel` javobida ikkinchi tugma bo'lib chiqadi
 
 ### 🔒 Himoya
-Admin panel internetda ochiq bo'lgani uchun:
-- Parol **5 marta** xato kiritilsa — IP **15 daqiqaga bloklanadi**
-- Har bir xatodan keyin nechta urinish qolgani ko'rsatiladi
-- Parolni almashtirish: `.env` dagi `ADMIN_PASSWORD`, keyin backendni qayta ishga tushiring
-- Havolani begonaga bermang — u tasodifiy va topib bo'lmaydigan, lekin bilgan odam ocha oladi
+- **Telegram orqali** kirganda panel faqat adminlarga ochiladi (`/admin PAROL`
+  qilganlar va `.env` dagi `ADMIN_IDS`). Boshqa odam havolani bilsa ham kira olmaydi.
+- **Brauzerdan** kirishda parol so'raladi. Parol **5 marta** xato kiritilsa —
+  IP **15 daqiqaga bloklanadi**. Bu blok Telegram orqali kirishga ta'sir qilmaydi,
+  ya'ni botdan panelni baribir ocha olasiz.
+- Parolni almashtirish: `.env` (yoki Render) dagi `ADMIN_PASSWORD`, keyin
+  backendni qayta ishga tushiring.
 
 ---
 
@@ -157,6 +176,8 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 | `DATABASE_URL` | Neon PostgreSQL manzili |
 | `BOT_TOKEN` | BotFather tokeni |
 | `ADMIN_PASSWORD` | Admin panel paroli va `/admin` buyrug'i uchun |
+| `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi |
+| `ADMIN_MINIAPP_URL` | BotFather `/newapp` bergan `t.me/...` havola (ixtiyoriy) |
 | `WEB_APP_URL` | Tunnel manzili — **avtomatik yoziladi** |
 | `ADMIN_IDS` | Qo'shimcha adminlar (ixtiyoriy — `/admin` buyrug'i yetarli) |
 | `SKIP_INITDATA_CHECK` | `false` bo'lishi kerak. Faqat brauzerda test qilish uchun `true` qiling |
@@ -170,6 +191,13 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 
 **Mini App "Telegram orqali kiring" deyapti**
 Do'konni brauzerdan emas, Telegram ichidan oching.
+
+**Botdagi `/panel` tugmasi eski manzilni ochyapti**
+Bazada kompyuterdagi tunnel manzili qolib ketgan. Botda yangi manzilni bering:
+`/panel https://lusso-brand-kr-admin.vercel.app`
+
+**Panelga kirganda "Siz admin emassiz" deyapti**
+Botga `/admin LussoKR2026` deb yozing, keyin panelni qaytadan oching.
 
 **Brauzerda test qilmoqchiman**
 `.env` da `SKIP_INITDATA_CHECK="true"` (hozir shunday turibdi) — brauzerda

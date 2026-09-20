@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getToken, setToken } from './api';
+import api, { getToken, setToken } from './api';
+import { initTelegram, isTelegram, tg } from './telegram';
 
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -26,6 +27,11 @@ export default function App() {
   const [pending, setPending] = useState(0);
   const [toast, setToast] = useState(null);
 
+  // Telegram ichida ochilgan bo'lsa — oynani to'liq ekranga yoyamiz
+  useEffect(() => {
+    initTelegram();
+  }, []);
+
   const showToast = (text, isError = false) => {
     setToast({ text, isError });
     setTimeout(() => setToast(null), 3200);
@@ -34,16 +40,15 @@ export default function App() {
   // Yangi buyurtmalar sonini davriy tekshirish
   useEffect(() => {
     if (!authed) return;
-    const check = () => {
-      fetch('/api/admin/orders', { headers: { Authorization: 'Bearer ' + getToken() } })
-        .then((r) => (r.ok ? r.json() : []))
+    const check = () =>
+      api
+        .orders()
         .then((list) =>
           setPending(
             list.filter((o) => ['PENDING_PAYMENT', 'RECEIPT_SENT'].includes(o.status)).length
           )
         )
         .catch(() => {});
-    };
     check();
     const id = setInterval(check, 20000);
     return () => clearInterval(id);
@@ -53,8 +58,17 @@ export default function App() {
 
   const props = { toast: showToast };
 
+  const leave = () => {
+    if (isTelegram) {
+      tg?.close();
+      return;
+    }
+    setToken('');
+    setAuthed(false);
+  };
+
   return (
-    <div className="layout">
+    <div className={`layout${isTelegram ? ' in-telegram' : ''}`}>
       <aside className="sidebar">
         <div className="brand">
           LUSSO BRAND
@@ -73,16 +87,9 @@ export default function App() {
           </button>
         ))}
 
-        <button
-          className="side-btn"
-          style={{ marginTop: 'auto', color: '#dc2626' }}
-          onClick={() => {
-            setToken('');
-            setAuthed(false);
-          }}
-        >
+        <button className="side-btn leave" onClick={leave}>
           <span>🚪</span>
-          <span className="txt">Chiqish</span>
+          <span className="txt">{isTelegram ? 'Yopish' : 'Chiqish'}</span>
         </button>
       </aside>
 

@@ -39,11 +39,17 @@ export const config = {
     .filter(Boolean),
 
   // Admin panel
-  adminPassword: process.env.ADMIN_PASSWORD || 'lusso2025',
+  // Parol .env dan olinadi. Bo'sh bo'lsa — README dagi parol ishlatiladi,
+  // shunda Render'da o'zgaruvchi kiritilmay qolsa ham panel ochilaveradi.
+  adminPassword: (process.env.ADMIN_PASSWORD || 'LussoKR2026').trim(),
   jwtSecret: process.env.JWT_SECRET || 'lusso-dev-secret',
   lanIp,
-  // Botdagi xabarlarda ko'rsatiladigan admin panel havolasi
+  // Botdagi xabarlarda ko'rsatiladigan admin panel havolasi (doimiy manzil)
   adminUrl: (process.env.ADMIN_PANEL_URL || `http://${lanIp}:5174`).replace(/\/$/, ''),
+  // Bot ichida Mini App bo'lib ochiladigan havola: https://t.me/<bot>/<short_name>
+  // BotFather → /newapp orqali yaratiladi. Bo'sh bo'lsa ham panel web_app tugmasi
+  // orqali botning ichida ochilaveradi.
+  adminMiniAppUrl: (process.env.ADMIN_MINIAPP_URL || '').trim().replace(/\/$/, ''),
 
   // Brauzerda (Telegramsiz) test qilish uchun
   skipInitDataCheck: String(process.env.SKIP_INITDATA_CHECK || '').toLowerCase() === 'true',

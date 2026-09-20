@@ -19,6 +19,14 @@ export function loginLimiter(req, res, next) {
   const now = Date.now();
   const rec = attempts.get(ip);
 
+  // Telegram orqali kirishda parol yo'q — imzo tekshiriladi, ya'ni tanlab
+  // topib bo'lmaydi. Shuning uchun blok bu yo'lni to'smaydi: panel bot ichidan
+  // har doim ochilishi kerak.
+  if (req.body?.initData) {
+    req.loginIp = ip;
+    return next();
+  }
+
   if (rec?.blockedUntil && rec.blockedUntil > now) {
     const minutes = Math.ceil((rec.blockedUntil - now) / 60000);
     return res.status(429).json({

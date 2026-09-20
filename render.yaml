@@ -24,8 +24,10 @@ services:
         generateValue: true     # Render o'zi tasodifiy qiymat yaratadi
       - key: WEB_APP_URL        # Vercel miniapp manzili
         sync: false
-      - key: ADMIN_PANEL_URL    # Vercel admin manzili
+      - key: ADMIN_PANEL_URL    # Vercel admin manzili — botdagi /panel shuni ochadi
         sync: false
+      - key: ADMIN_MINIAPP_URL  # BotFather /newapp havolasi (ixtiyoriy)
+        value: ""
       - key: PUBLIC_URL         # https://lusso-brand.onrender.com
         sync: false
       - key: SKIP_INITDATA_CHECK
