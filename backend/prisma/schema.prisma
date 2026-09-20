@@ -168,6 +168,7 @@ model Setting {
   supportUsername String @default("lusso_admin")
   webAppUrl       String @default("") // Mini App tunnel manzili (avtomatik)
   adminUrl        String @default("") // Admin panel tunnel manzili (avtomatik)
+  panelPassword   String @default("") // Panelga brauzerdan kirish paroli. Bo'sh bo'lsa .env dagi ADMIN_PASSWORD ishlaydi
   aboutUz         String @default("LUSSO BRAND KR — Koreyadagi erkaklar uchun original oyoq kiyim, ko'zoynak va atirlar do'koni.")
   aboutRu         String @default("LUSSO BRAND KR — магазин мужской обуви, очков и парфюма в Корее.")
   isOpen          Boolean @default(true)

@@ -75,12 +75,14 @@ export async function adminPanelKeyboard() {
  * Panelni yuborish. Telegram web_app tugmasini faqat shaxsiy chatda qabul qiladi,
  * shuning uchun guruhda (yoki manzil sozlanmagan bo'lsa) oddiy havola yuboriladi.
  */
-async function replyWithPanel(ctx, text) {
+async function replyWithPanel(ctx, text, tail = '') {
   const keyboard = ctx.chat?.type === 'private' ? await adminPanelKeyboard() : undefined;
 
-  if (keyboard) return ctx.reply(text, { parse_mode: 'Markdown', reply_markup: keyboard });
-
-  return ctx.reply(`${text}\n${await adminPanelUrl()}`, { parse_mode: 'Markdown' });
+  // Manzil kod bloki ichida: bosilsa nusxa olinadi va Markdown uni buzmaydi
+  return ctx.reply(`${text}\n\`${await adminPanelUrl()}\`${tail}`, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+  });
 }
 
 // Asosiy menyu klaviaturasi
@@ -347,9 +349,14 @@ export async function onPanelCommand(ctx) {
     );
   }
 
+  const pass = await SettingModel.panelPassword();
+
   return replyWithPanel(
     ctx,
-    `🖥 *Admin panel*\n\n🔑 Brauzerdan kirish uchun parol: \`${config.adminPassword}\`\n`
+    '🖥 *Admin panel*\n\nTugmani bossangiz shu yerda ochiladi.\n' +
+      "Boshqa odamga yuborish uchun manzil (bosing — nusxa olinadi):",
+    `\n🔑 Parol: \`${pass}\`\n\n` +
+      "_Parolni panel → Sozlamalar bo'limida istalgan vaqtda o'zgartirasiz._"
   );
 }
 
