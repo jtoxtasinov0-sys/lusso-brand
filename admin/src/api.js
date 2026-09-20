@@ -1,5 +1,11 @@
 // Admin panel — backend bilan aloqa
-const BASE = '/api/admin';
+// Manzil: odatda shu domenning o'zi (/api/... Vercel orqali backendga o'tadi).
+// Kerak bo'lsa .env da VITE_API_URL orqali to'g'ridan-to'g'ri backend ko'rsatiladi.
+const ORIGIN = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const BASE = ORIGIN + '/api/admin';
+
+// Render bepul tarifda uxlab qoladi va birinchi so'rov ~50 soniya ketadi
+const TIMEOUT_MS = 70000;
 
 export function getToken() {
   return localStorage.getItem('lusso-admin-token') || '';
@@ -10,36 +16,76 @@ export function setToken(token) {
   else localStorage.removeItem('lusso-admin-token');
 }
 
-async function request(path, options = {}) {
-  const res = await fetch(BASE + path, {
-    ...options,
-    headers: {
-      Authorization: 'Bearer ' + getToken(),
-      ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-      ...(options.headers || {}),
-    },
-  });
+export class ApiError extends Error {
+  constructor(message, { status = 0, code = '' } = {}) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+}
 
-  if (res.status === 401) {
+async function request(path, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  let res;
+  try {
+    res = await fetch(BASE + path, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        Authorization: 'Bearer ' + getToken(),
+        ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+        ...(options.headers || {}),
+      },
+    });
+  } catch (err) {
+    throw new ApiError(
+      err.name === 'AbortError'
+        ? 'Server javob bermadi. Biroz kutib, qaytadan urining.'
+        : "Serverga ulanib bo'lmadi. Internetni tekshiring.",
+      { code: 'NETWORK' }
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+
+  // Sessiya tugagan bo'lsa — qaytadan kirish. Lekin login so'rovining o'zi
+  // 401 qaytarsa (parol noto'g'ri) sahifani yangilamaymiz, xatoni ko'rsatamiz.
+  if (res.status === 401 && path !== '/login' && getToken()) {
     setToken('');
     window.location.reload();
-    throw new Error('Sessiya tugadi');
+    throw new ApiError('Sessiya tugadi', { status: 401 });
+  }
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    /* javob JSON emas */
   }
 
   if (!res.ok) {
-    let message = 'Xatolik';
-    try {
-      message = (await res.json()).error || message;
-    } catch {
-      /* ignore */
-    }
-    throw new Error(message);
+    // Render bepul tarifda uxlab qoladi va shu paytda 502/503/504 qaytadi
+    const waking = res.status === 502 || res.status === 503 || res.status === 504;
+    throw new ApiError(
+      waking
+        ? "Server uyqudan uyg'onmoqda. Bir daqiqadan keyin qaytadan urining."
+        : data?.error || `Xatolik (${res.status})`,
+      { status: res.status, code: data?.code || (waking ? 'WAKING' : '') }
+    );
   }
-  return res.json();
+  return data;
 }
 
 export const api = {
+  health: () => request('/health'),
+
   login: (password) => request('/login', { method: 'POST', body: JSON.stringify({ password }) }),
+
+  // Panel bot ichida ochilganda: parol o'rniga Telegram imzosi yuboriladi
+  loginWithTelegram: (initData) =>
+    request('/login', { method: 'POST', body: JSON.stringify({ initData }) }),
 
   stats: () => request('/stats'),
 

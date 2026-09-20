@@ -18,26 +18,69 @@ const STATUS_LABEL = {
 
 const isHttps = (url) => typeof url === 'string' && url.startsWith('https://');
 
-// Mini App manzili: avval bazadan (tunnel avtomatik yozadi), keyin .env dan
-export async function shopUrl() {
+// Vaqtinchalik tunnel manzillari (kompyuterda test qilishda ochiladi).
+// Kompyuter o'chgach ular o'ladi — shuning uchun doimiy manzil ulardan ustun turadi.
+const TEMP_TUNNEL =
+  /^https:\/\/[^/]*\.(trycloudflare\.com|ngrok-free\.app|ngrok\.io|ngrok\.dev|loca\.lt|serveo\.net|localhost\.run)/i;
+
+const isPermanent = (url) => isHttps(url) && !TEMP_TUNNEL.test(url);
+
+/**
+ * Manzilni tanlash tartibi:
+ *   1. .env dagi doimiy https manzil (Vercel) — deploy qilingan holat
+ *   2. bazadagi manzil (tunnel.js kompyuterda ishlaganda yozadi)
+ *   3. .env dagi qolgan qiymat (Wi-Fi manzili)
+ * Shu tartib tufayli bazada eski, o'lik tunnel manzili qolib ketgan bo'lsa ham
+ * bot doimiy manzilni yuboradi.
+ */
+async function pickUrl(envUrl, dbField) {
+  if (isPermanent(envUrl)) return envUrl;
   try {
     const s = await SettingModel.get();
-    if (isHttps(s.webAppUrl)) return s.webAppUrl;
+    if (isHttps(s[dbField])) return s[dbField];
   } catch {
     /* baza tayyor bo'lmasa */
   }
-  return config.webAppUrl;
+  return envUrl;
 }
 
-// Admin panel manzili: avval bazadan (tunnel yozadi), keyin Wi-Fi manzili
+// Mini App manzili
+export async function shopUrl() {
+  return pickUrl(config.webAppUrl, 'webAppUrl');
+}
+
+// Admin panel manzili
 export async function adminPanelUrl() {
-  try {
-    const s = await SettingModel.get();
-    if (isHttps(s.adminUrl)) return s.adminUrl;
-  } catch {
-    /* baza tayyor bo'lmasa */
+  return pickUrl(config.adminUrl, 'adminUrl');
+}
+
+/**
+ * Admin panelni ochadigan tugma.
+ * https manzil bo'lsa — web_app tugmasi: panel botning ichida ochiladi,
+ * brauzerga chiqish va parol yozish shart emas (Telegram o'zi tanitadi).
+ */
+export async function adminPanelKeyboard() {
+  const url = await adminPanelUrl();
+  const rows = [];
+
+  if (isHttps(url)) rows.push([InlineKeyboard.webApp('🖥 Admin panelni ochish', url)]);
+  if (config.adminMiniAppUrl) {
+    rows.push([InlineKeyboard.url('↗️ Alohida oynada ochish', config.adminMiniAppUrl)]);
   }
-  return config.adminUrl;
+
+  return rows.length ? InlineKeyboard.from(rows) : undefined;
+}
+
+/**
+ * Panelni yuborish. Telegram web_app tugmasini faqat shaxsiy chatda qabul qiladi,
+ * shuning uchun guruhda (yoki manzil sozlanmagan bo'lsa) oddiy havola yuboriladi.
+ */
+async function replyWithPanel(ctx, text) {
+  const keyboard = ctx.chat?.type === 'private' ? await adminPanelKeyboard() : undefined;
+
+  if (keyboard) return ctx.reply(text, { parse_mode: 'Markdown', reply_markup: keyboard });
+
+  return ctx.reply(`${text}\n${await adminPanelUrl()}`, { parse_mode: 'Markdown' });
 }
 
 // Asosiy menyu klaviaturasi
@@ -215,7 +258,7 @@ export async function notifyAdmins(order) {
   const ids = new Set([...config.adminIds, ...fromDb.map((u) => u.telegramId)]);
   if (!ids.size) return;
 
-  const panel = await adminPanelUrl();
+  const keyboard = await adminPanelKeyboard();
   const items = (order.items || [])
     .map((i) => `• ${i.name}${i.variant ? ` (${i.variant})` : ''} × ${i.qty}`)
     .join('\n');
@@ -226,10 +269,14 @@ export async function notifyAdmins(order) {
     `👤 ${order.customerName} · ${order.phone}\n` +
     `📍 ${order.street}${order.detail ? ', ' + order.detail : ''}\n\n` +
     `${items}\n\n` +
-    `💰 *${money(order.total)}*\n\n` +
-    `🖥 ${panel}`;
+    `💰 *${money(order.total)}*`;
 
-  for (const id of ids) await safeSend(id, text);
+  for (const id of ids) {
+    const sent = await safeSend(id, text, { reply_markup: keyboard });
+    // Guruh/kanalga web_app tugmasi yuborilmaydi — bunda xabar tugmasiz ketadi,
+    // chunki yangi buyurtma haqidagi xabar har qanday holatda yetib borishi kerak
+    if (!sent && keyboard) await safeSend(id, `${text}\n\n🖥 ${await adminPanelUrl()}`);
+  }
 }
 
 // /admin <parol> — o'zini admin qilib ro'yxatdan o'tkazish
@@ -253,16 +300,21 @@ export async function onAdminCommand(ctx) {
   });
   await UserModel.makeAdmin(ctx.from.id);
 
-  return ctx.reply(
+  return replyWithPanel(
+    ctx,
     "✅ *Siz admin bo'ldingiz!*\n\nEndi har bir yangi buyurtma haqida shu yerga xabar keladi.\n\n" +
-      `🖥 Admin panel:\n${await adminPanelUrl()}\n🔑 Parol: \`${config.adminPassword}\``,
-    { parse_mode: 'Markdown' }
+      '🖥 Admin panel:'
   );
 }
 
 // /panel — admin panel havolasi va paroli (faqat adminlarga)
 export async function onPanelCommand(ctx) {
-  const user = await UserModel.findByTelegramId(ctx.from.id);
+  let user = null;
+  try {
+    user = await UserModel.findByTelegramId(ctx.from.id);
+  } catch {
+    // Baza javob bermasa ham .env dagi ADMIN_IDS bo'yicha panel ochiladi
+  }
   const isAdmin = user?.isAdmin || config.adminIds.includes(String(ctx.from.id));
 
   if (!isAdmin) {
@@ -271,9 +323,33 @@ export async function onPanelCommand(ctx) {
     });
   }
 
-  return ctx.reply(
-    `🖥 *Admin panel*\n\n${await adminPanelUrl()}\n\n` + `🔑 Parol: \`${config.adminPassword}\``,
-    { parse_mode: 'Markdown' }
+  // `/panel https://...` — panel manzilini almashtirish (qayta deploy qilmasdan)
+  const arg = (ctx.message.text || '').split(/\s+/)[1];
+  if (arg) {
+    if (!isHttps(arg)) {
+      return ctx.reply("Manzil `https://` bilan boshlanishi kerak.", { parse_mode: 'Markdown' });
+    }
+    await SettingModel.update({ adminUrl: arg.replace(/\/$/, '') });
+    return ctx.reply(`✅ Panel manzili yangilandi:\n${arg}`, {
+      reply_markup: await adminPanelKeyboard(),
+    });
+  }
+
+  const url = await adminPanelUrl();
+
+  if (!isHttps(url) && !config.adminMiniAppUrl) {
+    return ctx.reply(
+      "⚠️ *Admin panel manzili sozlanmagan.*\n\n" +
+        `Hozirgi qiymat: \`${url}\`\n\n` +
+        'Render → Environment → `ADMIN_PANEL_URL` ga panelning https manzilini yozing,\n' +
+        "yoki shu yerda: `/panel https://sizning-panel.vercel.app`",
+      { parse_mode: 'Markdown' }
+    );
+  }
+
+  return replyWithPanel(
+    ctx,
+    `🖥 *Admin panel*\n\n🔑 Brauzerdan kirish uchun parol: \`${config.adminPassword}\`\n`
   );
 }
 

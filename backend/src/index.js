@@ -10,6 +10,10 @@ import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
 
+// Render/Vercel proksisi ortida turadi — mijozning haqiqiy IP si shu orqali
+// aniqlanadi (login urinishlarini sanash uchun kerak)
+app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use('/uploads', express.static(config.uploadsDir));
@@ -45,6 +49,20 @@ async function start() {
     console.log('   📱 Telefondan (bir xil Wi-Fi da):');
     console.log('      Admin panel:  ' + config.adminUrl);
     console.log('      Mini App:     http://' + config.lanIp + ':5173');
+    console.log('');
+    console.log('   🖥 Botdagi /panel shu manzilni beradi: ' + config.adminUrl);
+
+    if (!config.adminUrl.startsWith('https://')) {
+      console.warn(
+        "   ⚠️  ADMIN_PANEL_URL sozlanmagan — botdan panel ochilmaydi.\n" +
+          '      Render → Environment → ADMIN_PANEL_URL ga panel manzilini yozing.'
+      );
+    }
+    if (!process.env.ADMIN_PASSWORD) {
+      console.warn(
+        '   ⚠️  ADMIN_PASSWORD sozlanmagan — vaqtincha standart parol ishlatilyapti.'
+      );
+    }
     console.log('');
   });
 

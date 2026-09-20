@@ -1,7 +1,7 @@
 // Admin Panel API (CRUD, statistika, rassilka)
 import config from '../config/default.js';
 import prisma from '../database/connection.js';
-import { signAdminToken } from '../middlewares/auth.middleware.js';
+import { signAdminToken, verifyInitData } from '../middlewares/auth.middleware.js';
 import { registerFailedLogin, clearFailedLogins } from '../middlewares/ratelimit.middleware.js';
 import ProductModel from '../models/Product.js';
 import OrderModel from '../models/Order.js';
@@ -10,19 +10,74 @@ import SettingModel from '../models/Setting.js';
 import { notifyStatus, runBroadcast } from './botController.js';
 
 // ---------------- KIRISH ----------------
-export function login(req, res) {
-  const { password } = req.body;
+/**
+ * Ikki xil kirish:
+ *   1. initData — panel bot ichida ochilganda. Telegram imzosi tekshiriladi,
+ *      foydalanuvchi admin bo'lsa parolsiz kiradi.
+ *   2. password — panel brauzerda ochilganda.
+ */
+export async function login(req, res) {
+  const { password, initData } = req.body || {};
 
-  if (password !== config.adminPassword) {
+  if (initData) return loginWithTelegram(initData, req, res);
+
+  if (typeof password !== 'string' || !password.trim()) {
+    return res.status(400).json({ error: 'Parolni kiriting' });
+  }
+
+  if (password.trim() !== config.adminPassword) {
     const left = registerFailedLogin(req.loginIp);
     return res.status(401).json({
-      error:
-        left > 0 ? `Parol noto'g'ri. Yana ${left} ta urinish qoldi.` : "Parol noto'g'ri",
+      code: 'BAD_PASSWORD',
+      error: left > 0 ? `Parol noto'g'ri. Yana ${left} ta urinish qoldi.` : "Parol noto'g'ri",
     });
   }
 
   clearFailedLogins(req.loginIp);
-  res.json({ token: signAdminToken() });
+  res.json({ token: signAdminToken(), via: 'password' });
+}
+
+async function loginWithTelegram(initData, req, res) {
+  if (!config.botToken) {
+    return res.status(503).json({ code: 'NO_BOT', error: 'Bot tokeni sozlanmagan' });
+  }
+
+  const tgUser = verifyInitData(initData, config.botToken);
+  if (!tgUser) {
+    return res
+      .status(401)
+      .json({ code: 'BAD_INITDATA', error: "Telegram ma'lumoti tasdiqlanmadi" });
+  }
+
+  const telegramId = String(tgUser.id);
+
+  let dbUser = null;
+  try {
+    dbUser = await UserModel.findByTelegramId(telegramId);
+  } catch {
+    // Baza javob bermasa ham .env dagi ADMIN_IDS bo'yicha kirish mumkin qoladi
+  }
+
+  const isAdmin = Boolean(dbUser?.isAdmin) || config.adminIds.includes(telegramId);
+
+  if (!isAdmin) {
+    return res.status(403).json({
+      code: 'NOT_ADMIN',
+      error: 'Siz admin emassiz. Botga /admin PAROL deb yozing va qaytadan oching.',
+    });
+  }
+
+  clearFailedLogins(req.loginIp);
+  res.json({
+    token: signAdminToken(),
+    via: 'telegram',
+    name: tgUser.first_name || 'Admin',
+  });
+}
+
+// Render bepul tarifda uxlab qoladi — panel shu yo'l bilan uni uyg'otadi
+export function health(req, res) {
+  res.json({ ok: true, bot: Boolean(config.botToken) });
 }
 
 // ---------------- DASHBOARD ----------------

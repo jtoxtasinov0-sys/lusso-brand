@@ -18,6 +18,7 @@ export const SettingModel = {
       'bankHolder',
       'supportUsername',
       'webAppUrl',
+      'adminUrl',
       'aboutUz',
       'aboutRu',
       'isOpen',
