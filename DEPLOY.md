@@ -4,7 +4,7 @@
 |---|---|---|
 | Mini App | Vercel | https://lusso-miniapp.vercel.app |
 | Admin panel | Vercel | https://lusso-admin-sand.vercel.app |
-| Backend + bot | Render | https://lusso-brand-api.onrender.com |
+| Backend + bot | Render | https://lusso-brand.onrender.com |
 | Baza | Neon.tech | (PostgreSQL) |
 
 Frontend allaqachon deploy qilingan. Qolgani — backend.
@@ -17,7 +17,7 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
 2. **New → Blueprint** tugmasi.
 3. `jtoxtasinov0-sys/lusso-brand` repo'sini tanlang. Render `render.yaml` ni
    o'zi topadi va sozlamalarni to'ldiradi.
-4. **Servis nomi `lusso-brand-api` bo'lib qolsin** — `vercel.json` aynan shu
+4. **Servis nomi `lusso-brand` bo'lib qolsin** — `vercel.json` aynan shu
    manzilga murojaat qiladi. Boshqa nom qo'ysangiz, 4-bo'limga qarang.
 5. Render maxfiy qiymatlarni so'raydi. Ularni `backend/.env` faylingizdan
    ko'chiring:
@@ -30,14 +30,14 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
    | `ADMIN_PASSWORD` | admin panel paroli |
    | `WEB_APP_URL` | `https://lusso-miniapp.vercel.app` |
    | `ADMIN_PANEL_URL` | `https://lusso-admin-sand.vercel.app` |
-   | `PUBLIC_URL` | `https://lusso-brand-api.onrender.com` |
+   | `PUBLIC_URL` | `https://lusso-brand.onrender.com` |
 
    `JWT_SECRET` ni Render o'zi yaratadi, `SKIP_INITDATA_CHECK` esa `false`
    qilib qo'yilgan — **uni true qilmang**, aks holda API'ni istalgan odam
    Telegramsiz chaqira oladi.
 
 6. **Apply** → birinchi build 3–5 daqiqa. Tayyor bo'lgach
-   `https://lusso-brand-api.onrender.com` manzili `status: ishlayapti ✅`
+   `https://lusso-brand.onrender.com` manzili `status: ishlayapti ✅`
    qaytarsa, hammasi joyida.
 
 ## 2. Bazani to'ldirish (bir marta)
@@ -76,7 +76,7 @@ to'xtatadi. Bot long polling'da ishlagani uchun **uxlagan paytda botga
 yozganingizga javob bermaydi**, birinchi so'rov esa ~50 soniya kutadi.
 
 Yechim: https://uptimerobot.com da bepul monitor yarating —
-`https://lusso-brand-api.onrender.com` manzilini har 10 daqiqada tekshirsin.
+`https://lusso-brand.onrender.com` manzilini har 10 daqiqada tekshirsin.
 Shunda servis doim uyg'oq turadi (oyiga ~730 soat, bepul limit 750 soat).
 Jiddiyroq yechim — Render'ning $7/oy tarifi.
 

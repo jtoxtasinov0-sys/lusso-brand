@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://lusso-brand-api.onrender.com/api/:path*"
+      "destination": "https://lusso-brand.onrender.com/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://lusso-brand-api.onrender.com/uploads/:path*"
+      "destination": "https://lusso-brand.onrender.com/uploads/:path*"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]

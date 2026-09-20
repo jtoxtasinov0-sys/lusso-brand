@@ -2,7 +2,7 @@
 # Render > New > Blueprint > shu repo'ni tanlang.
 services:
   - type: web
-    name: lusso-brand-api
+    name: lusso-brand
     runtime: node
     plan: free
     region: singapore
@@ -26,7 +26,7 @@ services:
         sync: false
       - key: ADMIN_PANEL_URL    # Vercel admin manzili
         sync: false
-      - key: PUBLIC_URL         # https://lusso-brand-api.onrender.com
+      - key: PUBLIC_URL         # https://lusso-brand.onrender.com
         sync: false
       - key: SKIP_INITDATA_CHECK
         value: "false"          # PRODUCTION'da doimo false!
