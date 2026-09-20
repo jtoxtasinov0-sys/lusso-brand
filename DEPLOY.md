@@ -35,8 +35,9 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
    | `ADMIN_PANEL_URL` | `https://lusso-brand-kr-admin.vercel.app` |
    | `PUBLIC_URL` | `https://lusso-brand.onrender.com` |
 
-   `ADMIN_PANEL_URL` — **eng muhimi**: botdagi `/panel` shu manzilni ochadi.
-   Noto'g'ri yoki bo'sh bo'lsa, panel ochilmaydi.
+   `ADMIN_PANEL_URL` — botdagi `/panel` shu manzilni ochadi. Bo'sh qoldirsangiz
+   `https://lusso-brand-kr-admin.vercel.app` ishlatiladi, ya'ni Vercel loyihasi
+   shu nom bilan tursa buni yozish shart emas.
 
    `JWT_SECRET` ni Render o'zi yaratadi, `SKIP_INITDATA_CHECK` esa `false`
    qilib qo'yilgan — **uni true qilmang**, aks holda API'ni istalgan odam
@@ -73,9 +74,11 @@ Panel Vercel'da `lusso-brand-kr-admin` nomi bilan turadi. Nomi boshqacha bo'lsa:
    `lusso-brand-kr-admin` → **Save**. Manzil shu zahoti
    `https://lusso-brand-kr-admin.vercel.app` bo'ladi.
    (Domenlarda nuqta va `_` ishlatib bo'lmaydi, shuning uchun tire bilan.)
-2. Render → Environment → `ADMIN_PANEL_URL` ni yangi manzilga almashtiring → **Save**.
-3. Yoki qayta deploy qilmasdan, to'g'ridan-to'g'ri botda:
-   `/panel https://lusso-brand-kr-admin.vercel.app`
+2. Nomi aynan `lusso-brand-kr-admin` bo'lsa — boshqa hech narsa qilish kerak emas,
+   bot shu manzilni o'zi ishlatadi.
+3. Vercel boshqa nom bergan bo'lsa, ikki yo'ldan biri:
+   Render → Environment → `ADMIN_PANEL_URL` → yangi manzil → **Save**,
+   yoki qayta deploy qilmasdan botda: `/panel https://<yangi-manzil>`
 
 **Panel botning ichida ochilishi** uchun qo'shimcha sozlash shart emas —
 `/panel` javobidagi tugma Mini App bo'lib ochadi va adminni parolsiz kiritadi.

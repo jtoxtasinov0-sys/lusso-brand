@@ -26,6 +26,14 @@ function localIp() {
 
 const lanIp = localIp();
 
+// Serverda (Render) ishlayaptimi yoki kompyuterdami
+const onServer = Boolean(process.env.RENDER) || (process.env.PUBLIC_URL || '').startsWith('https://');
+
+// Serverda ADMIN_PANEL_URL kiritilmay qolsa ham bot panelni bera olishi uchun
+// standart manzil. Vercel loyihasi boshqa nom bilan tursa, uni Render'dagi
+// ADMIN_PANEL_URL orqali yoki botda `/panel https://...` bilan almashtiring.
+const DEFAULT_PANEL_URL = 'https://lusso-brand-kr-admin.vercel.app';
+
 export const config = {
   port,
   publicUrl: process.env.PUBLIC_URL || `http://localhost:${port}`,
@@ -44,8 +52,12 @@ export const config = {
   adminPassword: (process.env.ADMIN_PASSWORD || 'LussoKR2026').trim(),
   jwtSecret: process.env.JWT_SECRET || 'lusso-dev-secret',
   lanIp,
-  // Botdagi xabarlarda ko'rsatiladigan admin panel havolasi (doimiy manzil)
-  adminUrl: (process.env.ADMIN_PANEL_URL || `http://${lanIp}:5174`).replace(/\/$/, ''),
+  // Botdagi xabarlarda ko'rsatiladigan admin panel havolasi (doimiy manzil).
+  // Serverda: .env → standart Vercel manzili. Kompyuterda: Wi-Fi manzili.
+  adminUrl: (
+    process.env.ADMIN_PANEL_URL ||
+    (onServer ? DEFAULT_PANEL_URL : `http://${lanIp}:5174`)
+  ).replace(/\/$/, ''),
   // Bot ichida Mini App bo'lib ochiladigan havola: https://t.me/<bot>/<short_name>
   // BotFather → /newapp orqali yaratiladi. Bo'sh bo'lsa ham panel web_app tugmasi
   // orqali botning ichida ochilaveradi.

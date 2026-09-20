@@ -176,7 +176,7 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 | `DATABASE_URL` | Neon PostgreSQL manzili |
 | `BOT_TOKEN` | BotFather tokeni |
 | `ADMIN_PASSWORD` | Admin panel paroli va `/admin` buyrug'i uchun |
-| `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi |
+| `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi. Serverda bo'sh bo'lsa `lusso-brand-kr-admin.vercel.app` ishlatiladi |
 | `ADMIN_MINIAPP_URL` | BotFather `/newapp` bergan `t.me/...` havola (ixtiyoriy) |
 | `WEB_APP_URL` | Tunnel manzili — **avtomatik yoziladi** |
 | `ADMIN_IDS` | Qo'shimcha adminlar (ixtiyoriy — `/admin` buyrug'i yetarli) |
