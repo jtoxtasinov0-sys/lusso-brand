@@ -1,6 +1,33 @@
 import { useEffect, useState } from 'react';
 import api from '../api';
 
+// Panel qaysi manzilda ochilgan bo'lsa — boshqa odamga yuboriladigan manzil shu
+const PANEL_URL = window.location.origin;
+
+// Telegram ichida clipboard har doim ham ishlamaydi — zaxira usul bilan
+function copyText(text) {
+  try {
+    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+  } catch {
+    /* quyidagi usulga o'tamiz */
+  }
+  return new Promise((resolve, reject) => {
+    try {
+      const el = document.createElement('textarea');
+      el.value = text;
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 export default function SettingsPage({ toast }) {
   const [s, setS] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -12,6 +39,15 @@ export default function SettingsPage({ toast }) {
   if (!s) return <div className="empty">Yuklanmoqda...</div>;
 
   const set = (k) => (e) => setS({ ...s, [k]: e.target.value });
+
+  const copy = (text, label) =>
+    copyText(text)
+      .then(() => toast(label + ' nusxa olindi ✅'))
+      .catch(() => toast('Nusxa olinmadi — qo\'lda belgilab oling', true));
+
+  const invite =
+    `Admin panel:\n${PANEL_URL}\n` +
+    `Parol: ${s?.panelPassword?.trim() || '(serverdagi standart parol)'}`;
 
   const save = async () => {
     setBusy(true);
@@ -30,6 +66,53 @@ export default function SettingsPage({ toast }) {
     <>
       <div className="page-head">
         <h1>Sozlamalar</h1>
+      </div>
+
+      <div className="card" style={{ marginBottom: 18 }}>
+        <h3 style={{ margin: '0 0 4px', fontSize: 16 }}>🔐 Panelga kirish</h3>
+        <div className="muted" style={{ fontSize: 13, marginBottom: 14 }}>
+          Boshqa odam panelga brauzerdan kirishi uchun quyidagi manzil va parolni yuboring.
+          Parolni istalgan vaqtda o'zgartirsangiz, eskisi darhol ishlamay qoladi.
+        </div>
+
+        <div className="form-row">
+          <label className="label">Panel manzili</label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input className="input" value={PANEL_URL} readOnly />
+            <button className="btn light" type="button" onClick={() => copy(PANEL_URL, 'Manzil')}>
+              Nusxa
+            </button>
+          </div>
+        </div>
+
+        <div className="form-row">
+          <label className="label">Panel paroli</label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              className="input"
+              value={s.panelPassword || ''}
+              onChange={set('panelPassword')}
+              placeholder="Bo'sh — serverdagi standart parol ishlaydi"
+            />
+            <button
+              className="btn light"
+              type="button"
+              disabled={!s.panelPassword}
+              onClick={() => copy(s.panelPassword, 'Parol')}
+            >
+              Nusxa
+            </button>
+          </div>
+        </div>
+
+        <button className="btn light" type="button" onClick={() => copy(invite, 'Xabar')}>
+          📋 Manzil va parolni birga nusxalash
+        </button>
+
+        <div className="muted" style={{ fontSize: 12.5, marginTop: 12 }}>
+          ⚠️ Yangi parol <b>Saqlash</b> tugmasi bosilgandan keyin kuchga kiradi. Siz botdan
+          kirganingizda parol so'ralmaydi — bu parol faqat brauzerdan kiradiganlar uchun.
+        </div>
       </div>
 
       <div className="grid-2">

@@ -76,14 +76,28 @@ havola berish mumkin:
 6. Shu havolani Render → Environment → `ADMIN_MINIAPP_URL` ga yozing —
    `/panel` javobida ikkinchi tugma bo'lib chiqadi
 
+### 👥 Boshqa odamga panel berish
+
+Panel → **Sozlamalar → 🔐 Panelga kirish** bo'limida manzil va parol turadi.
+**Manzil va parolni birga nusxalash** tugmasini bosib, o'sha odamga yuborasiz —
+u brauzerdan kiradi. Botda `/panel` ham xuddi shu manzil va parolni beradi.
+
+Parolni o'sha yerda istalgan vaqtda o'zgartirasiz: **Saqlash** bosilishi bilan
+eski parol ishlamay qoladi. Render'ga ham, `.env` ga ham tegish kerak emas.
+
+> Parol bilan kirgan odam **Telegram admini bo'lmaydi** — unga buyurtmalar
+> haqida xabar kelmaydi va u `/panel` dan foydalana olmaydi.
+
 ### 🔒 Himoya
 - **Telegram orqali** kirganda panel faqat adminlarga ochiladi (`/admin PAROL`
   qilganlar va `.env` dagi `ADMIN_IDS`). Boshqa odam havolani bilsa ham kira olmaydi.
 - **Brauzerdan** kirishda parol so'raladi. Parol **5 marta** xato kiritilsa —
   IP **15 daqiqaga bloklanadi**. Bu blok Telegram orqali kirishga ta'sir qilmaydi,
   ya'ni botdan panelni baribir ocha olasiz.
-- Parolni almashtirish: `.env` (yoki Render) dagi `ADMIN_PASSWORD`, keyin
-  backendni qayta ishga tushiring.
+- Parolni almashtirish: **Sozlamalar → Panel paroli**. U bo'sh qoldirilsa
+  `.env` (yoki Render) dagi `ADMIN_PASSWORD` ishlatiladi.
+- `/admin PAROL` buyrug'i esa hamisha `ADMIN_PASSWORD` ni so'raydi — ya'ni
+  panel parolini bilgan odam o'zini admin qilib ola olmaydi.
 
 ---
 
@@ -175,7 +189,7 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 |---|---|
 | `DATABASE_URL` | Neon PostgreSQL manzili |
 | `BOT_TOKEN` | BotFather tokeni |
-| `ADMIN_PASSWORD` | Admin panel paroli va `/admin` buyrug'i uchun |
+| `ADMIN_PASSWORD` | `/admin` buyrug'i uchun va Sozlamalarda parol yozilmagan holat uchun zaxira |
 | `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi. Serverda bo'sh bo'lsa `lusso-brand-kr-admin.vercel.app` ishlatiladi |
 | `ADMIN_MINIAPP_URL` | BotFather `/newapp` bergan `t.me/...` havola (ixtiyoriy) |
 | `WEB_APP_URL` | Tunnel manzili — **avtomatik yoziladi** |

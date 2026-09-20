@@ -25,7 +25,7 @@ export async function login(req, res) {
     return res.status(400).json({ error: 'Parolni kiriting' });
   }
 
-  if (password.trim() !== config.adminPassword) {
+  if (password.trim() !== (await SettingModel.panelPassword())) {
     const left = registerFailedLogin(req.loginIp);
     return res.status(401).json({
       code: 'BAD_PASSWORD',

@@ -14,7 +14,7 @@ export async function auth(req, res) {
     await UserModel.setLanguage(user.telegramId, req.body.language);
     user.language = req.body.language;
   }
-  const settings = await SettingModel.get();
+  const settings = await SettingModel.publicView();
   res.json({ user, settings });
 }
 
@@ -39,7 +39,7 @@ export async function getStories(req, res) {
 }
 
 export async function getSettings(req, res) {
-  res.json(await SettingModel.get());
+  res.json(await SettingModel.publicView());
 }
 
 // ---------------- BUYURTMA ----------------
