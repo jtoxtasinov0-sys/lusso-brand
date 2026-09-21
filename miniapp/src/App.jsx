@@ -56,19 +56,22 @@ export default function App() {
       .catch((e) => showToast(e.message));
 
     api.stories().then(setStories).catch(() => {});
-    // Qo'shimcha taklif (upsell) uchun butun katalog
-    api.catalog().then((res) => setAllProducts(res.products)).catch(() => {});
   }, []);
 
   // ---------- Katalog ----------
   useEffect(() => {
     setLoading(true);
+    // Filtr qo'yilmagan bo'lsa — shu javobning o'zi upsell uchun ham yaraydi,
+    // ya'ni butun katalogni ikkinchi marta so'rashning hojati yo'q
+    const isFullList = category === 'all' && !search.trim();
+
     const timer = setTimeout(() => {
       api
         .catalog({ category, search, sort })
         .then((res) => {
           setProducts(res.products);
           setCategories(res.categories);
+          if (isFullList) setAllProducts(res.products);
         })
         .catch((e) => showToast(e.message))
         .finally(() => setLoading(false));

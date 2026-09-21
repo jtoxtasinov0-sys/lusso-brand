@@ -105,10 +105,13 @@ git add -A && git commit -m "backend manzili yangilandi" && git push
 to'xtatadi. Bot long polling'da ishlagani uchun **uxlagan paytda botga
 yozganingizga javob bermaydi**, birinchi so'rov esa ~50 soniya kutadi.
 
-Yechim: https://uptimerobot.com da bepul monitor yarating —
-`https://lusso-brand.onrender.com` manzilini har 10 daqiqada tekshirsin.
-Shunda servis doim uyg'oq turadi (oyiga ~730 soat, bepul limit 750 soat).
-Jiddiyroq yechim — Render'ning $7/oy tarifi.
+Yechim: backend endi **o'zini uyg'oq tutadi** — har 10 daqiqada o'ziga bitta
+yengil so'rov yuboradi (`PUBLIC_URL` https bo'lsa avtomatik ishlaydi). Tashqi
+xizmat kerak emas.
+
+> Buning evaziga servis deyarli doim ishlab turadi: oyiga ~730 soat, bepul
+> limit esa 750 soat. Ikkinchi servis qo'shsangiz limit yetmay qoladi —
+> o'shanda `PUBLIC_URL` ni bo'shatib qo'ying yoki Render'ning $7/oy tarifiga o'ting.
 
 **2. Yuklangan rasmlar o'chib ketadi.** Render'da disk vaqtinchalik: har
 deploy'da `backend/uploads` boshlang'ich holatiga qaytadi. Repo'dagi 23 ta

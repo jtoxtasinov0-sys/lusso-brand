@@ -16,7 +16,9 @@ app.set('trust proxy', 1);
 
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
-app.use('/uploads', express.static(config.uploadsDir));
+// Rasmlar kamdan-kam o'zgaradi — brauzer va Vercel ularni saqlab qolsin,
+// shunda ilova ikkinchi marta ochilganda rasmlar qayta yuklanmaydi
+app.use('/uploads', express.static(config.uploadsDir, { maxAge: '30d' }));
 
 app.get('/', (req, res) => {
   res.json({
@@ -66,6 +68,8 @@ async function start() {
     console.log('');
   });
 
+  keepAwake();
+
   if (hasBot) {
     registerBotHandlers(bot);
     await bot.api.deleteWebhook({ drop_pending_updates: false }).catch(() => {});
@@ -75,6 +79,23 @@ async function start() {
   } else {
     console.log('🤖 Bot ishga tushmadi — .env dagi BOT_TOKEN ni to\'ldiring');
   }
+}
+
+/**
+ * Render bepul tarifda 15 daqiqa so'rovsiz turса servisni uxlatib qo'yadi va
+ * keyingi so'rov ~50 soniya kutadi. Har 10 daqiqada o'zimizga bitta yengil
+ * so'rov yuborib, servisni uyg'oq tutamiz — ilova darhol ochiladi.
+ */
+function keepAwake() {
+  if (!config.publicUrl.startsWith('https://')) return;
+
+  const url = config.publicUrl + '/api/admin/health';
+  const timer = setInterval(() => {
+    fetch(url).catch(() => {});
+  }, 10 * 60 * 1000);
+
+  timer.unref?.();
+  console.log('   ⏰ Servis uyg\'oq tutiladi (har 10 daqiqada)');
 }
 
 async function stop() {
