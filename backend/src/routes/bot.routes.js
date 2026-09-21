@@ -6,6 +6,7 @@ import {
   onText,
   onAdminCommand,
   onPanelCommand,
+  onPricesCommand,
 } from '../controllers/botController.js';
 
 export function registerBotHandlers(bot) {
@@ -16,6 +17,8 @@ export function registerBotHandlers(bot) {
   bot.command('admin', onAdminCommand);
 
   bot.command('panel', onPanelCommand);
+
+  bot.command('narxlar', onPricesCommand);
 
   bot.callbackQuery(/^lang:(uz|ru)$/, onLanguageChosen);
 

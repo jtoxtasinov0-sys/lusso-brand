@@ -5,6 +5,8 @@ import { safeSend, safeSendPhoto } from '../core/bot.js';
 import UserModel from '../models/User.js';
 import OrderModel from '../models/Order.js';
 import SettingModel from '../models/Setting.js';
+import { applyPrices } from '../core/prices.js';
+import { clearCache } from '../core/cache.js';
 import { t, money } from '../locales/index.js';
 
 const STATUS_LABEL = {
@@ -309,15 +311,20 @@ export async function onAdminCommand(ctx) {
   );
 }
 
-// /panel — admin panel havolasi va paroli (faqat adminlarga)
-export async function onPanelCommand(ctx) {
+// Foydalanuvchi admin ekanini tekshirish (baza yiqilsa ADMIN_IDS bo'yicha)
+async function isAdminUser(telegramId) {
   let user = null;
   try {
-    user = await UserModel.findByTelegramId(ctx.from.id);
+    user = await UserModel.findByTelegramId(telegramId);
   } catch {
-    // Baza javob bermasa ham .env dagi ADMIN_IDS bo'yicha panel ochiladi
+    /* baza javob bermasa .env ga suyanamiz */
   }
-  const isAdmin = user?.isAdmin || config.adminIds.includes(String(ctx.from.id));
+  return Boolean(user?.isAdmin) || config.adminIds.includes(String(telegramId));
+}
+
+// /panel — admin panel havolasi va paroli (faqat adminlarga)
+export async function onPanelCommand(ctx) {
+  const isAdmin = await isAdminUser(ctx.from.id);
 
   if (!isAdmin) {
     return ctx.reply("Bu buyruq faqat adminlar uchun.\n\nAdmin bo'lish: `/admin PAROL`", {
@@ -358,6 +365,53 @@ export async function onPanelCommand(ctx) {
     `\n🔑 Parol: \`${pass}\`\n\n` +
       "_Parolni panel → Sozlamalar bo'limida istalgan vaqtda o'zgartirasiz._"
   );
+}
+
+// /narxlar — fayldagi narxlarni bazaga yozish (faqat adminlar)
+export async function onPricesCommand(ctx) {
+  if (!(await isAdminUser(ctx.from.id))) {
+    return ctx.reply('Bu buyruq faqat adminlar uchun.');
+  }
+
+  const confirmed = /\s(ha|tasdiq|tasdiqlash)\b/i.test(ctx.message.text || '');
+
+  try {
+    const { changes, missing, same, max, total } = await applyPrices({ dryRun: !confirmed });
+
+    if (!changes.length) {
+      return ctx.reply(
+        `\u2705 *Narxlar joyida*\n\n${same} ta mahsulot allaqachon to'g'ri narxda.\n` +
+          `Eng qimmat: ${money(max)}`,
+        { parse_mode: 'Markdown' }
+      );
+    }
+
+    const list = changes
+      .slice(0, 15)
+      .map((c) => `\u2022 ${c.name}\n   ${money(c.from)} \u2192 *${money(c.to)}*`)
+      .join('\n');
+
+    const tail = changes.length > 15 ? `\n\n...va yana ${changes.length - 15} ta` : '';
+    const notFound = missing.length ? `\n\n\u26a0\ufe0f Topilmadi: ${missing.length} ta` : '';
+
+    if (!confirmed) {
+      return ctx.reply(
+        `\ud83d\udcb0 *${changes.length} ta narx o'zgaradi* (jami ${total} ta)\n\n${list}${tail}${notFound}\n\n` +
+          `Tasdiqlash uchun yozing: \`/narxlar ha\``,
+        { parse_mode: 'Markdown' }
+      );
+    }
+
+    clearCache(); // mijozlar yangi narxni darhol ko'rsin
+    return ctx.reply(
+      `\u2705 *${changes.length} ta narx yangilandi*\n\n${list}${tail}${notFound}\n\n` +
+        `Eng qimmat narx: ${money(max)}\n\nDo'konni qaytadan oching.`,
+      { parse_mode: 'Markdown' }
+    );
+  } catch (err) {
+    console.error('onPricesCommand:', err);
+    return ctx.reply("\u274c Narxlarni yangilab bo'lmadi: " + err.message);
+  }
 }
 
 // ---------------- RASSILKA ----------------

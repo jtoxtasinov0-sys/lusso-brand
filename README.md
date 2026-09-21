@@ -6,6 +6,8 @@ Telegram Mini App + Bot + Admin Panel.
 **Bot:** [@lusso_brand_bot](https://t.me/lusso_brand_bot)
 **Admin panel:** botda `/panel` → tugmani bosing (panel botning ichida ochiladi)
 
+**Bot buyruqlari:** `/start` · `/panel` · `/admin PAROL` · `/narxlar`
+
 ---
 
 ## ▶️ ISHGA TUSHIRISH — 4 ta tugma
@@ -106,8 +108,9 @@ eski parol ishlamay qoladi. Render'ga ham, `.env` ga ham tegish kerak emas.
 
 Botga yozing:
 ```
-/admin LussoKR2026
+/admin PAROL
 ```
+(parol — Render'dagi `ADMIN_PASSWORD` qiymati)
 Shundan keyin **har bir yangi buyurtma** haqida Telegramga xabar keladi:
 mijoz ismi, telefoni, manzili, nima olgani va summasi.
 
@@ -141,14 +144,25 @@ lusso_brand.kr/
 
 ## 💰 Narxlarni yangilash
 
-Barcha narxlar **bitta faylda**: `backend/prisma/prices.js`. Ochib, jadvalni
-tahrirlaysiz (`[nomi, narxi, eski narxi]`), keyin `5-NARXLARNI-YANGILASH.bat`
-faylini ikki marta bosasiz.
+Barcha narxlar **bitta faylda**: `backend/src/core/prices.js` —
+`[nomi, narxi, eski narxi]` ko'rinishida. "Eski narx" mijozga chizilgan holda
+ko'rsatiladi, ya'ni chegirmani bildiradi.
 
-Bu skript **faqat narxni** o'zgartiradi — mahsulotlar, rasmlar, o'lchamlar va
-buyurtmalar joyida qoladi.
+Fayldagi narxlarni bazaga yozishning ikki yo'li bor:
 
-> Bitta mahsulotning narxini o'zgartirish uchun bu shart emas —
+**1. Botdan (kompyuter kerak emas)**
+
+```
+/narxlar        → nima o'zgarishini ko'rsatadi, hech narsa yozmaydi
+/narxlar ha     → yozadi
+```
+
+**2. Kompyuterdan** — `5-NARXLARNI-YANGILASH.bat` faylini ikki marta bosing.
+
+Ikkalasi ham **faqat narxni** o'zgartiradi — mahsulotlar, rasmlar, o'lchamlar
+va buyurtmalar joyida qoladi.
+
+> Bitta mahsulotning narxini o'zgartirish uchun bularning hojati yo'q —
 > Admin panel → Mahsulotlar → ✏️ orqali qilaverasiz.
 
 Hozirgi narxlar: **45 000 – 150 000 ₩**.
