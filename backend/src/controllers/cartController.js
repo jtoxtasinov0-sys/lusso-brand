@@ -5,6 +5,7 @@ import UserModel from '../models/User.js';
 import ProductModel from '../models/Product.js';
 import OrderModel from '../models/Order.js';
 import SettingModel from '../models/Setting.js';
+import { cached, clearCache } from '../core/cache.js';
 import { notifyOrderCreated, notifyReceipt, notifyAdmins } from './botController.js';
 
 // Mini App ochilganda mijozni ro'yxatdan o'tkazish
@@ -14,18 +15,26 @@ export async function auth(req, res) {
     await UserModel.setLanguage(user.telegramId, req.body.language);
     user.language = req.body.language;
   }
-  const settings = await SettingModel.publicView();
+  const settings = await cached('settings', () => SettingModel.publicView());
   res.json({ user, settings });
 }
 
 export async function getCatalog(req, res) {
   const { category, search, sort, brand } = req.query;
-  const [products, categories, brands] = await Promise.all([
-    ProductModel.catalog({ categorySlug: category, search, sort, brand }),
-    ProductModel.categories(),
-    ProductModel.brands(),
-  ]);
-  res.json({ products, categories, brands });
+
+  // Qidiruv har safar boshqacha bo'ladi — uni keshlamaymiz
+  const key = search ? null : `catalog:${category || ''}:${sort || ''}:${brand || ''}`;
+
+  const load = async () => {
+    const [products, categories, brands] = await Promise.all([
+      ProductModel.catalog({ categorySlug: category, search, sort, brand }),
+      ProductModel.categories(),
+      ProductModel.brands(),
+    ]);
+    return { products, categories, brands };
+  };
+
+  res.json(key ? await cached(key, load) : await load());
 }
 
 export async function getProduct(req, res) {
@@ -35,11 +44,11 @@ export async function getProduct(req, res) {
 }
 
 export async function getStories(req, res) {
-  res.json(await SettingModel.stories(true));
+  res.json(await cached('stories', () => SettingModel.stories(true)));
 }
 
 export async function getSettings(req, res) {
-  res.json(await SettingModel.publicView());
+  res.json(await cached('settings', () => SettingModel.publicView()));
 }
 
 // ---------------- BUYURTMA ----------------
@@ -110,6 +119,7 @@ export async function createOrder(req, res) {
 
     // Zaxirani kamaytirish
     for (const item of built) await ProductModel.decreaseStock(item.variantId, item.qty);
+    clearCache(); // katalogdagi o'lchamlar soni yangilansin
 
     // Telefon saqlanmagan bo'lsa — saqlab qo'yamiz
     if (!user.phone) await UserModel.setPhone(user.telegramId, phone);

@@ -8,6 +8,7 @@
     "start": "node src/index.js",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
+    "db:prices": "node prisma/prices.js",
     "db:studio": "prisma studio"
   },
   "prisma": {

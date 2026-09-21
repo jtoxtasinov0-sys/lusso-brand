@@ -18,6 +18,7 @@ Papkadagi fayllarni **shu tartibda** ikki marta bosing:
 | `2-MINIAPP-ishga-tushirish.bat` | Mijozlar uchun do'kon (port 5173) |
 | `3-ADMIN-ishga-tushirish.bat` | Admin panel (port 5174) |
 | `4-TUNNEL-ochish.bat` | Do'kon va admin panelni internetga chiqaradi |
+| `5-NARXLARNI-YANGILASH.bat` | Narxlarni bazaga yozadi (kerak bo'lganda) |
 
 To'rtala oyna **ochiq turishi kerak**. Yopilsa — do'kon ishlamaydi.
 
@@ -138,17 +139,35 @@ lusso_brand.kr/
 
 ---
 
+## 💰 Narxlarni yangilash
+
+Barcha narxlar **bitta faylda**: `backend/prisma/prices.js`. Ochib, jadvalni
+tahrirlaysiz (`[nomi, narxi, eski narxi]`), keyin `5-NARXLARNI-YANGILASH.bat`
+faylini ikki marta bosasiz.
+
+Bu skript **faqat narxni** o'zgartiradi — mahsulotlar, rasmlar, o'lchamlar va
+buyurtmalar joyida qoladi.
+
+> Bitta mahsulotning narxini o'zgartirish uchun bu shart emas —
+> Admin panel → Mahsulotlar → ✏️ orqali qilaverasiz.
+
+Hozirgi narxlar: **45 000 – 150 000 ₩**.
+
+---
+
 ## 🗄 Baza bilan ishlash
 
 ```bash
 cd backend
 npm run db:push      # sxemani bazaga yozish
+npm run db:prices    # faqat narxlarni yangilash (xavfsiz)
 npm run db:seed      # mahsulotlarni qayta yuklash
 npm run db:studio    # bazani brauzerda ko'rish
 ```
 
 ⚠️ `db:seed` barcha mahsulotlarni **o'chirib, qaytadan yozadi**.
 Admin paneldan qo'shgan mahsulotlaringiz yo'qoladi — faqat boshida ishlating.
+Narx uchun esa `db:prices` ishlating — u hech narsani o'chirmaydi.
 
 ---
 
@@ -199,6 +218,11 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 ---
 
 ## ❓ Tez-tez uchraydigan holatlar
+
+**Ilova sekin ochilyapti**
+Birinchi ochilish server uyqudan uyg'onishini kutadi. Endi server o'zini har 10
+daqiqada uyg'oq tutadi, shuning uchun bu kamdan-kam bo'ladi. Rasmlar esa
+brauzerda saqlanadi — ikkinchi ochilish darhol bo'ladi.
 
 **Botdagi "Do'kon" tugmasi ochilmayapti**
 `4-TUNNEL-ochish.bat` oynasi yopilgan. Qaytadan oching.

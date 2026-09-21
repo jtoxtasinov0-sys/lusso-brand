@@ -4,6 +4,7 @@ import { adminAuth } from '../middlewares/auth.middleware.js';
 import { uploadImage } from '../middlewares/upload.middleware.js';
 import { wrapAll } from '../middlewares/async.middleware.js';
 import { loginLimiter } from '../middlewares/ratelimit.middleware.js';
+import { clearCache } from '../core/cache.js';
 import * as adminController from '../controllers/adminController.js';
 
 const admin = wrapAll(adminController);
@@ -15,6 +16,17 @@ router.post('/login', loginLimiter, admin.login);
 
 // Qolgan hammasi token bilan
 router.use(adminAuth);
+
+// Mahsulot, kategoriya, story yoki sozlama o'zgarsa — mijozlar keshi tozalanadi,
+// shunda ilovada eski ma'lumot qolib ketmaydi
+router.use((req, res, next) => {
+  if (req.method !== 'GET') {
+    res.on('finish', () => {
+      if (res.statusCode < 400) clearCache();
+    });
+  }
+  next();
+});
 
 router.get('/stats', admin.stats);
 
