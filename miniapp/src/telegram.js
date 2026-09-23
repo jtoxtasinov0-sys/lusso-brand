@@ -22,6 +22,22 @@ export function getInitData() {
   return window.Telegram?.WebApp?.initData || '';
 }
 
+// Ba'zan Telegram initData'ni sahifa render bo'lgan zahoti emas, bir
+// necha o'n millisekundadan keyin to'ldiradi. Shu sabab birinchi
+// so'rovdan oldin qisqa vaqt (jami ~600ms, har 40ms tekshirib) kutamiz.
+export function waitForInitData(timeoutMs = 600) {
+  if (getInitData()) return Promise.resolve(getInitData());
+  return new Promise((resolve) => {
+    const start = Date.now();
+    const tick = () => {
+      const id = getInitData();
+      if (id || Date.now() - start >= timeoutMs) return resolve(id);
+      setTimeout(tick, 40);
+    };
+    tick();
+  });
+}
+
 export function tgUser() {
   return tg?.initDataUnsafe?.user || null;
 }
