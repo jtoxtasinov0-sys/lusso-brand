@@ -87,15 +87,25 @@ async function replyWithPanel(ctx, text, tail = '') {
   });
 }
 
-// Asosiy menyu klaviaturasi
+/**
+ * Do'konni ochadigan tugma — INLINE (xabarga bog'langan) web_app tugmasi.
+ * Pastki (reply) klaviaturadagi web_app tugmasi ba'zi Telegram versiyalarida
+ * (ayniqsa iOS'da) initData'ni bo'sh yuborib qo'yadigan nosozlikka ega —
+ * shuning uchun bu yerda ham admin panel kabi ishonchli INLINE tugma ishlatiladi.
+ */
+export async function shopKeyboard(lang) {
+  const L = t(lang);
+  const url = await shopUrl();
+  if (!isHttps(url)) return undefined;
+  return InlineKeyboard.from([[InlineKeyboard.webApp(L.menuShop, url)]]);
+}
+
+// Asosiy menyu klaviaturasi (pastki, doimiy klaviatura — faqat matnli tugmalar)
 export async function mainKeyboard(lang) {
   const L = t(lang);
   const kb = new Keyboard();
-  const url = await shopUrl();
 
-  if (isHttps(url)) kb.webApp(L.menuShop, url).row();
-  else kb.text(L.menuShop).row();
-
+  kb.text(L.menuShop).row();
   kb.text(L.menuOrders).row();
   kb.text(L.menuContact).text(L.menuAbout).row();
   kb.text(L.menuLang);
@@ -190,14 +200,15 @@ export async function onText(ctx) {
   }
 
   if (text === L.menuShop) {
-    if (!isHttps(await shopUrl())) {
+    const keyboard = ctx.chat?.type === 'private' ? await shopKeyboard(lang) : undefined;
+    if (!keyboard) {
       return ctx.reply(
         lang === 'ru'
           ? '⚠️ Магазин пока не подключён. Администратор настраивает туннель.'
           : "⚠️ Do'kon hali ulanmagan. Administrator tunnel sozlamoqda."
       );
     }
-    return ctx.reply(L.openShopHint, { reply_markup: await mainKeyboard(lang) });
+    return ctx.reply(L.openShopHint, { reply_markup: keyboard });
   }
 
   return ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(lang) });
