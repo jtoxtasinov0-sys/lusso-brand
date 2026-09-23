@@ -40,6 +40,23 @@ export function closeApp() {
   }
 }
 
+// Tashqi havolani ochish (Telegram link bo'lsa — botning o'zida, aks holda brauzerda)
+export function openLink(url) {
+  try {
+    if (url.includes('t.me/') && tg?.openTelegramLink) {
+      tg.openTelegramLink(url);
+      return;
+    }
+    if (tg?.openLink) {
+      tg.openLink(url);
+      return;
+    }
+  } catch {
+    /* ignore */
+  }
+  window.open(url, '_blank');
+}
+
 export function showBackButton(onClick) {
   if (!tg?.BackButton) return () => {};
   tg.BackButton.show();

@@ -47,6 +47,10 @@ export async function getStories(req, res) {
   res.json(await cached('stories', () => SettingModel.stories(true)));
 }
 
+export async function getBestsellers(req, res) {
+  res.json(await cached('bestsellers', () => ProductModel.bestsellers(10)));
+}
+
 export async function getSettings(req, res) {
   res.json(await cached('settings', () => SettingModel.publicView()));
 }

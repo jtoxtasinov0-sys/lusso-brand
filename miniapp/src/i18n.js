@@ -18,6 +18,7 @@ export const dict = {
     heroText: "Eng so'nggi modellar — chegirma bilan",
     heroBtn: 'Xaridni boshlash',
     newArrivals: 'Yangi kelganlar',
+    bestsellers: '🏆 Eng ko\'p sotilganlar',
     discounted: 'Chegirmada',
     seeAll: 'Hammasi',
     storyShop: 'Xarid qilish',
@@ -67,6 +68,7 @@ export const dict = {
     saveAddress: 'Manzilni saqlab qo\'yish',
     confirm: 'Tasdiqlash',
     fillAll: "Iltimos, barcha maydonlarni to'ldiring",
+    askQuestion: "Savolingiz bormi? Administratorga yozing",
 
     // Payment
     payTitle: "To'lov",
@@ -82,6 +84,7 @@ export const dict = {
     receiptSent: 'Chek yuborildi ✅',
     done: 'Yopish',
     laterPay: "Keyinroq to'layman",
+    supportAfterOrder: "❓ Savollaringiz bo'lsa — administratorga yozing",
 
     // Profile
     profile: 'Profil',
@@ -120,6 +123,7 @@ export const dict = {
     heroText: 'Свежие модели — со скидкой',
     heroBtn: 'Начать покупки',
     newArrivals: 'Новинки',
+    bestsellers: '🏆 Хиты продаж',
     discounted: 'Со скидкой',
     seeAll: 'Все',
     storyShop: 'За покупками',
@@ -164,6 +168,7 @@ export const dict = {
     saveAddress: 'Сохранить адрес',
     confirm: 'Подтвердить',
     fillAll: 'Пожалуйста, заполните все поля',
+    askQuestion: 'Есть вопросы? Напишите администратору',
 
     payTitle: 'Оплата',
     paySuccess: 'Заказ принят!',
@@ -178,6 +183,7 @@ export const dict = {
     receiptSent: 'Чек отправлен ✅',
     done: 'Закрыть',
     laterPay: 'Оплачу позже',
+    supportAfterOrder: '❓ Есть вопросы? Напишите администратору',
 
     profile: 'Профиль',
     myOrders: '📜 Мои заказы',

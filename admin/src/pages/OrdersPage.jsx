@@ -4,6 +4,16 @@ import Modal from '../components/Modal';
 
 const money = (n) => '₩' + Number(n || 0).toLocaleString('ko-KR');
 
+const PLACEHOLDER =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23f1f2f4"/><text x="50%" y="52%" font-size="24" text-anchor="middle" fill="%23c9c9cf">LUSSO</text></svg>'
+  );
+
+const onImgError = (e) => {
+  if (e.target.src !== PLACEHOLDER) e.target.src = PLACEHOLDER;
+};
+
 const STATUSES = [
   { key: 'all', label: 'Hammasi' },
   { key: 'PENDING_PAYMENT', label: "To'lov kutilmoqda" },
@@ -23,6 +33,7 @@ export default function OrdersPage({ toast, onCountChange }) {
   const [open, setOpen] = useState(null);
   const [tracking, setTracking] = useState('');
   const [saving, setSaving] = useState(false);
+  const [lightbox, setLightbox] = useState(null); // { order, item }
 
   const load = () => {
     setLoading(true);
@@ -46,6 +57,8 @@ export default function OrdersPage({ toast, onCountChange }) {
     setOpen(o);
     setTracking(o.trackingNumber || '');
   };
+
+  const openLightbox = (order, item) => setLightbox({ order, item });
 
   const update = async (data) => {
     setSaving(true);
@@ -94,6 +107,7 @@ export default function OrdersPage({ toast, onCountChange }) {
           <table>
             <thead>
               <tr>
+                <th>Rasm</th>
                 <th>Buyurtma</th>
                 <th>Mijoz</th>
                 <th>Telefon</th>
@@ -107,6 +121,18 @@ export default function OrdersPage({ toast, onCountChange }) {
             <tbody>
               {orders.map((o) => (
                 <tr key={o.id}>
+                  <td>
+                    <img
+                      className="order-thumb"
+                      src={(o.items || [])[0]?.image || PLACEHOLDER}
+                      alt=""
+                      onError={onImgError}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openLightbox(o, (o.items || [])[0]);
+                      }}
+                    />
+                  </td>
                   <td className="nowrap">
                     <b>{o.orderNumber}</b>
                   </td>
@@ -184,9 +210,20 @@ export default function OrdersPage({ toast, onCountChange }) {
               <h4 style={{ margin: '0 0 8px', fontSize: 14 }}>🛍 Mahsulotlar</h4>
               <div className="order-items-list">
                 {(open.items || []).map((i, idx) => (
-                  <div key={idx}>
-                    • {i.name}
-                    {i.variant ? ` — ${i.variant}` : ''} × {i.qty} = <b>{money(i.price * i.qty)}</b>
+                  <div className="order-item-row" key={idx} onClick={() => openLightbox(open, i)}>
+                    <img
+                      className="order-thumb sm"
+                      src={i.image || PLACEHOLDER}
+                      alt=""
+                      onError={onImgError}
+                    />
+                    <div className="oi-info">
+                      <span>
+                        {i.name}
+                        {i.variant ? ` — ${i.variant}` : ''} × {i.qty}
+                      </span>
+                      <b>{money(i.price * i.qty)}</b>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -246,6 +283,71 @@ export default function OrdersPage({ toast, onCountChange }) {
             ))}
           </div>
         </Modal>
+      )}
+
+      {lightbox && (
+        <div className="lightbox-backdrop" onClick={() => setLightbox(null)}>
+          <div className="lightbox" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setLightbox(null)}>
+              ✕
+            </button>
+            <img
+              src={lightbox.item?.image || PLACEHOLDER}
+              alt=""
+              onError={onImgError}
+            />
+            <div className="lightbox-info">
+              <div className="lightbox-order">🧾 {lightbox.order.orderNumber}</div>
+              <div className="lightbox-name">
+                {lightbox.item?.name}
+                {lightbox.item?.variant ? ` — ${lightbox.item.variant}` : ''}
+              </div>
+
+              <div className="lightbox-row">
+                <span>Miqdor</span>
+                <b>{lightbox.item?.qty}</b>
+              </div>
+              <div className="lightbox-row">
+                <span>Narx</span>
+                <b>{money((lightbox.item?.price || 0) * (lightbox.item?.qty || 1))}</b>
+              </div>
+              <div className="lightbox-row">
+                <span>Mijoz</span>
+                <b>{lightbox.order.customerName}</b>
+              </div>
+              <div className="lightbox-row">
+                <span>Telefon</span>
+                <b>{lightbox.order.phone}</b>
+              </div>
+              <div className="lightbox-row">
+                <span>Manzil</span>
+                <b style={{ textAlign: 'right' }}>
+                  {lightbox.order.street}
+                  {lightbox.order.detail ? `, ${lightbox.order.detail}` : ''}
+                </b>
+              </div>
+              <div className="lightbox-row">
+                <span>Buyurtma holati</span>
+                <b>{LABEL[lightbox.order.status]}</b>
+              </div>
+              <div className="lightbox-row">
+                <span>Buyurtma jami</span>
+                <b>{money(lightbox.order.total)}</b>
+              </div>
+
+              <button
+                className="btn"
+                style={{ marginTop: 14, width: '100%' }}
+                onClick={() => {
+                  setLightbox(null);
+                  openOrder(lightbox.order);
+                }}
+              >
+                Buyurtmani to'liq ochish
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

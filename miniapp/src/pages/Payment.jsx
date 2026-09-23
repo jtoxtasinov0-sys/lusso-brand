@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { money } from '../i18n';
 import api from '../api';
-import { haptic, closeApp } from '../telegram';
+import { haptic, closeApp, openLink } from '../telegram';
+import { SUPPORT_URL } from '../constants';
 
 export default function Payment({ t, order, bank, onDone }) {
   const [copied, setCopied] = useState('');
@@ -102,6 +103,18 @@ export default function Payment({ t, order, bank, onDone }) {
           }}
         >
           {uploaded ? t.done : t.laterPay}
+        </button>
+
+        <button
+          type="button"
+          className="support-btn"
+          style={{ marginTop: 12 }}
+          onClick={() => {
+            haptic('light');
+            openLink(SUPPORT_URL);
+          }}
+        >
+          {t.supportAfterOrder}
         </button>
       </div>
     </div>

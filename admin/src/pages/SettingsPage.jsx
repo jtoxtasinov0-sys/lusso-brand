@@ -197,6 +197,35 @@ export default function SettingsPage({ toast }) {
             <textarea className="input" value={s.aboutRu} onChange={set('aboutRu')} />
           </div>
         </div>
+
+        <div className="card">
+          <h3 style={{ margin: '0 0 6px', fontSize: 16 }}>🔗 Mini App / Admin panel manzillari</h3>
+          <p className="muted" style={{ marginTop: 0, fontSize: 12.5 }}>
+            Render/Vercel'dagi doimiy manzil har doim avtomatik ustuvor bo'ladi — bu yerlar
+            faqat qo'lda boshqa manzil sinab ko'rish yoki eski qiymatni tozalash uchun,
+            odatda bo'sh qoldirsangiz ham bo'laveradi.
+          </p>
+
+          <div className="form-row">
+            <label className="label">Mini App manzili (webAppUrl)</label>
+            <input
+              className="input"
+              value={s.webAppUrl || ''}
+              onChange={set('webAppUrl')}
+              placeholder="https://lusso-miniapp.vercel.app"
+            />
+          </div>
+
+          <div className="form-row">
+            <label className="label">Admin panel manzili (adminUrl)</label>
+            <input
+              className="input"
+              value={s.adminUrl || ''}
+              onChange={set('adminUrl')}
+              placeholder="https://lusso-admin-sand.vercel.app"
+            />
+          </div>
+        </div>
       </div>
 
       <button className="btn" style={{ marginTop: 18 }} onClick={save} disabled={busy}>

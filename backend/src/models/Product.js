@@ -51,6 +51,39 @@ export const ProductModel = {
     });
   },
 
+  // Eng ko'p sotilgan mahsulotlar (buyurtmalar items JSON'idan hisoblanadi)
+  async bestsellers(limit = 10) {
+    const orders = await prisma.order.findMany({
+      where: { status: { not: 'CANCELLED' } },
+      select: { items: true },
+      take: 1000,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const soldQty = {};
+    for (const o of orders) {
+      for (const it of o.items || []) {
+        if (!it.productId) continue;
+        soldQty[it.productId] = (soldQty[it.productId] || 0) + (it.qty || 0);
+      }
+    }
+
+    const topIds = Object.entries(soldQty)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit)
+      .map(([id]) => Number(id));
+
+    if (!topIds.length) return [];
+
+    const products = await prisma.product.findMany({
+      where: { id: { in: topIds }, isActive: true },
+      include: withRelations,
+    });
+
+    const rank = new Map(topIds.map((id, i) => [id, i]));
+    return products.sort((a, b) => rank.get(a.id) - rank.get(b.id));
+  },
+
   // ---------------- ADMIN ----------------
   async listAll() {
     return prisma.product.findMany({

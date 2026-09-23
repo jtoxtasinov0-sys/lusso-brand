@@ -29,6 +29,8 @@ export const texts = {
     statusDELIVERED: (o) =>
       `🎉 *Buyurtmangiz yetkazildi!*\n\n🧾 ${o.orderNumber}\n\nXaridingiz muborak bo'lsin! Yana kutamiz 🖤`,
     statusCANCELLED: (o) => `❌ Buyurtma ${o.orderNumber} bekor qilindi.\n\nSavollar uchun admin bilan bog'laning.`,
+    askQuestionBtn: '❓ Savol berish',
+    askQuestionText: "Savollaringiz bo'lsa — pastdagi tugma orqali administratorga yozing 👇",
   },
 
   ru: {
@@ -58,6 +60,8 @@ export const texts = {
       }\n\nДоставка 1-2 дня.`,
     statusDELIVERED: (o) => `🎉 *Заказ доставлен!*\n\n🧾 ${o.orderNumber}\n\nСпасибо за покупку! Ждём снова 🖤`,
     statusCANCELLED: (o) => `❌ Заказ ${o.orderNumber} отменён.\n\nПо вопросам напишите администратору.`,
+    askQuestionBtn: '❓ Задать вопрос',
+    askQuestionText: 'Если есть вопросы — напишите администратору по кнопке ниже 👇',
   },
 };
 

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { money } from '../i18n';
 import api from '../api';
-import { haptic } from '../telegram';
+import { haptic, openLink } from '../telegram';
+import { SUPPORT_URL } from '../constants';
 
 export default function Checkout({ t, user, items, settings, onBack, onCreated }) {
   const [form, setForm] = useState({
@@ -72,6 +73,17 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
       </div>
 
       <div className="screen-body">
+        <button
+          type="button"
+          className="support-btn"
+          onClick={() => {
+            haptic('light');
+            openLink(SUPPORT_URL);
+          }}
+        >
+          💬 {t.askQuestion}
+        </button>
+
         {error && <div className="error-box">{error}</div>}
 
         <div className="field">

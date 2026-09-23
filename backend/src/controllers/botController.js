@@ -238,7 +238,13 @@ export async function notifyOrderCreated(order) {
     bankHolder: s.bankHolder,
   });
 
-  await safeSend(user.telegramId, `${head}\n\n🛍 *Buyurtma tarkibi:*\n${itemsText}`);
+  const keyboard = new InlineKeyboard().url(L.askQuestionBtn, config.ownerContactUrl);
+
+  await safeSend(
+    user.telegramId,
+    `${head}\n\n🛍 *Buyurtma tarkibi:*\n${itemsText}\n\n${L.askQuestionText}`,
+    { reply_markup: keyboard }
+  );
 }
 
 export async function notifyReceipt(order) {

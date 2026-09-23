@@ -38,6 +38,7 @@ export const api = {
 
   product: (id) => request('/products/' + id),
   stories: () => request('/stories'),
+  bestsellers: () => request('/bestsellers'),
   settings: () => request('/settings'),
 
   createOrder: (payload) => request('/orders', { method: 'POST', body: JSON.stringify(payload) }),

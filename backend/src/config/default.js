@@ -67,6 +67,9 @@ export const config = {
   skipInitDataCheck: String(process.env.SKIP_INITDATA_CHECK || '').toLowerCase() === 'true',
   devTelegramId: process.env.DEV_TELEGRAM_ID || '999000111',
 
+  // Do'kon egasining Telegram profili (savol-javob uchun tugma/havola)
+  ownerContactUrl: (process.env.OWNER_CONTACT_URL || 'https://t.me/Nurillo_0304').trim(),
+
   // Do'kon
   shop: {
     name: 'LUSSO BRAND KR',

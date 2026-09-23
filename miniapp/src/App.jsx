@@ -35,6 +35,7 @@ export default function App() {
   const [allProducts, setAllProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [stories, setStories] = useState([]);
+  const [bestsellers, setBestsellers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [category, setCategory] = useState('all');
@@ -56,6 +57,7 @@ export default function App() {
       .catch((e) => showToast(e.message));
 
     api.stories().then(setStories).catch(() => {});
+    api.bestsellers().then(setBestsellers).catch(() => {});
   }, []);
 
   // ---------- Katalog ----------
@@ -128,15 +130,29 @@ export default function App() {
     });
   };
 
-  // Qo'shimcha taklif: katalogdagi eng arzon, savatda yo'q mahsulot
+  // Qo'shimcha taklif: savatda ko'zoynak bo'lsa — atir taklif qilinadi,
+  // aks holda katalogdagi eng arzon, savatda yo'q mahsulot taklif qilinadi
   const upsell = useMemo(() => {
     if (!allProducts.length || !cart.items.length) return null;
     const inCart = new Set(cart.items.map((i) => i.productId));
-    return (
-      allProducts
-        .filter((p) => !inCart.has(p.id) && (p.variants || []).some((v) => v.stock > 0))
-        .sort((a, b) => a.price - b.price)[0] || null
+    const available = allProducts.filter(
+      (p) => !inCart.has(p.id) && (p.variants || []).some((v) => v.stock > 0)
     );
+    if (!available.length) return null;
+
+    const hasGlasses = cart.items.some((i) => {
+      const p = allProducts.find((x) => x.id === i.productId);
+      return p?.category?.slug === 'glasses';
+    });
+
+    if (hasGlasses) {
+      const perfume = available
+        .filter((p) => p.category?.slug === 'perfume')
+        .sort((a, b) => a.price - b.price)[0];
+      if (perfume) return perfume;
+    }
+
+    return available.sort((a, b) => a.price - b.price)[0] || null;
   }, [allProducts, cart.items]);
 
   const toggleUpsell = () => {
@@ -199,6 +215,7 @@ export default function App() {
           user={user}
           stories={stories}
           products={products}
+          bestsellers={bestsellers}
           loading={loading}
           onOpen={setSheet}
           onQuickAdd={quickAdd}

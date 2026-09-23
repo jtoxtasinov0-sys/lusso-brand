@@ -16,6 +16,7 @@ router.post('/language', cart.setLanguage);
 router.get('/catalog', cart.getCatalog);
 router.get('/products/:id', cart.getProduct);
 router.get('/stories', cart.getStories);
+router.get('/bestsellers', cart.getBestsellers);
 router.get('/settings', cart.getSettings);
 
 router.post('/orders', cart.createOrder);

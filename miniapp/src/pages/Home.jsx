@@ -6,6 +6,7 @@ export default function Home({
   user,
   stories,
   products,
+  bestsellers = [],
   loading,
   onOpen,
   onQuickAdd,
@@ -48,6 +49,26 @@ export default function Home({
         <p>{t.heroText}</p>
         <button onClick={goCatalog}>{t.heroBtn}</button>
       </div>
+
+      {bestsellers.length > 0 && (
+        <>
+          <div className="section-head">
+            <h2>{t.bestsellers}</h2>
+            <button onClick={goCatalog}>{t.seeAll}</button>
+          </div>
+          <div className="row-scroll">
+            {bestsellers.map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                lang={lang}
+                onOpen={onOpen}
+                onQuickAdd={onQuickAdd}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       {loading ? (
         <div className="grid" style={{ marginTop: 24 }}>

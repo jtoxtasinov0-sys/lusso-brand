@@ -1,7 +1,7 @@
 import { money } from '../i18n';
 import { keyOf } from '../store';
 import { haptic } from '../telegram';
-import { onImgError } from '../components/ProductCard';
+import { PLACEHOLDER, onImgError } from '../components/ProductCard';
 
 export default function Cart({
   t,
@@ -82,6 +82,12 @@ export default function Cart({
 
       {upsell && (
         <div className="upsell">
+          <img
+            className="upsell-img"
+            src={upsell.images?.[0]?.url || PLACEHOLDER}
+            alt=""
+            onError={onImgError}
+          />
           <div className="txt">
             <b>
               {lang === 'ru'
