@@ -4,6 +4,7 @@ import {
   onLanguageChosen,
   onContact,
   onText,
+  onMenuAction,
   onAdminCommand,
   onPanelCommand,
   onPricesCommand,
@@ -21,6 +22,8 @@ export function registerBotHandlers(bot) {
   bot.command('narxlar', onPricesCommand);
 
   bot.callbackQuery(/^lang:(uz|ru)$/, onLanguageChosen);
+
+  bot.callbackQuery(/^menu:(orders|contact|about|lang)$/, onMenuAction);
 
   bot.on('message:contact', onContact);
 

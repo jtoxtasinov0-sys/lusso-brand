@@ -88,45 +88,32 @@ async function replyWithPanel(ctx, text, tail = '') {
 }
 
 /**
- * Do'konni ochadigan tugma — INLINE (xabarga bog'langan) web_app tugmasi.
- * Pastki (reply) klaviaturadagi web_app tugmasi ba'zi Telegram versiyalarida
- * (ayniqsa iOS'da) initData'ni bo'sh yuborib qo'yadigan nosozlikka ega —
- * shuning uchun bu yerda ham admin panel kabi ishonchli INLINE tugma ishlatiladi.
+ * Asosiy menyu — bitta xabarga bog'langan INLINE tugmalar (pastki doimiy
+ * klaviatura emas). web_app turidagi pastki klaviatura tugmasi ba'zi
+ * Telegram versiyalarida (ayniqsa iOS'da) initData'ni bo'sh yuborib
+ * qo'yadigan nosozlikka ega edi — shuning uchun hammasi (do'kon, buyurtmalar,
+ * aloqa va h.k.) bitta xabarda, ishonchli INLINE tugmalar bilan beriladi.
  */
-export async function shopKeyboard(lang) {
+export async function mainMenuKeyboard(lang) {
   const L = t(lang);
   const url = await shopUrl();
-  if (!isHttps(url)) return undefined;
-  return InlineKeyboard.from([[InlineKeyboard.webApp(L.menuShop, url)]]);
+  const rows = [];
+
+  if (isHttps(url)) rows.push([InlineKeyboard.webApp(L.menuShop, url)]);
+  rows.push([InlineKeyboard.text(L.menuOrders, 'menu:orders')]);
+  rows.push([
+    InlineKeyboard.text(L.menuContact, 'menu:contact'),
+    InlineKeyboard.text(L.menuAbout, 'menu:about'),
+  ]);
+  rows.push([InlineKeyboard.text(L.menuLang, 'menu:lang')]);
+
+  return InlineKeyboard.from(rows);
 }
 
-// Asosiy menyu klaviaturasi (pastki, doimiy klaviatura — faqat matnli tugmalar)
-export async function mainKeyboard(lang) {
-  const L = t(lang);
-  const kb = new Keyboard();
-
-  kb.text(L.menuOrders).row();
-  kb.text(L.menuContact).text(L.menuAbout).row();
-  kb.text(L.menuLang);
-
-  return kb.resized();
-}
-
-/**
- * Asosiy menyuni yuboradi: bitta bosishda do'konni ochadigan INLINE
- * tugma (xabarga bog'langan) + pastki doimiy navigatsiya klaviaturasi.
- * Ikkalasi bitta xabarga sig'maydi (Telegram cheklovi), shuning uchun
- * ketma-ket ikkita xabar yuboriladi.
- */
+// Asosiy menyuni bitta xabar bilan yuboradi
 async function sendMainMenu(ctx, lang) {
   const L = t(lang);
-  const shopKb = ctx.chat?.type === 'private' ? await shopKeyboard(lang) : undefined;
-
-  if (shopKb) {
-    await ctx.reply(L.openShopHint, { reply_markup: shopKb });
-  }
-
-  return ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(lang) });
+  return ctx.reply(L.mainMenu, { reply_markup: await mainMenuKeyboard(lang) });
 }
 
 function phoneKeyboard(lang) {
@@ -184,7 +171,8 @@ export async function onContact(ctx) {
   const phone = ctx.message.contact.phone_number;
   const user = await UserModel.setPhone(ctx.from.id, phone);
   const L = t(user.language);
-  await ctx.reply(L.phoneSaved);
+  // "Telefon yuborish" pastki klaviaturasi endi kerak emas — olib tashlaymiz
+  await ctx.reply(L.phoneSaved, { reply_markup: { remove_keyboard: true } });
   await sendMainMenu(ctx, user.language);
 }
 
@@ -216,6 +204,37 @@ export async function onText(ctx) {
   }
 
   return sendMainMenu(ctx, lang);
+}
+
+// Asosiy menyudagi inline tugmalar bosilganda (Buyurtmalarim / Aloqa / Biz haqimizda / Til)
+export async function onMenuAction(ctx) {
+  const user = await UserModel.findOrCreate({
+    id: ctx.from.id,
+    firstName: ctx.from.first_name,
+    lastName: ctx.from.last_name,
+    username: ctx.from.username,
+  });
+  const lang = user.language;
+  const L = t(lang);
+  const action = ctx.callbackQuery.data.split(':')[1];
+
+  await ctx.answerCallbackQuery();
+
+  if (action === 'orders') return sendMyOrders(ctx, user);
+
+  if (action === 'contact') {
+    const s = await SettingModel.get();
+    return ctx.reply(L.contact(s.supportUsername), { parse_mode: 'Markdown' });
+  }
+
+  if (action === 'about') {
+    const s = await SettingModel.get();
+    return ctx.reply(lang === 'ru' ? s.aboutRu : s.aboutUz);
+  }
+
+  if (action === 'lang') {
+    return ctx.reply(L.chooseLanguage, { reply_markup: langKeyboard() });
+  }
 }
 
 async function sendMyOrders(ctx, user) {
