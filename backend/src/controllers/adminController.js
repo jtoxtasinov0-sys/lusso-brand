@@ -86,7 +86,7 @@ export async function stats(req, res) {
   res.json({
     ...data,
     lowStock: lowStock.map((v) => ({
-      product: v.product.nameUz,
+      product: v.product?.nameUz || '—',
       label: v.label,
       stock: v.stock,
     })),

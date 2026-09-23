@@ -92,11 +92,16 @@ export const OrderModel = {
 
     const counter = {};
     for (const o of orders) {
-      for (const it of o.items || []) {
-        const key = it.name;
+      // items JSON — eski/buzilgan yozuvlar statistikani yiqitmasligi uchun tekshiriladi
+      const items = Array.isArray(o.items) ? o.items : [];
+      for (const it of items) {
+        if (!it || typeof it !== 'object') continue;
+        const key = it.name || '—';
+        const qty = Number(it.qty) || 0;
+        const price = Number(it.price) || 0;
         if (!counter[key]) counter[key] = { name: key, qty: 0, sum: 0 };
-        counter[key].qty += it.qty;
-        counter[key].sum += it.price * it.qty;
+        counter[key].qty += qty;
+        counter[key].sum += price * qty;
       }
     }
     const top = Object.values(counter)
