@@ -105,12 +105,28 @@ export async function mainKeyboard(lang) {
   const L = t(lang);
   const kb = new Keyboard();
 
-  kb.text(L.menuShop).row();
   kb.text(L.menuOrders).row();
   kb.text(L.menuContact).text(L.menuAbout).row();
   kb.text(L.menuLang);
 
   return kb.resized();
+}
+
+/**
+ * Asosiy menyuni yuboradi: bitta bosishda do'konni ochadigan INLINE
+ * tugma (xabarga bog'langan) + pastki doimiy navigatsiya klaviaturasi.
+ * Ikkalasi bitta xabarga sig'maydi (Telegram cheklovi), shuning uchun
+ * ketma-ket ikkita xabar yuboriladi.
+ */
+async function sendMainMenu(ctx, lang) {
+  const L = t(lang);
+  const shopKb = ctx.chat?.type === 'private' ? await shopKeyboard(lang) : undefined;
+
+  if (shopKb) {
+    await ctx.reply(L.openShopHint, { reply_markup: shopKb });
+  }
+
+  return ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(lang) });
 }
 
 function phoneKeyboard(lang) {
@@ -137,8 +153,7 @@ export async function onStart(ctx) {
     return;
   }
 
-  const L = t(user.language);
-  await ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(user.language) });
+  await sendMainMenu(ctx, user.language);
 }
 
 export async function onLanguageChosen(ctx) {
@@ -161,7 +176,7 @@ export async function onLanguageChosen(ctx) {
       reply_markup: phoneKeyboard(lang),
     });
   } else {
-    await ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(lang) });
+    await sendMainMenu(ctx, lang);
   }
 }
 
@@ -169,7 +184,8 @@ export async function onContact(ctx) {
   const phone = ctx.message.contact.phone_number;
   const user = await UserModel.setPhone(ctx.from.id, phone);
   const L = t(user.language);
-  await ctx.reply(L.phoneSaved, { reply_markup: await mainKeyboard(user.language) });
+  await ctx.reply(L.phoneSaved);
+  await sendMainMenu(ctx, user.language);
 }
 
 export async function onText(ctx) {
@@ -199,19 +215,7 @@ export async function onText(ctx) {
     return ctx.reply(L.chooseLanguage, { reply_markup: langKeyboard() });
   }
 
-  if (text === L.menuShop) {
-    const keyboard = ctx.chat?.type === 'private' ? await shopKeyboard(lang) : undefined;
-    if (!keyboard) {
-      return ctx.reply(
-        lang === 'ru'
-          ? '⚠️ Магазин пока не подключён. Администратор настраивает туннель.'
-          : "⚠️ Do'kon hali ulanmagan. Administrator tunnel sozlamoqda."
-      );
-    }
-    return ctx.reply(L.openShopHint, { reply_markup: keyboard });
-  }
-
-  return ctx.reply(L.mainMenu, { reply_markup: await mainKeyboard(lang) });
+  return sendMainMenu(ctx, lang);
 }
 
 async function sendMyOrders(ctx, user) {
