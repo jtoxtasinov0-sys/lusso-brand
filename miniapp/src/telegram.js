@@ -14,7 +14,13 @@ export function initTelegram() {
   }
 }
 
-export const initData = tg?.initData || '';
+// MUHIM: bu funksiya, o'zgarmas const emas — chunki Telegram ba'zan
+// initData'ni sahifa ochilgan zahoti emas, bir lahzadan keyin to'ldiradi.
+// Uni bitta marta o'qib saqlab qo'ysak, "hali bo'sh" holatida qolib ketishi
+// mumkin va barcha so'rovlar butun sessiya davomida 401 bilan qaytadi.
+export function getInitData() {
+  return window.Telegram?.WebApp?.initData || '';
+}
 
 export function tgUser() {
   return tg?.initDataUnsafe?.user || null;

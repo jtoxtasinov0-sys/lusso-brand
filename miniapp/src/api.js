@@ -1,5 +1,5 @@
 // Backend bilan aloqa
-import { initData } from './telegram';
+import { getInitData } from './telegram';
 
 const BASE = '/api/client';
 
@@ -7,7 +7,7 @@ async function request(path, options = {}) {
   const res = await fetch(BASE + path, {
     ...options,
     headers: {
-      'x-init-data': initData,
+      'x-init-data': getInitData(),
       ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(options.headers || {}),
     },
