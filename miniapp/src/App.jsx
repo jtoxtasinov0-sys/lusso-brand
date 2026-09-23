@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import api from './api';
 import { dict } from './i18n';
 import { useApp, useCart } from './store';
-import { haptic, showBackButton, getInitData, tg } from './telegram';
+import { haptic, showBackButton } from './telegram';
 
 import Onboarding from './components/Onboarding';
 import BottomNav from './components/BottomNav';
@@ -44,7 +44,6 @@ export default function App() {
 
   const [orderResult, setOrderResult] = useState(null);
   const [upsellOn, setUpsellOn] = useState(false);
-  const [authDebug, setAuthDebug] = useState('');
 
   // ---------- Boshlang'ich yuklash ----------
   useEffect(() => {
@@ -55,19 +54,7 @@ export default function App() {
         setSettings(res.settings);
         if (res.user?.language && res.user.language !== lang) setLang(res.user.language);
       })
-      .catch((e) => {
-        showToast(e.message);
-        // VAQTINCHALIK DIAGNOSTIKA: muammoni aniqlash uchun.
-        // Nima ko'rsatilsa — shu matnni skrinshot qilib yuboring.
-        const id = getInitData();
-        setAuthDebug(
-          `Xato: ${e.message} | tg mavjud: ${tg ? 'ha' : "yo'q"} | ` +
-            `platform: ${tg?.platform || '?'} | versiya: ${tg?.version || '?'} | ` +
-            `initData uzunligi: ${id.length} | initDataUnsafe.user: ${
-              tg?.initDataUnsafe?.user ? 'bor' : "yo'q"
-            }`
-        );
-      });
+      .catch((e) => showToast(e.message));
 
     api.stories().then(setStories).catch(() => {});
     api.bestsellers().then(setBestsellers).catch(() => {});
@@ -346,30 +333,6 @@ export default function App() {
       )}
 
       {toast && <div className="toast">{toast}</div>}
-
-      {authDebug && (
-        <div
-          style={{
-            position: 'fixed',
-            left: 8,
-            right: 8,
-            bottom: 8,
-            zIndex: 999,
-            background: '#111',
-            color: '#0f0',
-            fontSize: 11,
-            fontFamily: 'monospace',
-            padding: '10px 12px',
-            borderRadius: 10,
-            lineHeight: 1.5,
-            wordBreak: 'break-word',
-          }}
-          onClick={() => setAuthDebug('')}
-        >
-          {authDebug}
-          <div style={{ color: '#999', marginTop: 4 }}>(yopish uchun bosing)</div>
-        </div>
-      )}
     </>
   );
 }
