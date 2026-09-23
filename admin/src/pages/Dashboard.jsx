@@ -9,13 +9,46 @@ const TEST_ACCOUNTS = ['1234-5678-9012', '110-000-000000', '110-123-456789', '']
 export default function Dashboard({ toast, onGoSettings }) {
   const [data, setData] = useState(null);
   const [settings, setSettings] = useState(null);
+  const [error, setError] = useState('');
+
+  // Statistika kelmasa sahifa abadiy "Yuklanmoqda..."da qolib ketmasin:
+  // bir necha marta avtomatik qayta uriniladi, keyin xato va tugma ko'rsatiladi
+  const load = (attempt = 0) => {
+    setError('');
+    api
+      .stats()
+      .then(setData)
+      .catch((e) => {
+        if (attempt < 2 && e.status !== 401) {
+          setTimeout(() => load(attempt + 1), 2000 * (attempt + 1));
+          return;
+        }
+        setError(e.message || 'Xatolik');
+        toast(e.message, true);
+      });
+  };
 
   useEffect(() => {
-    api.stats().then(setData).catch((e) => toast(e.message, true));
+    load();
     api.settings().then(setSettings).catch(() => {});
   }, []);
 
-  if (!data) return <div className="empty">Yuklanmoqda...</div>;
+  if (!data) {
+    if (error) {
+      return (
+        <div className="empty">
+          <div style={{ marginBottom: 12 }}>Statistikani yuklab bo'lmadi: {error}</div>
+          <button className="btn" onClick={() => load()}>
+            Qayta urinish
+          </button>
+        </div>
+      );
+    }
+    return <div className="empty">Yuklanmoqda...</div>;
+  }
+
+  const topProducts = data.topProducts || [];
+  const lowStock = data.lowStock || [];
 
   const bankNotReady = settings && TEST_ACCOUNTS.includes((settings.bankAccount || '').trim());
 
@@ -85,10 +118,10 @@ export default function Dashboard({ toast, onGoSettings }) {
       <div className="grid-2">
         <div className="card">
           <h3 style={{ margin: '0 0 14px', fontSize: 16 }}>🔥 Eng ko'p sotilganlar</h3>
-          {data.topProducts.length === 0 ? (
+          {topProducts.length === 0 ? (
             <div className="muted">Hali sotuv yo'q</div>
           ) : (
-            data.topProducts.map((p) => (
+            topProducts.map((p) => (
               <div className="info-row" key={p.name}>
                 <span style={{ color: 'var(--text)' }}>{p.name}</span>
                 <b>
@@ -101,10 +134,10 @@ export default function Dashboard({ toast, onGoSettings }) {
 
         <div className="card">
           <h3 style={{ margin: '0 0 14px', fontSize: 16 }}>⚠️ Tugayotgan zaxira</h3>
-          {data.lowStock.length === 0 ? (
+          {lowStock.length === 0 ? (
             <div className="muted">Hammasi yetarli</div>
           ) : (
-            data.lowStock.map((v, i) => (
+            lowStock.map((v, i) => (
               <div className="info-row" key={i}>
                 <span style={{ color: 'var(--text)' }}>
                   {v.product} — {v.label}
