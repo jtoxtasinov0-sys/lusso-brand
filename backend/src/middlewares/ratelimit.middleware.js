@@ -58,3 +58,29 @@ export function registerFailedLogin(ip) {
 export function clearFailedLogins(ip) {
   attempts.delete(ip);
 }
+
+/**
+ * Saytdan (brauzer orqali) buyurtma berish cheklovi.
+ * Brauzer mijozini Telegram imzosi bilan tekshirib bo'lmaydi — shuning uchun
+ * bitta IP'dan soxta buyurtmalar yog'dirilmasligi uchun soniga chek qo'yiladi.
+ * Telegram ichidan kelgan buyurtmalarga ta'sir qilmaydi.
+ */
+const GUEST_ORDER_MAX = 5; // bir soatda nechta buyurtma
+const GUEST_ORDER_WINDOW_MS = 60 * 60 * 1000;
+const guestOrders = new Map(); // ip -> [vaqtlar]
+
+export function guestOrderLimiter(req, res, next) {
+  if (!req.tgUser?.isGuest) return next();
+
+  const ip = clientIp(req);
+  const now = Date.now();
+  const recent = (guestOrders.get(ip) || []).filter((at) => now - at < GUEST_ORDER_WINDOW_MS);
+
+  if (recent.length >= GUEST_ORDER_MAX) {
+    return res.status(429).json({ error: "Juda ko'p buyurtma. Birozdan keyin qayta urining." });
+  }
+
+  recent.push(now);
+  guestOrders.set(ip, recent);
+  next();
+}

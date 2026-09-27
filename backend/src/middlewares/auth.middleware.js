@@ -52,6 +52,15 @@ export function telegramAuth(req, res, next) {
     }
   }
 
+  // Brauzer (Chrome va h.k.) orqali kirgan mijoz: Telegram yo'q, shuning uchun
+  // brauzer o'zi yaratib localStorage'da saqlagan tasodifiy "mehmon ID" bilan
+  // tanib olinadi. Bazada u "web_<id>" ko'rinishida alohida mijoz bo'ladi.
+  const guestId = req.headers['x-guest-id'] || '';
+  if (/^[a-zA-Z0-9-]{16,64}$/.test(guestId)) {
+    req.tgUser = { id: `web_${guestId}`, firstName: 'Mijoz', isGuest: true };
+    return next();
+  }
+
   // Test rejimi: faqat .env da yoqilgan bo'lsa VA so'rov shu kompyuterdan kelsa.
   // Shu sababli tunnel (ngrok/cloudflare) manzili hamisha himoyalangan qoladi.
   if (config.skipInitDataCheck && isLocalRequest(req)) {

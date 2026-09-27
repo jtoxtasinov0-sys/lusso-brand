@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { telegramAuth } from '../middlewares/auth.middleware.js';
 import { uploadImage } from '../middlewares/upload.middleware.js';
+import { guestOrderLimiter } from '../middlewares/ratelimit.middleware.js';
 import { wrapAll } from '../middlewares/async.middleware.js';
 import * as cartController from '../controllers/cartController.js';
 
@@ -19,7 +20,7 @@ router.get('/stories', cart.getStories);
 router.get('/bestsellers', cart.getBestsellers);
 router.get('/settings', cart.getSettings);
 
-router.post('/orders', cart.createOrder);
+router.post('/orders', guestOrderLimiter, cart.createOrder);
 router.get('/orders', cart.myOrders);
 router.post('/orders/:id/receipt', uploadImage.single('receipt'), cart.uploadReceipt);
 

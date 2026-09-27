@@ -2,7 +2,7 @@
 import { Keyboard, InlineKeyboard } from 'grammy';
 import config from '../config/default.js';
 import { safeSend, safeSendPhoto } from '../core/bot.js';
-import UserModel from '../models/User.js';
+import UserModel, { isWebUser } from '../models/User.js';
 import OrderModel from '../models/Order.js';
 import SettingModel from '../models/Setting.js';
 import { applyPrices } from '../core/prices.js';
@@ -256,7 +256,7 @@ async function sendMyOrders(ctx, user) {
 
 export async function notifyOrderCreated(order) {
   const user = order.user;
-  if (!user) return;
+  if (!user || isWebUser(user)) return; // saytdan kirgan mijoz Telegram'da yo'q
   const L = t(user.language);
   const s = await SettingModel.get();
 
@@ -283,13 +283,13 @@ export async function notifyOrderCreated(order) {
 
 export async function notifyReceipt(order) {
   const user = order.user;
-  if (!user) return;
+  if (!user || isWebUser(user)) return; // saytdan kirgan mijoz Telegram'da yo'q
   await safeSend(user.telegramId, t(user.language).receiptReceived);
 }
 
 export async function notifyStatus(order) {
   const user = order.user;
-  if (!user) return;
+  if (!user || isWebUser(user)) return; // saytdan kirgan mijoz Telegram'da yo'q
   const L = t(user.language);
   const fn = L[`status${order.status}`];
   if (!fn) return;
@@ -309,7 +309,7 @@ export async function notifyAdmins(order) {
 
   const text =
     `🔔 *Yangi buyurtma!*\n\n` +
-    `🧾 ${order.orderNumber}\n` +
+    `🧾 ${order.orderNumber}${isWebUser(order.user) ? ' · 🌐 saytdan' : ''}\n` +
     `👤 ${order.customerName} · ${order.phone}\n` +
     `📍 ${order.street}${order.detail ? ', ' + order.detail : ''}\n\n` +
     `${items}\n\n` +

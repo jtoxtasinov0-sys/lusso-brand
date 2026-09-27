@@ -1,6 +1,11 @@
 // Mijozlar bilan ishlash (Prisma logikasi)
 import prisma from '../database/connection.js';
 
+// Brauzer orqali kirgan (Telegram'siz) mijozmi — bunday mijozga bot xabar yubora olmaydi
+export function isWebUser(user) {
+  return String(user?.telegramId || '').startsWith('web_');
+}
+
 export const UserModel = {
   async findByTelegramId(telegramId) {
     return prisma.user.findUnique({ where: { telegramId: String(telegramId) } });
@@ -14,6 +19,9 @@ export const UserModel = {
     const username = tg.username || null;
 
     const existing = await prisma.user.findUnique({ where: { telegramId } });
+    // Brauzer mijozining ismi buyurtmada kiritilgan ism bilan yangilanadi —
+    // bu yerda uni standart "Mijoz" ga qaytarib yubormaymiz
+    if (existing && tg.isGuest) return existing;
     if (existing) {
       if (existing.firstName === firstName && existing.username === username) return existing;
       return prisma.user.update({ where: { telegramId }, data: { firstName, username } });
@@ -34,6 +42,10 @@ export const UserModel = {
 
   async setPhone(telegramId, phone) {
     return prisma.user.update({ where: { telegramId: String(telegramId) }, data: { phone } });
+  },
+
+  async setName(telegramId, firstName) {
+    return prisma.user.update({ where: { telegramId: String(telegramId) }, data: { firstName } });
   },
 
   async setLanguage(telegramId, language) {
@@ -69,7 +81,8 @@ export const UserModel = {
 
   async allTelegramIds() {
     const users = await prisma.user.findMany({
-      where: { isBlocked: false },
+      // Brauzer mijozlari ("web_...") Telegram'da yo'q — ularga rassilka yuborib bo'lmaydi
+      where: { isBlocked: false, NOT: { telegramId: { startsWith: 'web_' } } },
       select: { telegramId: true, language: true },
     });
     return users;

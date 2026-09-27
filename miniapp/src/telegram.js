@@ -14,6 +14,35 @@ export function initTelegram() {
   }
 }
 
+// Ilova Telegram ichida ochilganmi yoki oddiy brauzerda (Chrome va h.k.)?
+// telegram-web-app.js brauzerda ham window.Telegram.WebApp ni yaratadi,
+// lekin u yerda platform "unknown" bo'ladi.
+export function isTelegram() {
+  if (getInitData()) return true;
+  return Boolean(tg?.platform && tg.platform !== 'unknown');
+}
+
+// Brauzer mijozining doimiy tasodifiy ID si — savat, buyurtmalar va
+// manzillar shu ID ga bog'lanadi (localStorage'da saqlanadi)
+export function getGuestId() {
+  let id = '';
+  try {
+    id = localStorage.getItem('lusso-guest-id') || '';
+  } catch {
+    /* ignore */
+  }
+  if (!/^[a-zA-Z0-9-]{16,64}$/.test(id)) {
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    id = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+    try {
+      localStorage.setItem('lusso-guest-id', id);
+    } catch {
+      /* ignore */
+    }
+  }
+  return id;
+}
+
 // MUHIM: bu funksiya, o'zgarmas const emas — chunki Telegram ba'zan
 // initData'ni sahifa ochilgan zahoti emas, bir lahzadan keyin to'ldiradi.
 // Uni bitta marta o'qib saqlab qo'ysak, "hali bo'sh" holatida qolib ketishi

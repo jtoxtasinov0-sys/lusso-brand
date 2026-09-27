@@ -1,0 +1,12 @@
+{
+  "name": "LUSSO BRAND KR",
+  "short_name": "LUSSO",
+  "description": "Koreyadagi premium brend do'kon",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

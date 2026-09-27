@@ -1,15 +1,19 @@
 // Backend bilan aloqa
-import { waitForInitData } from './telegram';
+import { waitForInitData, isTelegram, getGuestId } from './telegram';
 
 const BASE = '/api/client';
 
-async function request(path, options = {}) {
-  const initData = await waitForInitData();
+// Telegram ichida — imzolangan initData, brauzerda — mehmon ID yuboriladi
+async function authHeaders() {
+  if (isTelegram()) return { 'x-init-data': await waitForInitData() };
+  return { 'x-guest-id': getGuestId() };
+}
 
+async function request(path, options = {}) {
   const res = await fetch(BASE + path, {
     ...options,
     headers: {
-      'x-init-data': initData,
+      ...(await authHeaders()),
       ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(options.headers || {}),
     },

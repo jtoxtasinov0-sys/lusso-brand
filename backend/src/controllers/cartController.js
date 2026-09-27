@@ -128,6 +128,11 @@ export async function createOrder(req, res) {
     // Telefon saqlanmagan bo'lsa — saqlab qo'yamiz
     if (!user.phone) await UserModel.setPhone(user.telegramId, phone);
 
+    // Brauzer mijozi uchun ism faqat buyurtmadan ma'lum bo'ladi
+    if (req.tgUser.isGuest && user.firstName !== customerName) {
+      await UserModel.setName(user.telegramId, customerName);
+    }
+
     // Manzilni saqlash
     if (saveAddress) {
       await UserModel.saveAddress(user.id, {

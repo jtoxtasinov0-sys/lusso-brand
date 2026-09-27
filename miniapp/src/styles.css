@@ -1537,3 +1537,30 @@ img {
     transform: translate(-50%, 0);
   }
 }
+
+/* ================= KOMPYUTER BRAUZERI ================= */
+/* Keng ekranda ilova markazda telefon kengligida ko'rsatiladi.
+   transform — ichidagi position:fixed elementlarni (pastki menyu, oynalar,
+   toast) shu ustun ichida ushlab turadi; sahifa esa ustunning ichida aylanadi. */
+@media (min-width: 600px) {
+  html,
+  body {
+    background: #efede7;
+  }
+
+  #root {
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    margin: 0 auto;
+    overflow-y: auto;
+    background: var(--bg);
+    box-shadow: 0 0 0 1px var(--line), 0 20px 60px rgba(0, 0, 0, 0.08);
+    transform: translateZ(0);
+  }
+
+  .onboarding {
+    height: 100%;
+  }
+}

@@ -3,6 +3,7 @@ import api from './api';
 import { dict } from './i18n';
 import { useApp, useCart } from './store';
 import { haptic, showBackButton } from './telegram';
+import { hideSplash } from './splash';
 
 import Onboarding from './components/Onboarding';
 import BottomNav from './components/BottomNav';
@@ -76,7 +77,10 @@ export default function App() {
           if (isFullList) setAllProducts(res.products);
         })
         .catch((e) => showToast(e.message))
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          hideSplash();
+        });
     }, search ? 350 : 0);
 
     return () => clearTimeout(timer);
