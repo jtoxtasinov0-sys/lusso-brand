@@ -29,6 +29,8 @@ export const SettingModel = {
     const s = await this.get();
     const out = {};
     for (const key of PUBLIC_FIELDS) out[key] = s[key];
+    // Telegram ilovasida buyurtma berish yoqilganmi (serverdagi TELEGRAM_ORDERS)
+    out.telegramOrders = config.telegramOrders;
     return out;
   },
 

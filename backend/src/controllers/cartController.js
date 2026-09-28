@@ -57,6 +57,14 @@ export async function getSettings(req, res) {
 
 // ---------------- BUYURTMA ----------------
 export async function createOrder(req, res) {
+  // Telegram ilovasi ichidan buyurtma hozircha qabul qilinmaydi — faqat sayt orqali
+  if (req.tgUser.viaTelegram && !config.telegramOrders) {
+    return res.status(403).json({
+      error: "Buyurtma faqat sayt orqali qabul qilinadi. Do'konni brauzerda oching.",
+      code: 'TELEGRAM_ORDERS_OFF',
+    });
+  }
+
   try {
     const { items = [], customerName, phone, street, detail, comment, saveAddress } = req.body;
 

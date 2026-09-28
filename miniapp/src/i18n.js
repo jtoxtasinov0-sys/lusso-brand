@@ -56,6 +56,9 @@ export const dict = {
     free: 'BEPUL',
     total: 'Jami',
     checkout: 'Buyurtmani rasmiylashtirish',
+    orderInBrowser: 'Saytda buyurtma berish',
+    orderInBrowserHint:
+      "Buyurtma sayt orqali qabul qilinadi. Tugmani bosing — savatingiz bilan birga brauzerda ochiladi.",
     freeHint: (n) => `Yana ${n} xarid qilsangiz yetkazish bepul!`,
 
     // Checkout
@@ -157,6 +160,9 @@ export const dict = {
     free: 'БЕСПЛАТНО',
     total: 'Итого',
     checkout: 'Оформить заказ',
+    orderInBrowser: 'Оформить на сайте',
+    orderInBrowserHint:
+      'Заказы принимаются через сайт. Нажмите кнопку — сайт откроется в браузере вместе с корзиной.',
     freeHint: (n) => `Ещё ${n} — и доставка бесплатно!`,
 
     checkoutTitle: 'Заказ',

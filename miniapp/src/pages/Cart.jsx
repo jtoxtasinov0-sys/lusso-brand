@@ -16,6 +16,7 @@ export default function Cart({
   upsellOn,
   goCatalog,
   onCheckout,
+  orderInBrowser,
 }) {
   if (!items.length) {
     return (
@@ -129,9 +130,11 @@ export default function Cart({
 
       {left > 0 && <div className="free-hint">🚚 {t.freeHint(money(left))}</div>}
 
+      {orderInBrowser && <div className="free-hint">🌐 {t.orderInBrowserHint}</div>}
+
       <div className="sticky-bottom">
         <button className="btn" onClick={onCheckout}>
-          {t.checkout} — {money(total)}
+          {orderInBrowser ? t.orderInBrowser : t.checkout} — {money(total)}
         </button>
       </div>
     </div>

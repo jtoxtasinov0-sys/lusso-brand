@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import api from './api';
 import { dict } from './i18n';
-import { useApp, useCart } from './store';
-import { haptic, showBackButton } from './telegram';
+import { useApp, useCart, cartLink, importCartFromUrl } from './store';
+import { haptic, showBackButton, isTelegram, openLink } from './telegram';
 import { hideSplash } from './splash';
 
 import Onboarding from './components/Onboarding';
@@ -18,6 +18,9 @@ import Payment from './pages/Payment';
 import Profile from './pages/Profile';
 import Orders from './pages/Orders';
 
+// Telegram ilovasidan savat bilan kelingan bo'lsa — savat sahifasidan boshlaymiz
+const cameWithCart = !isTelegram() && importCartFromUrl();
+
 export default function App() {
   const { lang, setLang, user, setUser, settings, setSettings } = useApp();
   const cart = useCart();
@@ -26,7 +29,7 @@ export default function App() {
   const [onboarded, setOnboarded] = useState(
     () => localStorage.getItem('lusso-onboarded') === '1'
   );
-  const [tab, setTab] = useState('home');
+  const [tab, setTab] = useState(cameWithCart ? 'cart' : 'home');
   const [screen, setScreen] = useState(null); // checkout | payment | orders
   const [sheet, setSheet] = useState(null);
   const [storyIndex, setStoryIndex] = useState(null);
@@ -197,6 +200,19 @@ export default function App() {
     showToast(lang === 'ru' ? 'Добавлено в корзину ✅' : "Savatga qo'shildi ✅");
   };
 
+  // Telegram ilovasida buyurtma berish o'chiq bo'lsa (serverdagi TELEGRAM_ORDERS),
+  // buyurtma sayt orqali beriladi: savat bilan birga brauzerda ochamiz
+  const orderInBrowser = isTelegram() && settings?.telegramOrders === false;
+
+  const checkout = () => {
+    if (!orderInBrowser) {
+      setScreen('checkout');
+      return;
+    }
+    haptic('light');
+    openLink(cartLink(cart.items));
+  };
+
   // ---------- Onboarding ----------
   if (!onboarded) {
     return (
@@ -259,7 +275,8 @@ export default function App() {
           upsellOn={upsellOn}
           onToggleUpsell={toggleUpsell}
           goCatalog={() => setTab('catalog')}
-          onCheckout={() => setScreen('checkout')}
+          orderInBrowser={orderInBrowser}
+          onCheckout={checkout}
         />
       )}
 

@@ -47,6 +47,7 @@ export function telegramAuth(req, res, next) {
         firstName: user.first_name || 'Mijoz',
         lastName: user.last_name || null,
         username: user.username || null,
+        viaTelegram: true,
       };
       return next();
     }

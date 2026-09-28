@@ -54,4 +54,39 @@ export const useApp = create((set) => ({
   setSettings: (settings) => set({ settings }),
 }));
 
+// Telegram ilovasidan saytga o'tilganda savat havolaning "#cart=..." qismida
+// keladi. Brauzerda sahifa ochilganda uni savatga yozib, havolani tozalaymiz.
+const CART_HASH = '#cart=';
+
+export function cartLink(items) {
+  const slim = items.map(({ productId, variantId, name, variant, price, image, qty }) => ({
+    productId,
+    variantId,
+    name,
+    variant,
+    price,
+    image,
+    qty,
+  }));
+  return (
+    window.location.origin + window.location.pathname + CART_HASH + encodeURIComponent(JSON.stringify(slim))
+  );
+}
+
+export function importCartFromUrl() {
+  if (!window.location.hash.startsWith(CART_HASH)) return false;
+  let items = [];
+  try {
+    items = JSON.parse(decodeURIComponent(window.location.hash.slice(CART_HASH.length)));
+  } catch {
+    /* buzilgan havola */
+  }
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  if (!Array.isArray(items)) return false;
+  const valid = items.filter((i) => i && Number(i.productId) && Number(i.qty) > 0);
+  if (!valid.length) return false;
+  useCart.setState({ items: valid });
+  return true;
+}
+
 export { keyOf };
