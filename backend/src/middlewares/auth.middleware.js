@@ -56,7 +56,7 @@ export function telegramAuth(req, res, next) {
   // Brauzer (Chrome va h.k.) orqali kirgan mijoz: Telegram yo'q, shuning uchun
   // brauzer o'zi yaratib localStorage'da saqlagan tasodifiy "mehmon ID" bilan
   // tanib olinadi. Bazada u "web_<id>" ko'rinishida alohida mijoz bo'ladi.
-  // Hozircha o'chiq (config.browserAccess) — do'kon faqat bot ichida ishlaydi.
+  // Faqat config.browserAccess yoqilgan bo'lsa (backend/features.json).
   const guestId = req.headers['x-guest-id'] || '';
   if (config.browserAccess && /^[a-zA-Z0-9-]{16,64}$/.test(guestId)) {
     req.tgUser = { id: `web_${guestId}`, firstName: 'Mijoz', isGuest: true };
