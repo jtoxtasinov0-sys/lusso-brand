@@ -1,14 +1,40 @@
 import { useEffect, useState } from 'react';
 import api, { setToken } from '../api';
-import { initData, isTelegram, tgUser } from '../telegram';
+import { initData, inTelegramWithoutData, isTelegram, tgUser } from '../telegram';
 
 export default function Login({ onDone }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  // Telegram ichida ochilgan bo'lsa — avtomatik kirishga urinamiz
-  const [phase, setPhase] = useState(isTelegram ? 'telegram' : 'password');
+  // Telegram ichida ochilgan bo'lsa — avtomatik kirishga urinamiz.
+  // Brauzerda esa avval server parol bilan kirishga ruxsat beradimi — shuni bilamiz.
+  const [phase, setPhase] = useState(isTelegram ? 'telegram' : 'checking');
   const [waking, setWaking] = useState(false);
+  const [browserAllowed, setBrowserAllowed] = useState(false);
+  const [botUrl, setBotUrl] = useState(null);
+
+  // Brauzer kirishi yoqilganmi (server sozlamasi: BROWSER_ACCESS)
+  useEffect(() => {
+    let alive = true;
+    const check = (second = false) =>
+      api
+        .health()
+        .then((h) => {
+          if (!alive) return;
+          setBrowserAllowed(Boolean(h?.browser));
+          setBotUrl(h?.botUrl || null);
+          if (!isTelegram) setPhase(h?.browser ? 'password' : 'bot-only');
+        })
+        .catch(() => {
+          if (!alive) return;
+          if (!second) return check(true); // server uyg'onayotgan bo'lishi mumkin
+          if (!isTelegram) setPhase('bot-only');
+        });
+    check();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const enter = (res) => {
     setToken(res.token);
@@ -37,7 +63,7 @@ export default function Login({ onDone }) {
         }
 
         setError(err.message);
-        setPhase('password'); // Telegram tanimadi — parol bilan kirish qoladi
+        setPhase('password'); // Telegram tanimadi — xato (va ruxsat bo'lsa parol) ko'rsatiladi
       }
     };
 
@@ -78,6 +104,51 @@ export default function Login({ onDone }) {
             <br />
             Bu 30–50 soniya davom etishi mumkin.
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'checking') {
+    return (
+      <div className="login-wrap">
+        <div className="login-card">
+          <div className="logo">LUSSO BRAND KR</div>
+          <div className="sub">Admin panel</div>
+          <div className="login-hint">Yuklanmoqda...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Brauzer kirishi o'chiq: panel faqat bot ichida ochiladi
+  if (phase === 'bot-only' || (phase === 'password' && !browserAllowed)) {
+    return (
+      <div className="login-wrap">
+        <div className="login-card">
+          <div className="logo">LUSSO BRAND KR</div>
+          <div className="sub">Admin panel</div>
+          {error && <div className="login-error">{error}</div>}
+          <div className="login-hint" style={{ marginTop: 14 }}>
+            {isTelegram ? (
+              <>
+                Telegram sizni admin sifatida tanimadi. Botga <b>/admin PAROL</b> deb yozing va
+                panelni qaytadan oching.
+              </>
+            ) : inTelegramWithoutData ? (
+              <>Telegram ma'lumoti kelmadi. Panelni yopib, botdagi tugma orqali qaytadan oching.</>
+            ) : (
+              <>
+                Admin panel faqat Telegram bot ichida ishlaydi. Botga <b>/panel</b> deb yozing va
+                chiqqan tugma orqali oching.
+              </>
+            )}
+          </div>
+          {!isTelegram && !inTelegramWithoutData && botUrl && (
+            <a className="btn full" style={{ marginTop: 16, textDecoration: 'none' }} href={botUrl}>
+              Telegram botni ochish
+            </a>
+          )}
         </div>
       </div>
     );

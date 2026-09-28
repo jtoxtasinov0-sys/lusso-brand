@@ -13,6 +13,17 @@ export const bot = config.botToken ? new Bot(config.botToken) : null;
 
 export const hasBot = Boolean(bot);
 
+// Botning t.me havolasi (brauzerda ochilganda "botga o'tish" tugmasi uchun)
+export function botLink() {
+  if (config.botUrl) return config.botUrl;
+  try {
+    if (bot?.botInfo?.username) return `https://t.me/${bot.botInfo.username}`;
+  } catch {
+    /* bot hali ishga tushmagan */
+  }
+  return null;
+}
+
 // Xabar yuborish (xatolik bo'lsa server to'xtamaydi)
 export async function safeSend(chatId, text, extra = {}) {
   if (!bot) return false;

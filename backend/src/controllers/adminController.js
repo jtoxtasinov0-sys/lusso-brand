@@ -8,6 +8,7 @@ import OrderModel from '../models/Order.js';
 import UserModel from '../models/User.js';
 import SettingModel from '../models/Setting.js';
 import { notifyStatus, runBroadcast } from './botController.js';
+import { botLink } from '../core/bot.js';
 
 // ---------------- KIRISH ----------------
 /**
@@ -20,6 +21,13 @@ export async function login(req, res) {
   const { password, initData } = req.body || {};
 
   if (initData) return loginWithTelegram(initData, req, res);
+
+  if (!config.browserAccess) {
+    return res.status(403).json({
+      code: 'BOT_ONLY',
+      error: 'Admin panel hozircha faqat bot ichida ishlaydi. Botda /panel buyrug\'ini yuboring.',
+    });
+  }
 
   if (typeof password !== 'string' || !password.trim()) {
     return res.status(400).json({ error: 'Parolni kiriting' });
@@ -69,7 +77,7 @@ async function loginWithTelegram(initData, req, res) {
 
   clearFailedLogins(req.loginIp);
   res.json({
-    token: signAdminToken(),
+    token: signAdminToken('telegram'),
     via: 'telegram',
     name: tgUser.first_name || 'Admin',
   });
@@ -77,7 +85,7 @@ async function loginWithTelegram(initData, req, res) {
 
 // Render bepul tarifda uxlab qoladi — panel shu yo'l bilan uni uyg'otadi
 export function health(req, res) {
-  res.json({ ok: true, bot: Boolean(config.botToken) });
+  res.json({ ok: true, bot: Boolean(config.botToken), browser: config.browserAccess, botUrl: botLink() });
 }
 
 // ---------------- DASHBOARD ----------------

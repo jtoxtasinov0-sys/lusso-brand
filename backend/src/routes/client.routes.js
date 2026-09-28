@@ -5,9 +5,16 @@ import { uploadImage } from '../middlewares/upload.middleware.js';
 import { guestOrderLimiter } from '../middlewares/ratelimit.middleware.js';
 import { wrapAll } from '../middlewares/async.middleware.js';
 import * as cartController from '../controllers/cartController.js';
+import config from '../config/default.js';
+import { botLink } from '../core/bot.js';
 
 const cart = wrapAll(cartController);
 const router = Router();
+
+// Brauzerda ochilgan ilova shu orqali ruxsat borligini va bot havolasini biladi (himoyasiz)
+router.get('/access', (req, res) => {
+  res.json({ browser: config.browserAccess, botUrl: botLink() });
+});
 
 router.use(telegramAuth);
 
