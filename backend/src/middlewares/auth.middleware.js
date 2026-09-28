@@ -55,8 +55,9 @@ export function telegramAuth(req, res, next) {
   // Brauzer (Chrome va h.k.) orqali kirgan mijoz: Telegram yo'q, shuning uchun
   // brauzer o'zi yaratib localStorage'da saqlagan tasodifiy "mehmon ID" bilan
   // tanib olinadi. Bazada u "web_<id>" ko'rinishida alohida mijoz bo'ladi.
+  // Hozircha o'chiq (config.browserAccess) — do'kon faqat bot ichida ishlaydi.
   const guestId = req.headers['x-guest-id'] || '';
-  if (/^[a-zA-Z0-9-]{16,64}$/.test(guestId)) {
+  if (config.browserAccess && /^[a-zA-Z0-9-]{16,64}$/.test(guestId)) {
     req.tgUser = { id: `web_${guestId}`, firstName: 'Mijoz', isGuest: true };
     return next();
   }
@@ -73,7 +74,7 @@ export function telegramAuth(req, res, next) {
     return next();
   }
 
-  return res.status(401).json({ error: 'Telegram orqali kiring' });
+  return res.status(401).json({ code: 'BOT_ONLY', error: 'Telegram orqali kiring' });
 }
 
 function isLocalRequest(req) {
@@ -83,8 +84,9 @@ function isLocalRequest(req) {
 }
 
 // ---------------- ADMIN PANEL ----------------
-export function signAdminToken() {
-  return jwt.sign({ role: 'admin' }, config.jwtSecret, { expiresIn: '7d' });
+// via: 'telegram' (bot ichidan) yoki 'password' (brauzerdan)
+export function signAdminToken(via = 'password') {
+  return jwt.sign({ role: 'admin', via }, config.jwtSecret, { expiresIn: '7d' });
 }
 
 export function adminAuth(req, res, next) {
@@ -93,7 +95,12 @@ export function adminAuth(req, res, next) {
   if (!token) return res.status(401).json({ error: 'Avtorizatsiya talab qilinadi' });
 
   try {
-    jwt.verify(token, config.jwtSecret);
+    const payload = jwt.verify(token, config.jwtSecret);
+    // Brauzer kirishi o'chiq bo'lsa — faqat bot ichida olingan token o'tadi
+    // (avval brauzerda parol bilan olingan tokenlar ham shu yerda to'xtaydi)
+    if (!config.browserAccess && payload.via !== 'telegram') {
+      return res.status(401).json({ code: 'BOT_ONLY', error: 'Panel faqat bot ichida ishlaydi' });
+    }
     return next();
   } catch {
     return res.status(401).json({ error: 'Sessiya tugadi, qaytadan kiring' });

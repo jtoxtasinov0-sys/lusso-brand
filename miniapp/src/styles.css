@@ -1564,3 +1564,45 @@ img {
     height: 100%;
   }
 }
+
+/* ================= "BOT ORQALI OCHING" EKRANI ================= */
+.bot-only {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  background: #0a0a0a;
+  color: #f4f1ea;
+}
+.bot-only img {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+}
+.bot-only h1 {
+  margin: 6px 0 0;
+  color: #d6ae51;
+  font: 600 16px/1 Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.32em;
+}
+.bot-only p {
+  max-width: 320px;
+  margin: 0;
+  color: rgba(244, 241, 234, 0.75);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.bot-only-btn {
+  margin-top: 8px;
+  padding: 13px 26px;
+  border-radius: 12px;
+  background: #d6ae51;
+  color: #0a0a0a;
+  font-weight: 600;
+  text-decoration: none;
+}

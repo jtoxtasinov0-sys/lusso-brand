@@ -7,6 +7,9 @@ export const initData = tg?.initData || '';
 
 export const isTelegram = Boolean(initData);
 
+// Telegram ilovasi ichida ochilgan, lekin initData kelmagan (iOS'da ba'zan bo'ladi)
+export const inTelegramWithoutData = !initData && Boolean(tg?.platform && tg.platform !== 'unknown');
+
 export function initTelegram() {
   if (!tg) return;
   try {

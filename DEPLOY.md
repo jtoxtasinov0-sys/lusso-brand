@@ -34,6 +34,12 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
    | `WEB_APP_URL` | `https://lusso-miniapp.vercel.app` |
    | `ADMIN_PANEL_URL` | `https://lusso-brand-kr-admin.vercel.app` |
    | `PUBLIC_URL` | `https://lusso-brand.onrender.com` |
+   | `BOT_URL` | *(ixtiyoriy)* `https://t.me/<bot>` — brauzerdagi "botni ochish" tugmasi |
+
+   Do'kon va admin panel hozircha **faqat Telegram bot ichida** ishlaydi —
+   brauzerda "botni oching" ekrani chiqadi. Brauzer versiyasi Render sozlamasi
+   bilan emas, kod orqali yoqiladi: `backend/src/config/default.js` →
+   `browserAccess: true` → GitHub'ga push.
 
    `ADMIN_PANEL_URL` — botdagi `/panel` shu manzilni ochadi. Bo'sh qoldirsangiz
    `https://lusso-brand-kr-admin.vercel.app` ishlatiladi, ya'ni Vercel loyihasi
