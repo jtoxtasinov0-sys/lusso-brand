@@ -1,5 +1,6 @@
 // Barcha sozlamalar shu yerda to'planadi (.env faylidan o'qiladi)
 import dotenv from 'dotenv';
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -8,6 +9,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const port = Number(process.env.PORT) || 5000;
+
+// Repodagi funksiya kalitlari (GitHub Actions orqali o'zgartiriladi).
+// Fayl bo'lmasa yoki buzilgan bo'lsa — hammasi o'chiq hisoblanadi.
+function readFeatures() {
+  try {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../features.json'), 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
+const features = readFeatures();
 
 /**
  * Kompyuterning Wi-Fi/LAN manzilini topadi (masalan 192.168.0.7).
@@ -64,10 +77,10 @@ export const config = {
   adminMiniAppUrl: (process.env.ADMIN_MINIAPP_URL || '').trim().replace(/\/$/, ''),
 
   // Do'kon va admin panelni oddiy brauzerdan (Telegram'siz) ochish ruxsati.
-  // Hozircha o'chiq: ikkalasi faqat bot ichida ishlaydi. Bu qiymat ataylab
-  // .env/Render sozlamasida emas, kodda turadi — uni faqat dasturchi
-  // o'zgartira oladi. Yoqish uchun: false → true, so'ng GitHub'ga push.
-  browserAccess: false,
+  // Ataylab .env/Render sozlamasida emas, repodagi backend/features.json da
+  // turadi — uni faqat GitHub'ga kirishi bor dasturchi o'zgartira oladi.
+  // Yoqish/o'chirish: GitHub → Actions → "Brauzer kirishi" → Run workflow.
+  browserAccess: features.browserAccess === true,
   // Brauzerda ochilganda "botga o'tish" tugmasi uchun (masalan https://t.me/lusso_brand_kr_bot)
   botUrl: (process.env.BOT_URL || '').trim(),
 

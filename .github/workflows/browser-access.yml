@@ -1,0 +1,49 @@
+# Do'kon va admin panelni oddiy brauzerda ochishni yoqish / o'chirish.
+# GitHub → Actions → "Brauzer kirishi" → Run workflow → yoqish yoki o'chirish.
+# Natija backend/features.json ga yoziladi va main'ga commit qilinadi —
+# Render shu commitdan so'ng serverni o'zi yangilaydi.
+name: Brauzer kirishi
+
+on:
+  workflow_dispatch:
+    inputs:
+      holat:
+        description: "Brauzerdan kirish"
+        required: true
+        type: choice
+        options:
+          - yoqish
+          - o'chirish
+
+permissions:
+  contents: write
+
+jobs:
+  toggle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: features.json ni yangilash
+        env:
+          HOLAT: ${{ inputs.holat }}
+        run: |
+          if [ "$HOLAT" = "yoqish" ]; then VALUE=true; else VALUE=false; fi
+          printf '{\n  "browserAccess": %s\n}\n' "$VALUE" > backend/features.json
+          cat backend/features.json
+
+      - name: Commit va push
+        env:
+          HOLAT: ${{ inputs.holat }}
+        run: |
+          if git diff --quiet; then
+            echo "Allaqachon shu holatda — o'zgarish yo'q."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/features.json
+          git commit -m "Brauzer kirishi: $HOLAT"
+          git push origin HEAD:main

@@ -38,8 +38,9 @@ Frontend allaqachon deploy qilingan. Qolgani — backend.
 
    Do'kon va admin panel hozircha **faqat Telegram bot ichida** ishlaydi —
    brauzerda "botni oching" ekrani chiqadi. Brauzer versiyasi Render sozlamasi
-   bilan emas, kod orqali yoqiladi: `backend/src/config/default.js` →
-   `browserAccess: true` → GitHub'ga push.
+   bilan emas, GitHub'dan yoqiladi: **Actions → "Brauzer kirishi" →
+   Run workflow → yoqish / o'chirish**. Natija `backend/features.json` ga
+   yoziladi va Render serverni o'zi yangilaydi (2–5 daqiqa).
 
    `ADMIN_PANEL_URL` — botdagi `/panel` shu manzilni ochadi. Bo'sh qoldirsangiz
    `https://lusso-brand-kr-admin.vercel.app` ishlatiladi, ya'ni Vercel loyihasi
