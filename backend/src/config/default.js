@@ -64,9 +64,10 @@ export const config = {
   adminMiniAppUrl: (process.env.ADMIN_MINIAPP_URL || '').trim().replace(/\/$/, ''),
 
   // Do'kon va admin panelni oddiy brauzerdan (Telegram'siz) ochish ruxsati.
-  // Hozircha o'chiq: ikkalasi faqat bot ichida ishlaydi. Yoqish uchun
-  // Render → Environment → BROWSER_ACCESS = true.
-  browserAccess: String(process.env.BROWSER_ACCESS || '').toLowerCase() === 'true',
+  // Hozircha o'chiq: ikkalasi faqat bot ichida ishlaydi. Bu qiymat ataylab
+  // .env/Render sozlamasida emas, kodda turadi — uni faqat dasturchi
+  // o'zgartira oladi. Yoqish uchun: false → true, so'ng GitHub'ga push.
+  browserAccess: false,
   // Brauzerda ochilganda "botga o'tish" tugmasi uchun (masalan https://t.me/lusso_brand_kr_bot)
   botUrl: (process.env.BOT_URL || '').trim(),
 
