@@ -9,7 +9,8 @@
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
     "db:prices": "node prisma/prices.js",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:import": "node prisma/import.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

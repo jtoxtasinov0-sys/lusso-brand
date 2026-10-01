@@ -103,3 +103,10 @@ $RECYCLE.BIN/
 
 # ---- Vercel ----
 .vercel/
+
+# ---- Mahsulot yuklash papkasi (asl rasmlar katta, repoga kerak emas) ----
+# Kichraytirilgan nusxalari backend/uploads/mahsulot/ ga tushadi va commit qilinadi.
+MAHSULOTLAR/**/*
+!MAHSULOTLAR/*/
+!MAHSULOTLAR/*/.gitkeep
+!MAHSULOTLAR/QOLLANMA.txt

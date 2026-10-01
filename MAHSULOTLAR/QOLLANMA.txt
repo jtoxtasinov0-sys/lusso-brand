@@ -1,0 +1,39 @@
+MAHSULOTLARNI PAPKADAN YUKLASH
+==============================
+
+1) Rasmlarni kerakli papkaga tashlang:
+
+     oyoq-kiyim\   - krossovka, tufli
+     kozoynak\     - ko'zoynaklar
+     atir\         - atirlar
+
+2) Bitta mahsulotning 3 ta rasmini birdaniga nomlash (eng oson yo'l):
+
+     - 3 ta rasmni belgilang (Ctrl bosib turib bosing)
+     - F2 tugmasini bosing
+     - Yozing:   Nike Dunk Low Panda - 89000
+     - Enter
+
+   Windows o'zi shunday nomlaydi:
+     Nike Dunk Low Panda - 89000 (1).jpg   <- 1-rasm (asosiy)
+     Nike Dunk Low Panda - 89000 (2).jpg
+     Nike Dunk Low Panda - 89000 (3).jpg
+
+   Nomi bir xil rasmlar bitta mahsulot bo'lib yuklanadi.
+
+3) 6-MAHSULOT-YUKLASH.bat ni ikki marta bosing.
+   Ro'yxatni ko'rsatadi, "ha" deb yozsangiz yuklaydi.
+
+QO'SHIMCHA
+----------
+- Eski (chizilgan) narx kerak bo'lsa:   Nike Dunk Low Panda - 89000 - 135000
+- Narxni 89k deb yozsa ham bo'ladi.
+- Har bir mahsulotni alohida papkaga ham solsa bo'ladi:
+      oyoq-kiyim\Nike Dunk Low Panda - 89000\  (ichida istalgan nomli rasmlar)
+- Faqat JPG / PNG. iPhone'ning HEIC rasmlari o'qilmaydi.
+- Shu nomli mahsulot do'konda bo'lsa — yangisi qo'shilmaydi, eskisining
+  rasmi va narxi almashtiriladi.
+- Yuklangan rasmlar _yuklangan\ papkasiga olib qo'yiladi.
+- Oyoq kiyimga 240-285 o'lchamlar (har biridan 3 ta) avtomatik qo'shiladi,
+  boshqalarga "Standart" (10 ta). Tavsif, ruscha nom, o'lchamlarni keyin
+  admin paneldan o'zgartirish mumkin.

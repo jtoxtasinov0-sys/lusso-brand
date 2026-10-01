@@ -21,6 +21,7 @@ Papkadagi fayllarni **shu tartibda** ikki marta bosing:
 | `3-ADMIN-ishga-tushirish.bat` | Admin panel (port 5174) |
 | `4-TUNNEL-ochish.bat` | Do'kon va admin panelni internetga chiqaradi |
 | `5-NARXLARNI-YANGILASH.bat` | Narxlarni bazaga yozadi (kerak bo'lganda) |
+| `6-MAHSULOT-YUKLASH.bat` | `MAHSULOTLAR` papkasidagi rasmlardan mahsulot yaratadi (`MAHSULOTLAR/QOLLANMA.txt`) |
 
 To'rtala oyna **ochiq turishi kerak**. Yopilsa — do'kon ishlamaydi.
 
