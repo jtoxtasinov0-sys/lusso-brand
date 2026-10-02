@@ -71,8 +71,11 @@ export default function App() {
     <div className={`layout${isTelegram ? ' in-telegram' : ''}`}>
       <aside className="sidebar">
         <div className="brand">
-          LUSSO BRAND
-          <small>KR · Admin panel</small>
+          <img src="/logo.png" alt="" />
+          <div>
+            ADMIN
+            <small>LUSSO BRAND KR</small>
+          </div>
         </div>
 
         {MENU.map((m) => (

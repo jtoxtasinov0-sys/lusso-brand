@@ -93,8 +93,9 @@ export default function Login({ onDone }) {
     return (
       <div className="login-wrap">
         <div className="login-card">
-          <div className="logo">LUSSO BRAND KR</div>
-          <div className="sub">Admin panel</div>
+          <img className="login-logo" src="/logo.png" alt="" />
+          <div className="logo">ADMIN</div>
+          <div className="sub">LUSSO BRAND KR</div>
           <div className="login-hint">
             {waking
               ? "Server uyg'onmoqda, biroz kuting..."
@@ -113,8 +114,9 @@ export default function Login({ onDone }) {
     return (
       <div className="login-wrap">
         <div className="login-card">
-          <div className="logo">LUSSO BRAND KR</div>
-          <div className="sub">Admin panel</div>
+          <img className="login-logo" src="/logo.png" alt="" />
+          <div className="logo">ADMIN</div>
+          <div className="sub">LUSSO BRAND KR</div>
           <div className="login-hint">Yuklanmoqda...</div>
         </div>
       </div>
@@ -126,8 +128,9 @@ export default function Login({ onDone }) {
     return (
       <div className="login-wrap">
         <div className="login-card">
-          <div className="logo">LUSSO BRAND KR</div>
-          <div className="sub">Admin panel</div>
+          <img className="login-logo" src="/logo.png" alt="" />
+          <div className="logo">ADMIN</div>
+          <div className="sub">LUSSO BRAND KR</div>
           {error && <div className="login-error">{error}</div>}
           <div className="login-hint" style={{ marginTop: 14 }}>
             {isTelegram ? (
@@ -157,8 +160,9 @@ export default function Login({ onDone }) {
   return (
     <div className="login-wrap">
       <form className="login-card" onSubmit={submit}>
-        <div className="logo">LUSSO BRAND KR</div>
-        <div className="sub">Admin panel</div>
+        <img className="login-logo" src="/logo.png" alt="" />
+        <div className="logo">ADMIN</div>
+        <div className="sub">LUSSO BRAND KR</div>
 
         <input
           className="input"

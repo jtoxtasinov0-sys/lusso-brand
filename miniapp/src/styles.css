@@ -3487,3 +3487,45 @@ body::before {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =====================================================================
+   KOMPYUTER / KENG EKRAN — ilova telefon kengligidagi markaziy ustun bo'lib
+   ko'rinadi (Telegram Desktop va brauzerda juda cho'zilib ketmasligi uchun)
+   ===================================================================== */
+@media (min-width: 560px) {
+  :root {
+    --app-w: 440px;
+    /* fixed elementlarda % — skrollbarsiz ekran kengligidan hisoblanadi */
+    --app-side: max(0px, calc(50% - var(--app-w) / 2));
+  }
+
+  #root {
+    max-width: var(--app-w);
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 0 0 1px rgba(214, 174, 81, 0.14), 0 30px 80px rgba(122, 87, 25, 0.14);
+  }
+
+  .dock {
+    left: calc(var(--app-side) + 12px);
+    right: calc(var(--app-side) + 12px);
+  }
+
+  .sheet,
+  .screen,
+  .onboarding,
+  .story-viewer,
+  .iv {
+    left: var(--app-side);
+    right: var(--app-side);
+  }
+
+  .sheet {
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .toast {
+    max-width: calc(var(--app-w) - 32px);
+  }
+}
