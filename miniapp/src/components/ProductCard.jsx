@@ -4,6 +4,7 @@ import { haptic } from '../telegram';
 import { useFav } from '../store';
 import Icon from './Icon';
 import { frameStyle } from '../framing';
+import { colorOf } from '../colors';
 
 export const PLACEHOLDER =
   'data:image/svg+xml;utf8,' +
@@ -36,6 +37,7 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
   const variants = product.variants || [];
   const isShoes = product.category?.slug === 'shoes';
   const showVariants = !isShoes && variants.length > 1;
+  const dots = showVariants ? variants.map(colorOf).filter(Boolean) : [];
 
   return (
     <div className="card rise" style={{ '--i': Math.min(index, 8) }} onClick={() => onOpen(product)}>
@@ -98,11 +100,19 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
         <span className="price-new">{money(product.price)}</span>
         {discount > 0 && <span className="price-old">{money(product.oldPrice)}</span>}
       </div>
-      {showVariants && (
-        <div className="swatches">
-          {variants.length} {t.variantsCount}
-        </div>
-      )}
+      {showVariants &&
+        (dots.length ? (
+          <div className="swatches">
+            {dots.slice(0, 5).map((c, i) => (
+              <i key={i} className="dot" style={{ background: c }} />
+            ))}
+            {dots.length > 5 && <span>+{dots.length - 5}</span>}
+          </div>
+        ) : (
+          <div className="swatches">
+            {variants.length} {t.variantsCount}
+          </div>
+        ))}
     </div>
   );
 }

@@ -1,6 +1,9 @@
 // Mahsulotlar bilan ishlash (Prisma logikasi)
 import prisma from '../database/connection.js';
 
+// Faqat to'g'ri HEX rang (#rgb / #rrggbb) saqlanadi
+const cleanColor = (c) => (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(String(c || '').trim()) ? String(c).trim() : null);
+
 const withRelations = {
   images: { orderBy: { sortOrder: 'asc' } },
   variants: { orderBy: { sortOrder: 'asc' } },
@@ -106,6 +109,7 @@ export const ProductModel = {
             label: String(v.label),
             stock: Number(v.stock) || 0,
             extraPrice: Number(v.extraPrice) || 0,
+            color: cleanColor(v.color),
             sortOrder: i,
           })),
         },
@@ -133,6 +137,7 @@ export const ProductModel = {
           label: String(v.label),
           stock: Number(v.stock) || 0,
           extraPrice: Number(v.extraPrice) || 0,
+          color: cleanColor(v.color),
           sortOrder: i,
         })),
       });

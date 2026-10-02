@@ -6,6 +6,7 @@ import { PLACEHOLDER, onImgError, discountOf } from './ProductCard';
 import Icon from './Icon';
 import ImageViewer from './ImageViewer';
 import { frameStyle } from '../framing';
+import { colorOf } from '../colors';
 
 // Koreya o'lchami (mm) → EU / US
 const SIZE_TABLE = [
@@ -21,7 +22,7 @@ const SIZE_TABLE = [
   ['285', '45', '11'],
 ];
 
-export default function ProductSheet({ product, lang, t, settings, onClose, onAdd }) {
+export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
   const [variantId, setVariantId] = useState(null);
   const [showTable, setShowTable] = useState(false);
   const [slide, setSlide] = useState(0);
@@ -43,7 +44,6 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
   const discount = discountOf(product);
   // Har bir rang/variantning o'z rasmi bor (rasmlar soni = variantlar soni)
   const imagePerVariant = !isShoes && variants.length > 1 && images.length === variants.length;
-  const freeFrom = settings?.freeDeliveryFrom ?? 100000;
 
   useEffect(() => {
     const available = variants.filter((v) => v.stock > 0);
@@ -90,6 +90,7 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
         variantId: v?.id || null,
         name,
         variant: v?.label || null,
+        color: !isShoes && v ? colorOf(v) : null,
         price,
         image: images[Math.max(0, imgIdx)].url,
         qty: 1,
@@ -164,21 +165,6 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
               )}
             </div>
 
-            <div className="perks">
-              <div className="perk">
-                <b>🚚</b>
-                {t.perkDelivery}
-              </div>
-              <div className="perk">
-                <b>🎁</b>
-                {t.perkFree(money(freeFrom))}
-              </div>
-              <div className="perk">
-                <b>💬</b>
-                {t.perkSupport}
-              </div>
-            </div>
-
             {variants.length > 0 && !(variants.length === 1 && variants[0].label === 'Standart') && (
               <div>
                 <div className="opt-label">
@@ -213,16 +199,28 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
                 )}
 
                 <div className="options">
-                  {variants.map((v, idx) => (
-                    <button
-                      key={v.id}
-                      className={`opt ${v.stock <= 0 ? 'off' : v.id === variantId ? 'on' : ''}`}
-                      disabled={v.stock <= 0}
-                      onClick={() => pick(v, idx)}
-                    >
-                      {v.label}
-                    </button>
-                  ))}
+                  {variants.map((v, idx) => {
+                    const color = isShoes ? null : colorOf(v);
+                    const thumb = imagePerVariant ? images[idx]?.url : null;
+                    return (
+                      <button
+                        key={v.id}
+                        className={`opt ${thumb || color ? 'opt-color' : ''} ${
+                          v.stock <= 0 ? 'off' : v.id === variantId ? 'on' : ''
+                        }`}
+                        disabled={v.stock <= 0}
+                        onClick={() => pick(v, idx)}
+                      >
+                        {thumb && (
+                          <span className="opt-thumb">
+                            <img src={thumb} alt="" style={frameStyle(thumb)} onError={onImgError} />
+                          </span>
+                        )}
+                        {color && <i className="dot" style={{ background: color }} />}
+                        {v.label}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {variant && variant.stock > 0 && variant.stock <= 3 && (

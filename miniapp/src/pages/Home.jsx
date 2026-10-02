@@ -184,7 +184,7 @@ export default function Home({
   const catCount = (slug) => products.filter((p) => p.category?.slug === slug).length;
 
   return (
-    <div className="page">
+    <div className="page home">
       <div className="home-arc" aria-hidden="true" />
       <Hello greet={greet} name={firstName} sub={t.welcomeSub} lang={lang} onLang={onLang} />
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 import Modal from '../components/Modal';
 import ImageUploader from '../components/ImageUploader';
+import { colorOf } from '../colors';
 
 const money = (n) => '₩' + Number(n || 0).toLocaleString('ko-KR');
 
@@ -22,6 +23,28 @@ const EMPTY = {
 
 const SHOE_PRESET = ['240', '245', '250', '255', '260', '265', '270', '275', '280', '285'];
 const ML_PRESET = ['30ml', '50ml', '100ml'];
+
+// Variant rangi: doirachani bosib tanlanadi. Tanlanmagan bo'lsa — nomidan taxmin (xira ko'rinadi).
+function ColorPick({ variant, onChange }) {
+  const auto = colorOf({ label: variant.label });
+  const value = variant.color || auto;
+  return (
+    <div className="color-pick">
+      <label
+        className={`swatch ${variant.color ? '' : 'auto'} ${value ? '' : 'none'}`}
+        style={{ background: value || undefined }}
+        title={variant.color ? 'Tanlangan rang' : auto ? 'Nomidan aniqlandi — bosib o\'zgartiring' : 'Rang yo\'q — bosib tanlang'}
+      >
+        <input type="color" value={value || '#888888'} onChange={(e) => onChange(e.target.value)} />
+      </label>
+      {variant.color && (
+        <button type="button" className="clear" title="Rangni olib tashlash" onClick={() => onChange('')}>
+          ✕
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function ProductsPage({ toast }) {
   const [products, setProducts] = useState([]);
@@ -65,7 +88,7 @@ export default function ProductsPage({ toast }) {
       isNew: p.isNew,
       images: p.images.map((i) => i.url),
       variants: p.variants.length
-        ? p.variants.map((v) => ({ label: v.label, stock: v.stock, extraPrice: v.extraPrice }))
+        ? p.variants.map((v) => ({ label: v.label, stock: v.stock, extraPrice: v.extraPrice, color: v.color || '' }))
         : [{ label: '', stock: 10, extraPrice: 0 }],
     });
   };
@@ -342,6 +365,7 @@ export default function ProductsPage({ toast }) {
             </label>
 
             <div className="var-head">
+              <div>Rang</div>
               <div>Nomi (265 / 100ml / Qora)</div>
               <div>Zaxira</div>
               <div>Qo'shimcha narx</div>
@@ -350,6 +374,7 @@ export default function ProductsPage({ toast }) {
 
             {form.variants.map((v, i) => (
               <div className="variant-row" key={i}>
+                <ColorPick variant={v} onChange={(c) => setVariant(i, 'color', c)} />
                 <input
                   className="input"
                   value={v.label}
@@ -377,6 +402,11 @@ export default function ProductsPage({ toast }) {
             <button className="btn sm light" onClick={addVariant}>
               + Variant qo'shish
             </button>
+            <div className="hint var-hint">
+              Rang — ilovada variant yonida yumaloq belgi bo'lib chiqadi. Nomi rang bo'lsa (Qora, Ko'k...) o'zi
+              aniqlanadi, xohlasangiz doirachani bosib boshqasini tanlang. Rasmlar soni variantlar soniga teng
+              bo'lsa, har bir rangga o'z rasmi kichik bo'lib chiqadi (1-rasm — 1-variant).
+            </div>
           </div>
 
           <button className="btn full" style={{ marginTop: 14 }} onClick={save} disabled={saving}>
