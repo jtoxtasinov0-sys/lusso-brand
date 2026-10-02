@@ -27,6 +27,8 @@ const RESIZE = path.join(__dirname, 'resize.ps1');
 const EXTRA_FILE = path.join(INBOX, 'tavsiflar.json');
 
 const AUTO_YES = process.argv.includes('--ha');
+// --ochir: eski mahsulotlarni savolsiz o'chirish (--ha bilan birga ishlatiladi)
+const DELETE_OLD = process.argv.includes('--ochir');
 const IMAGE_EXT = /\.(jpe?g|png|webp|bmp|gif)$/i;
 
 const SHOE_SIZES = ['240', '245', '250', '255', '260', '265', '270', '275', '280', '285'];
@@ -341,7 +343,7 @@ async function main() {
     const oldCount = await prisma.product.count({
       where: { images: { none: { url: { startsWith: '/uploads/mahsulot/' } } } },
     });
-    let deleteOld = false;
+    let deleteOld = DELETE_OLD;
     if (oldCount > 0 && !AUTO_YES) {
       deleteOld = await ask(rl, `   Do'konda ${oldCount} ta eski mahsulot bor. Ular butunlay O'CHIRILSINMI? (qaytarib bo'lmaydi)`);
     }
