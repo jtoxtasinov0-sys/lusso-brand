@@ -45,7 +45,7 @@ const onServer = Boolean(process.env.RENDER) || (process.env.PUBLIC_URL || '').s
 // Serverda ADMIN_PANEL_URL kiritilmay qolsa ham bot panelni bera olishi uchun
 // standart manzil. Vercel loyihasi boshqa nom bilan tursa, uni Render'dagi
 // ADMIN_PANEL_URL orqali yoki botda `/panel https://...` bilan almashtiring.
-const DEFAULT_PANEL_URL = 'https://lusso-brand-kr-admin.vercel.app';
+const DEFAULT_PANEL_URL = 'https://lusso-admin-sand.vercel.app';
 
 export const config = {
   port,

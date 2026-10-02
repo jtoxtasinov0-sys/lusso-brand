@@ -65,7 +65,7 @@ Yangi buyurtma haqidagi xabarda ham xuddi shu tugma bo'ladi — bosdingiz, panel
 
 > Tugma chiqmasa, panel manzili sozlanmagan. Ikki yo'l bor:
 > Render → Environment → `ADMIN_PANEL_URL`, yoki to'g'ridan-to'g'ri botda:
-> `/panel https://lusso-brand-kr-admin.vercel.app`
+> `/panel https://lusso-admin-sand.vercel.app`
 
 ### Panelni alohida havola qilib ochish (ixtiyoriy)
 
@@ -75,7 +75,7 @@ havola berish mumkin:
 1. [@BotFather](https://t.me/BotFather) → **`/newapp`** → `@lusso_brand_bot`
 2. Nomi: `LUSSO Admin` · Tavsifi: `Admin panel`
 3. Rasm: 640×360 png · GIF: **Skip**
-4. **Web App URL:** `https://lusso-brand-kr-admin.vercel.app`
+4. **Web App URL:** `https://lusso-admin-sand.vercel.app`
 5. **Short name:** `admin` → havola tayyor: `t.me/lusso_brand_bot/admin`
 6. Shu havolani Render → Environment → `ADMIN_MINIAPP_URL` ga yozing —
    `/panel` javobida ikkinchi tugma bo'lib chiqadi
@@ -224,7 +224,7 @@ Botni ishga tushirgan barcha mijozlarga yetadi.
 | `DATABASE_URL` | Neon PostgreSQL manzili |
 | `BOT_TOKEN` | BotFather tokeni |
 | `ADMIN_PASSWORD` | `/admin` buyrug'i uchun va Sozlamalarda parol yozilmagan holat uchun zaxira |
-| `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi. Serverda bo'sh bo'lsa `lusso-brand-kr-admin.vercel.app` ishlatiladi |
+| `ADMIN_PANEL_URL` | Admin panel manzili — botdagi `/panel` shuni ochadi. Serverda bo'sh bo'lsa `lusso-admin-sand.vercel.app` ishlatiladi |
 | `ADMIN_MINIAPP_URL` | BotFather `/newapp` bergan `t.me/...` havola (ixtiyoriy) |
 | `WEB_APP_URL` | Tunnel manzili — **avtomatik yoziladi** |
 | `ADMIN_IDS` | Qo'shimcha adminlar (ixtiyoriy — `/admin` buyrug'i yetarli) |
@@ -247,7 +247,7 @@ Do'konni brauzerdan emas, Telegram ichidan oching.
 
 **Botdagi `/panel` tugmasi eski manzilni ochyapti**
 Bazada kompyuterdagi tunnel manzili qolib ketgan. Botda yangi manzilni bering:
-`/panel https://lusso-brand-kr-admin.vercel.app`
+`/panel https://lusso-admin-sand.vercel.app`
 
 **Panelga kirganda "Siz admin emassiz" deyapti**
 Botga `/admin LussoKR2026` deb yozing, keyin panelni qaytadan oching.
