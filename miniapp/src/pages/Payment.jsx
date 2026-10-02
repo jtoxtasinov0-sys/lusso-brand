@@ -5,25 +5,6 @@ import { haptic, closeApp, openLink, isTelegram } from '../telegram';
 import { SUPPORT_URL } from '../constants';
 import Icon from '../components/Icon';
 
-// Toss ilovasi tushunadigan bank nomlari
-const TOSS_BANKS = [
-  [/shinhan|신한/i, '신한'],
-  [/kb|kookmin|국민/i, '국민'],
-  [/woori|우리/i, '우리'],
-  [/hana|하나/i, '하나'],
-  [/nh|nonghyup|농협/i, '농협'],
-  [/ibk|기업/i, '기업'],
-  [/kakao|카카오/i, '카카오뱅크'],
-  [/toss|토스/i, '토스뱅크'],
-  [/sc|제일/i, 'SC제일'],
-];
-
-function tossLink(bank, total) {
-  const name = TOSS_BANKS.find(([re]) => re.test(bank?.name || ''))?.[1] || bank?.name || '';
-  const acc = String(bank?.account || '').replace(/\D/g, '');
-  return `supertoss://send?bank=${encodeURIComponent(name)}&accountNo=${acc}&amount=${total}`;
-}
-
 function SuccessMark() {
   return (
     <div className="success-mark">
@@ -128,21 +109,9 @@ export default function Payment({ t, order, bank, onDone }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button className="btn dark" style={{ height: 48, fontSize: 13.5 }} onClick={() => copy(String(order.total), 'sum')}>
-            <Icon name={copied === 'sum' ? 'check' : 'copy'} /> {t.copyAmount}
-          </button>
-          <button
-            className="btn dark"
-            style={{ height: 48, fontSize: 13.5 }}
-            onClick={() => {
-              haptic('light');
-              window.location.href = tossLink(bank, order.total);
-            }}
-          >
-            💸 {t.openToss}
-          </button>
-        </div>
+        <button className="btn dark" style={{ height: 48, fontSize: 13.5 }} onClick={() => copy(String(order.total), 'sum')}>
+          <Icon name={copied === 'sum' ? 'check' : 'copy'} /> {t.copyAmount}
+        </button>
 
         <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFile} />
 

@@ -4,6 +4,8 @@ import { haptic } from '../telegram';
 import { useFav } from '../store';
 import { PLACEHOLDER, onImgError, discountOf } from './ProductCard';
 import Icon from './Icon';
+import ImageViewer from './ImageViewer';
+import { frameStyle } from '../framing';
 
 // Koreya o'lchami (mm) → EU / US
 const SIZE_TABLE = [
@@ -24,6 +26,7 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
   const [showTable, setShowTable] = useState(false);
   const [slide, setSlide] = useState(0);
   const [closing, setClosing] = useState(false);
+  const [viewer, setViewer] = useState(null); // ochilgan rasm indeksi
   const trackRef = useRef(null);
   const imgRefs = useRef([]);
 
@@ -120,13 +123,19 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
           <div className="gallery">
             <div className="gallery-track" ref={trackRef} onScroll={onScroll}>
               {images.map((im, i) => (
-                <img
-                  key={i}
-                  ref={(el) => (imgRefs.current[i] = el)}
-                  src={im.url}
-                  alt={name}
-                  onError={onImgError}
-                />
+                <div className="gallery-cell" key={i}>
+                  <img
+                    ref={(el) => (imgRefs.current[i] = el)}
+                    src={im.url}
+                    alt={name}
+                    style={frameStyle(im.url)}
+                    onError={onImgError}
+                    onClick={() => {
+                      haptic('light');
+                      setViewer(i);
+                    }}
+                  />
+                </div>
               ))}
             </div>
             {images.length > 1 && (
@@ -136,6 +145,9 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
                 ))}
               </div>
             )}
+            <button className="gallery-zoom" onClick={() => setViewer(slide)} aria-label="zoom">
+              <Icon name="expand" />
+            </button>
           </div>
 
           <div className="sheet-info">
@@ -246,6 +258,10 @@ export default function ProductSheet({ product, lang, t, settings, onClose, onAd
           </button>
         </div>
       </div>
+
+      {viewer !== null && (
+        <ImageViewer images={images.map((im) => im.url)} start={viewer} alt={name} onClose={() => setViewer(null)} />
+      )}
     </>
   );
 }

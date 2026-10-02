@@ -27,6 +27,7 @@ const PATHS = {
   box: 'M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5 12 12l9-4.5M12 12v9',
   shield: 'M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z',
   spark: 'M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z',
+  expand: 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',
 };
 
 export default function Icon({ name, fill = false }) {

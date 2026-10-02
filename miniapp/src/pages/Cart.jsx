@@ -3,6 +3,7 @@ import { money } from '../i18n';
 import { keyOf } from '../store';
 import { haptic } from '../telegram';
 import { PLACEHOLDER, onImgError } from '../components/ProductCard';
+import { frameStyle } from '../framing';
 import Icon from '../components/Icon';
 
 function CartItem({ item, index, inc, dec, remove }) {
@@ -17,7 +18,7 @@ function CartItem({ item, index, inc, dec, remove }) {
 
   return (
     <div className={`cart-item rise ${leaving ? 'leaving' : ''}`} style={{ '--i': index }}>
-      <img src={item.image || PLACEHOLDER} alt="" onError={onImgError} />
+      <img src={item.image || PLACEHOLDER} alt="" className="framed" style={frameStyle(item.image)} onError={onImgError} />
       <div className="info">
         <div className="t">{item.name}</div>
         {item.variant && item.variant !== 'Standart' && <div className="v">{item.variant}</div>}
@@ -123,7 +124,13 @@ export default function Cart({
 
       {upsell && (
         <div className="upsell rise">
-          <img src={upsell.images?.[0]?.url || PLACEHOLDER} alt="" onError={onImgError} />
+          <img
+            src={upsell.images?.[0]?.url || PLACEHOLDER}
+            alt=""
+            className="framed"
+            style={frameStyle(upsell.images?.[0]?.url)}
+            onError={onImgError}
+          />
           <div className="txt">
             <b>{t.upsellTitle(lang === 'ru' ? upsell.nameRu : upsell.nameUz)}</b>
             {t.upsellText(money(upsell.price))}

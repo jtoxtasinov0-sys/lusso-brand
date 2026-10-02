@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ProductCard, { onImgError, discountOf, PLACEHOLDER } from '../components/ProductCard';
+import { frameStyle } from '../framing';
 import Icon from '../components/Icon';
 import { money } from '../i18n';
 import { haptic } from '../telegram';
@@ -87,7 +88,13 @@ function Showcase({ items, lang, t, onOpen }) {
               }}
             >
               <div className="slide-img">
-                <img src={p.images?.[0]?.url || PLACEHOLDER} alt="" onError={onImgError} />
+                <img
+                  src={p.images?.[0]?.url || PLACEHOLDER}
+                  alt=""
+                  className="framed"
+                  style={frameStyle(p.images?.[0]?.url)}
+                  onError={onImgError}
+                />
               </div>
               <div className="slide-info">
                 <span className="tag">{d > 0 ? `−${d}% · ${t.sale}` : p.brand || 'LUSSO'}</span>

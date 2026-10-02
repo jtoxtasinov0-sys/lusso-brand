@@ -3,6 +3,7 @@ import api from '../api';
 import { money } from '../i18n';
 import { haptic, openLink } from '../telegram';
 import { onImgError, PLACEHOLDER } from '../components/ProductCard';
+import { frameStyle } from '../framing';
 import Icon from '../components/Icon';
 
 const FLOW = ['PENDING_PAYMENT', 'CONFIRMED', 'SHIPPED', 'DELIVERED'];
@@ -88,7 +89,7 @@ export default function Orders({ t, lang, onBack, onReorder }) {
 
                 <div className="order-items" style={cancelled ? { marginTop: 14 } : undefined}>
                   {(o.items || []).map((i, k) => (
-                    <img key={k} src={i.image || PLACEHOLDER} alt="" onError={onImgError} />
+                    <img key={k} src={i.image || PLACEHOLDER} alt="" className="framed" style={frameStyle(i.image)} onError={onImgError} />
                   ))}
                 </div>
                 <div className="order-lines">

@@ -1,27 +1,32 @@
-/* ================= LUSSO BRAND KR — "Noir" interfeysi =================
-   Logo ranglari: qora #0b0b0c + oltin gradient (#f1d58a → #d6ae51 → #a8822e).
+/* ================= LUSSO BRAND KR — "Ivory" interfeysi =================
+   Och, sodda dizayn: fil suyagi rangidagi fon, oq kartalar va logodagi oltin.
+   Logo ranglari: oltin gradient (#f1d58a → #d6ae51 → #a8822e).
    Ranglarni almashtirish uchun faqat :root dagi o'zgaruvchilarni o'zgartiring.
    ===================================================================== */
 :root {
-  --bg: #0b0b0c;
-  --bg-2: #111113;
-  --card: #17171a;
-  --card-2: #1e1e22;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-2: rgba(255, 255, 255, 0.14);
-  --text: #f5f1e8;
-  --muted: #8f8a80;
-  --dim: #5d5952;
+  --bg: #faf7f1;
+  --bg-2: #f4eee3;
+  --card: #ffffff;
+  --card-2: #f6f1e7;
+  --line: rgba(140, 110, 50, 0.12);
+  --line-2: rgba(140, 110, 50, 0.22);
+  --text: #2b2721;
+  --muted: #8b8274;
+  --dim: #b5ac9d;
+  --on-gold: #2b2316; /* oltin tugma ustidagi yozuv */
 
-  --gold: #d6ae51;
+  --gold: #b88a2e;
   --gold-hi: #f1d58a;
   --gold-lo: #a8822e;
-  --gold-soft: rgba(214, 174, 81, 0.12);
+  --gold-soft: rgba(214, 174, 81, 0.14);
   --grad: linear-gradient(135deg, #f1d58a 0%, #d6ae51 48%, #a8822e 100%);
-  --plate: #f3efe7; /* mahsulot rasmi turadigan och "lavha" */
+  --grad-text: linear-gradient(135deg, #c99b3d 0%, #a8822e 100%);
+  --plate: #f3eee5; /* mahsulot rasmi turadigan och "lavha" */
+  --shadow: 0 6px 22px rgba(120, 92, 40, 0.08);
+  --shadow-l: 0 16px 40px rgba(120, 92, 40, 0.16);
 
-  --red: #ef5350;
-  --green: #4cc38a;
+  --red: #e04848;
+  --green: #2e9d6a;
 
   --r-s: 12px;
   --r: 20px;
@@ -96,7 +101,7 @@ svg.ic {
 }
 
 .gold-text {
-  background: var(--grad);
+  background: var(--grad-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -202,7 +207,7 @@ svg.ic {
   padding: 0 4px;
   border-radius: 9px;
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   font-size: 10px;
   font-weight: 800;
   display: grid;
@@ -348,8 +353,9 @@ svg.ic {
   height: 380px;
   border-radius: var(--r-l);
   overflow: hidden;
-  background: #141416;
+  background: var(--card);
   border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 
 .slide-img {
@@ -362,9 +368,8 @@ svg.ic {
 .slide-img img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  transform: scale(1.04);
+  object-fit: cover;
+  transform: scale(calc(var(--z, 1) * 1.04));
 }
 
 .slide.active .slide-img img {
@@ -373,10 +378,10 @@ svg.ic {
 
 @keyframes kenburns {
   from {
-    transform: scale(1.18) translateY(6px);
+    transform: scale(calc(var(--z, 1) * 1.18)) translateY(6px);
   }
   to {
-    transform: scale(1.04);
+    transform: scale(calc(var(--z, 1) * 1.04));
   }
 }
 
@@ -385,7 +390,7 @@ svg.ic {
   position: absolute;
   inset: auto 0 0;
   height: 70px;
-  background: linear-gradient(transparent, #141416);
+  background: linear-gradient(rgba(255, 255, 255, 0), var(--card));
 }
 
 .slide-info {
@@ -401,7 +406,7 @@ svg.ic {
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #111;
+  color: var(--on-gold);
   background: var(--grad);
   padding: 5px 10px;
   border-radius: 20px;
@@ -560,7 +565,7 @@ svg.ic {
   border-radius: 16px;
   background: var(--plate);
   transform: rotate(-8deg);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-l);
   transition: transform 0.6s var(--ease);
 }
 
@@ -584,7 +589,6 @@ svg.ic {
 
 .bento-tile b {
   position: relative;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
   font-family: var(--serif);
   font-size: 21px;
   font-weight: 600;
@@ -680,20 +684,19 @@ svg.ic {
 .card-img img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  object-fit: cover;
   opacity: 0;
-  transform: scale(1.06);
+  transform: scale(calc(var(--z, 1) * 1.06));
   transition: opacity 0.5s ease, transform 0.7s var(--ease);
 }
 
 .card-img img.loaded {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(var(--z, 1));
 }
 
 .card:active .card-img img.loaded {
-  transform: scale(0.96);
+  transform: scale(calc(var(--z, 1) * 0.96));
 }
 
 .card-img::before {
@@ -727,18 +730,18 @@ svg.ic {
   font-weight: 800;
   padding: 4px 8px;
   border-radius: 8px;
-  background: #0b0b0c;
+  background: var(--text);
   color: var(--gold-hi);
   letter-spacing: 0.04em;
 }
 
 .ribbon.new {
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
 }
 
 .ribbon.out {
-  background: rgba(11, 11, 12, 0.75);
+  background: rgba(43, 39, 33, 0.7);
   color: #fff;
 }
 
@@ -752,7 +755,7 @@ svg.ic {
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.85);
-  color: #111;
+  color: var(--on-gold);
   backdrop-filter: blur(6px);
   transition: transform 0.3s var(--spring);
 }
@@ -782,9 +785,9 @@ svg.ic {
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: #0b0b0c;
-  color: var(--gold-hi);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  background: var(--grad);
+  color: var(--on-gold);
+  box-shadow: 0 6px 16px rgba(168, 130, 46, 0.3);
   transition: transform 0.25s var(--spring), background 0.3s;
 }
 
@@ -794,7 +797,7 @@ svg.ic {
 
 .quick.done {
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   animation: pop 0.45s var(--spring);
 }
 
@@ -922,7 +925,7 @@ svg.ic {
 }
 
 .seg button.on {
-  color: #111;
+  color: var(--on-gold);
 }
 
 .seg-glider {
@@ -961,7 +964,7 @@ svg.ic {
 
 .chip.on {
   border-color: var(--gold);
-  color: var(--gold-hi);
+  color: var(--gold);
   background: var(--gold-soft);
 }
 
@@ -1031,7 +1034,7 @@ svg.ic {
   height: 56px;
   border-radius: 18px;
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   font-size: 15.5px;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -1132,11 +1135,11 @@ svg.ic {
   gap: 4px;
   padding: 6px;
   border-radius: 26px;
-  background: rgba(23, 23, 26, 0.82);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   border: 1px solid var(--line-2);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--shadow-l);
   max-width: calc(100% - 16px);
   animation: dock-in 0.7s var(--spring) both;
 }
@@ -1171,7 +1174,7 @@ svg.ic {
 
 .dock button.on {
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   padding: 0 13px;
 }
 
@@ -1197,7 +1200,7 @@ svg.ic {
 }
 
 .dock button.on .badge {
-  background: #111;
+  background: var(--text);
   color: var(--gold-hi);
 }
 
@@ -1219,10 +1222,10 @@ svg.ic {
   position: fixed;
   z-index: 200;
   border-radius: 16px;
-  object-fit: contain;
+  object-fit: cover;
   background: var(--plate);
   pointer-events: none;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-l);
 }
 
 /* ================= PASTDAN CHIQADIGAN OYNA ================= */
@@ -1230,7 +1233,7 @@ svg.ic {
   position: fixed;
   inset: 0;
   z-index: 90;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(43, 35, 22, 0.35);
   backdrop-filter: blur(4px);
   animation: fade-in 0.3s ease both;
 }
@@ -1297,7 +1300,7 @@ svg.ic {
   height: 5px;
   margin-left: -20px;
   border-radius: 3px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(43, 35, 22, 0.2);
 }
 
 .sheet-close {
@@ -1310,8 +1313,9 @@ svg.ic {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(11, 11, 12, 0.78);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
 }
 
@@ -1345,21 +1349,117 @@ svg.ic {
   display: none;
 }
 
-.gallery-track img {
+.gallery-cell {
   flex: 0 0 100%;
-  height: 46vh;
-  max-height: 420px;
-  object-fit: contain;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
   scroll-snap-align: center;
-  mix-blend-mode: multiply;
+  cursor: zoom-in;
   animation: zoom-in 0.8s var(--ease) both;
+}
+
+.gallery-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(var(--z, 1));
 }
 
 @keyframes zoom-in {
   from {
-    transform: scale(1.12);
+    transform: scale(1.08);
     opacity: 0;
   }
+}
+
+.gallery-zoom {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.gallery-zoom svg.ic {
+  width: 17px;
+  height: 17px;
+}
+
+/* ================= RASMNI KATTA KO'RISH ================= */
+.iv {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  animation: fade-in 0.25s ease both;
+}
+
+.iv-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 8px 20px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.iv-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.iv-track {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.iv-track::-webkit-scrollbar {
+  display: none;
+}
+
+.iv-track.locked {
+  overflow: hidden;
+}
+
+.iv-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+  scroll-snap-align: center;
+  display: grid;
+  place-items: center;
+}
+
+.iv-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s var(--ease);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.iv-dots {
+  position: static;
+  padding: 12px 0 calc(18px + var(--safe-b));
 }
 
 .gallery-dots {
@@ -1376,13 +1476,13 @@ svg.ic {
   width: 6px;
   height: 6px;
   border-radius: 3px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(43, 35, 22, 0.2);
   transition: width 0.35s var(--ease), background 0.3s;
 }
 
 .gallery-dots span.on {
   width: 22px;
-  background: #0b0b0c;
+  background: var(--gold);
 }
 
 .sheet-info {
@@ -1448,7 +1548,7 @@ svg.ic {
   padding: 4px 8px;
   border-radius: 8px;
   background: var(--gold-soft);
-  color: var(--gold-hi);
+  color: var(--gold);
 }
 
 .perks {
@@ -1523,7 +1623,7 @@ svg.ic {
 .opt.on {
   border-color: var(--gold);
   background: var(--gold-soft);
-  color: var(--gold-hi);
+  color: var(--gold);
   box-shadow: 0 0 0 3px var(--gold-soft);
 }
 
@@ -1536,7 +1636,7 @@ svg.ic {
   margin-top: 12px;
   font-size: 12.5px;
   font-weight: 700;
-  color: #ffb74d;
+  color: #d9822b;
   animation: pulse 1.6s ease-in-out infinite;
 }
 
@@ -1580,7 +1680,7 @@ svg.ic {
   padding: 9px 0 9px 22px;
   font-size: 13.5px;
   line-height: 1.45;
-  color: #d4cfc4;
+  color: #5a5348;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1725,7 +1825,7 @@ svg.ic {
 }
 
 .free-meter p b {
-  color: var(--gold-hi);
+  color: var(--gold);
 }
 
 .free-meter .meter {
@@ -1803,7 +1903,7 @@ svg.ic {
 
 .switch.on i {
   transform: translateX(18px);
-  background: #111;
+  background: #fff;
 }
 
 .summary {
@@ -1878,7 +1978,7 @@ svg.ic {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: rgba(11, 11, 12, 0.85);
+  background: rgba(250, 247, 241, 0.88);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
@@ -2014,49 +2114,6 @@ svg.ic {
   }
 }
 
-.zip-row {
-  display: flex;
-  gap: 8px;
-}
-
-.zip-row input {
-  flex: 1;
-}
-
-.zip-btn {
-  flex-shrink: 0;
-  height: 50px;
-  padding: 0 14px;
-  border-radius: 14px;
-  background: var(--grad);
-  color: #111;
-  font-size: 13px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.zip-btn svg.ic {
-  width: 16px;
-  height: 16px;
-}
-
-.memo-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.memo-chips .chip {
-  height: auto;
-  min-height: 32px;
-  padding: 6px 12px;
-  font-size: 12px;
-  text-align: left;
-}
-
 .check {
   display: flex;
   align-items: center;
@@ -2074,7 +2131,7 @@ svg.ic {
   border: 1.5px solid var(--line-2);
   display: grid;
   place-items: center;
-  color: #111;
+  color: var(--on-gold);
   font-weight: 900;
   font-size: 13px;
   transition: all 0.3s var(--spring);
@@ -2092,7 +2149,7 @@ svg.ic {
   border-radius: 14px;
   background: rgba(239, 83, 80, 0.1);
   border: 1px solid rgba(239, 83, 80, 0.35);
-  color: #ff8a80;
+  color: #c43c3c;
   font-size: 13.5px;
   animation: shake 0.4s;
 }
@@ -2112,31 +2169,6 @@ svg.ic {
 
 .eta svg.ic {
   color: var(--gold);
-}
-
-/* Daum 우편번호 oynasi */
-.postcode {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  animation: sheet-up 0.45s var(--ease) both;
-}
-
-.postcode-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--bg);
-  color: var(--text);
-  font-weight: 800;
-}
-
-.postcode-body {
-  flex: 1;
 }
 
 /* ================= TO'LOV ================= */
@@ -2221,7 +2253,7 @@ svg.ic {
   border: 1px solid var(--line);
   font-weight: 800;
   letter-spacing: 0.06em;
-  color: var(--gold-hi);
+  color: var(--gold);
 }
 
 .bank-card {
@@ -2229,8 +2261,9 @@ svg.ic {
   margin: 20px 0 14px;
   padding: 20px;
   border-radius: 24px;
-  background: radial-gradient(120% 140% at 100% 0%, #3a2e14 0%, #17171a 55%), #17171a;
-  border: 1px solid rgba(214, 174, 81, 0.35);
+  background: radial-gradient(120% 140% at 100% 0%, #f6e7c1 0%, #ffffff 60%), #fff;
+  border: 1px solid rgba(214, 174, 81, 0.45);
+  box-shadow: var(--shadow-l);
   overflow: hidden;
   animation: rise 0.7s 0.3s var(--ease) both;
 }
@@ -2239,7 +2272,7 @@ svg.ic {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(241, 213, 138, 0.12) 50%, transparent 65%);
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
   background-size: 250% 100%;
   animation: shimmer 4s linear infinite;
   pointer-events: none;
@@ -2303,11 +2336,11 @@ svg.ic {
   height: 32px;
   padding: 0 12px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--gold-soft);
   border: 1px solid var(--line-2);
   font-size: 12px;
   font-weight: 800;
-  color: var(--gold-hi);
+  color: var(--gold);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -2320,7 +2353,7 @@ svg.ic {
 
 .copy.ok {
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   animation: pop 0.4s var(--spring);
 }
 
@@ -2333,7 +2366,7 @@ svg.ic {
   margin-top: 12px;
   border-radius: 18px;
   border: 1.5px dashed var(--gold-lo);
-  color: var(--gold-hi);
+  color: var(--gold);
   font-weight: 800;
   font-size: 14.5px;
   cursor: pointer;
@@ -2383,7 +2416,7 @@ svg.ic {
   padding: 5px 10px;
   border-radius: 20px;
   background: var(--gold-soft);
-  color: var(--gold-hi);
+  color: var(--gold);
 }
 
 .status.DELIVERED {
@@ -2518,7 +2551,7 @@ svg.ic {
   padding: 0 12px;
   border-radius: 10px;
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   font-weight: 800;
   font-size: 12px;
 }
@@ -2540,7 +2573,7 @@ svg.ic {
   padding: 0 14px;
   border-radius: 12px;
   border: 1px solid var(--gold-lo);
-  color: var(--gold-hi);
+  color: var(--gold);
   font-weight: 700;
   font-size: 12.5px;
 }
@@ -2551,8 +2584,9 @@ svg.ic {
   margin-top: 8px;
   padding: 22px 18px;
   border-radius: var(--r-l);
-  background: radial-gradient(120% 140% at 0% 0%, #3a2e14 0%, #17171a 60%);
-  border: 1px solid rgba(214, 174, 81, 0.3);
+  background: radial-gradient(120% 140% at 0% 0%, #f6e7c1 0%, #ffffff 65%);
+  border: 1px solid rgba(214, 174, 81, 0.4);
+  box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -2569,7 +2603,7 @@ svg.ic {
   font-family: var(--serif);
   font-size: 30px;
   font-weight: 700;
-  color: #111;
+  color: var(--on-gold);
   background: var(--grad);
   flex-shrink: 0;
 }
@@ -2604,8 +2638,8 @@ svg.ic {
   letter-spacing: 0.2em;
   padding: 4px 9px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--gold-hi);
+  background: var(--gold-soft);
+  color: var(--gold);
 }
 
 .menu {
@@ -2691,7 +2725,7 @@ svg.ic {
 
 .lang-switch button.on {
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
 }
 
 .about {
@@ -2948,6 +2982,7 @@ svg.ic {
   font-size: 26px;
   font-weight: 600;
   margin-bottom: 14px;
+  color: #fff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
@@ -2961,12 +2996,12 @@ svg.ic {
   max-width: calc(100% - 32px);
   padding: 12px 18px;
   border-radius: 16px;
-  background: rgba(23, 23, 26, 0.95);
-  border: 1px solid rgba(214, 174, 81, 0.4);
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(214, 174, 81, 0.45);
   backdrop-filter: blur(10px);
   font-size: 13.5px;
   font-weight: 700;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-l);
   animation: toast 2.2s var(--ease) both;
 }
 
@@ -3026,7 +3061,7 @@ svg.ic {
   padding: 0 24px;
   border-radius: 16px;
   background: var(--grad);
-  color: #111;
+  color: var(--on-gold);
   font-weight: 800;
   text-decoration: none;
 }

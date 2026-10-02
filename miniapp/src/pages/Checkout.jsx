@@ -1,24 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { money } from '../i18n';
 import api from '../api';
 import { haptic, openLink } from '../telegram';
 import { SUPPORT_URL } from '../constants';
 import Icon from '../components/Icon';
-
-// Daum (Kakao) 우편번호 xizmati — bepul, kalit kerak emas
-const POSTCODE_SRC = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-
-function loadPostcode() {
-  if (window.daum?.Postcode) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = POSTCODE_SRC;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
 
 // 01012345678 → 010-1234-5678
 export function formatPhone(v) {
@@ -31,64 +16,18 @@ export function formatPhone(v) {
 
 const phoneOk = (v) => /^01[016789]\d{7,8}$/.test(String(v).replace(/\D/g, ''));
 
-function PostcodeSearch({ t, onPick, onClose }) {
-  const boxRef = useRef(null);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-    loadPostcode()
-      .then(() => {
-        if (!alive || !boxRef.current) return;
-        new window.daum.Postcode({
-          width: '100%',
-          height: '100%',
-          oncomplete: (data) => {
-            const road = data.roadAddress || data.jibunAddress || data.address;
-            const extra = data.buildingName ? ` (${data.buildingName})` : '';
-            onPick({ zipCode: data.zonecode, street: road + extra });
-          },
-        }).embed(boxRef.current);
-      })
-      .catch(() => alive && setFailed(true));
-    return () => {
-      alive = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // .screen animatsiyasi (transform) ichida position:fixed buziladi — body ga chiqaramiz
-  return createPortal(
-    <div className="postcode">
-      <div className="postcode-head">
-        <span>📮 {t.zipSearch}</span>
-        <button onClick={onClose} aria-label="✕">
-          <Icon name="close" />
-        </button>
-      </div>
-      <div className="postcode-body" ref={boxRef}>
-        {failed && <p style={{ padding: 20, color: '#333' }}>{t.zipFailed}</p>}
-      </div>
-    </div>,
-    document.body
-  );
-}
-
 export default function Checkout({ t, user, items, settings, onBack, onCreated }) {
   const [form, setForm] = useState({
     customerName: user?.firstName || '',
     phone: formatPhone(user?.phone || ''),
-    zipCode: '',
     street: '',
     detail: '',
     comment: '',
   });
-  const [memo, setMemo] = useState('');
   const [saveAddr, setSaveAddr] = useState(true);
   const [errors, setErrors] = useState({});
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [zipOpen, setZipOpen] = useState(false);
   const touched = useRef(new Set());
 
   // Qayta buyurtmada avto-to'ldirish: saqlangan manzil + oxirgi buyurtmadagi ism/telefon.
@@ -107,7 +46,7 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
       .addresses()
       .then((list) => {
         const a = list.find((x) => x.isDefault) || list[0];
-        if (a) fill({ zipCode: a.zipCode || '', street: a.street, detail: a.detail || '' });
+        if (a) fill({ street: a.street, detail: a.detail || '' });
       })
       .catch(() => {});
     api
@@ -118,7 +57,6 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
           fill({
             customerName: o.customerName,
             phone: formatPhone(o.phone),
-            zipCode: o.zipCode || '',
             street: o.street,
             detail: o.detail || '',
           });
@@ -138,13 +76,6 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
     setForm((f) => ({ ...f, [k]: value }));
     if (errors[k]) setErrors((x) => ({ ...x, [k]: '' }));
   };
-
-  const memos = [
-    { kr: '문 앞에 놓아주세요', label: t.memoDoor },
-    { kr: '경비실에 맡겨주세요', label: t.memoGuard },
-    { kr: '택배함에 넣어주세요', label: t.memoBox },
-    { kr: '배송 전 연락주세요', label: t.memoCall },
-  ];
 
   const validate = () => {
     const e = {};
@@ -168,14 +99,12 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
       return;
     }
 
-    const comment = [memo && `${memo.kr} (${memo.label})`, form.comment.trim()].filter(Boolean).join('\n');
-
     setBusy(true);
     try {
       const res = await api.createOrder({
         ...form,
         phone: formatPhone(form.phone),
-        comment,
+        comment: form.comment.trim(),
         saveAddress: saveAddr,
         items: items.map((i) => ({ productId: i.productId, variantId: i.variantId, qty: i.qty })),
       });
@@ -236,23 +165,6 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
           </div>
 
           <div className={`field ${errors.street ? 'bad' : ''}`}>
-            <label>{t.zip}</label>
-            <div className="zip-row">
-              <input name="zipCode" value={form.zipCode} onChange={set('zipCode')} placeholder="06236" inputMode="numeric" />
-              <button
-                type="button"
-                className="zip-btn"
-                onClick={() => {
-                  haptic('light');
-                  setZipOpen(true);
-                }}
-              >
-                <Icon name="search" /> {t.zipFind}
-              </button>
-            </div>
-          </div>
-
-          <div className={`field ${errors.street ? 'bad' : ''}`}>
             <label>{t.street}</label>
             <input name="street" value={form.street} onChange={set('street')} placeholder="서울 강남구 테헤란로 123" />
             {errors.street && <div className="err">{errors.street}</div>}
@@ -264,43 +176,22 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
             {errors.detail && <div className="err">{errors.detail}</div>}
           </div>
 
+          <div className="field">
+            <textarea name="comment" value={form.comment} onChange={set('comment')} placeholder={t.comment} />
+          </div>
+
           <div className="check" onClick={() => setSaveAddr(!saveAddr)}>
             <div className={`box ${saveAddr ? 'on' : ''}`}>{saveAddr ? '✓' : ''}</div>
             <span>{t.saveAddress}</span>
           </div>
         </div>
 
-        <div className="block rise" style={{ '--i': 2 }}>
-          <div className="block-title">
-            <Icon name="box" /> {t.memoTitle}
-          </div>
-          <div className="memo-chips">
-            {memos.map((m) => (
-              <button
-                key={m.kr}
-                className={`chip ${memo?.kr === m.kr ? 'on' : ''}`}
-                onClick={() => {
-                  haptic('light');
-                  setMemo(memo?.kr === m.kr ? '' : m);
-                }}
-              >
-                {m.label}
-                <br />
-                <small style={{ opacity: 0.6 }}>{m.kr}</small>
-              </button>
-            ))}
-          </div>
-          <div className="field">
-            <textarea name="comment" value={form.comment} onChange={set('comment')} placeholder={t.comment} />
-          </div>
-        </div>
-
-        <div className="eta rise" style={{ '--i': 3 }}>
+        <div className="eta rise" style={{ '--i': 2 }}>
           <Icon name="truck" />
           <span>{t.eta}</span>
         </div>
 
-        <div className="summary rise" style={{ '--i': 3 }}>
+        <div className="summary rise" style={{ '--i': 2 }}>
           <div className="line">
             <span>
               {t.subtotal} ({items.reduce((s, i) => s + i.qty, 0)})
@@ -333,21 +224,6 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
           <Icon name="chat" /> {t.askQuestion}
         </button>
       </div>
-
-      {zipOpen && (
-        <PostcodeSearch
-          t={t}
-          onClose={() => setZipOpen(false)}
-          onPick={(a) => {
-            touched.current.add('street');
-            setForm((f) => ({ ...f, zipCode: a.zipCode, street: a.street }));
-            setErrors((x) => ({ ...x, street: '' }));
-            setZipOpen(false);
-            haptic('success');
-            setTimeout(() => document.querySelector('[name="detail"]')?.focus(), 400);
-          }}
-        />
-      )}
     </div>
   );
 }

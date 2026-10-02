@@ -3,6 +3,7 @@ import { money } from '../i18n';
 import { haptic } from '../telegram';
 import { useFav } from '../store';
 import Icon from './Icon';
+import { frameStyle } from '../framing';
 
 export const PLACEHOLDER =
   'data:image/svg+xml;utf8,' +
@@ -43,6 +44,7 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
           ref={imgRef}
           src={img}
           alt={name}
+          style={frameStyle(img)}
           loading="lazy"
           className={ready ? 'loaded' : ''}
           onLoad={() => setReady(true)}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import api from '../api';
 import Modal from '../components/Modal';
+import ImageZoom from '../components/ImageZoom';
+import { frameStyle } from '../framing';
 
 const money = (n) => '₩' + Number(n || 0).toLocaleString('ko-KR');
 
@@ -34,6 +36,7 @@ export default function OrdersPage({ toast, onCountChange }) {
   const [tracking, setTracking] = useState('');
   const [saving, setSaving] = useState(false);
   const [lightbox, setLightbox] = useState(null); // { order, item }
+  const [zoom, setZoom] = useState(null); // butun ekranda ochilgan rasm
 
   const load = () => {
     setLoading(true);
@@ -120,11 +123,12 @@ export default function OrdersPage({ toast, onCountChange }) {
             </thead>
             <tbody>
               {orders.map((o) => (
-                <tr key={o.id}>
+                <tr key={o.id} className="click-row" onClick={() => openOrder(o)}>
                   <td>
                     <img
                       className="order-thumb"
                       src={(o.items || [])[0]?.image || PLACEHOLDER}
+                      style={frameStyle((o.items || [])[0]?.image)}
                       alt=""
                       onError={onImgError}
                       onClick={(e) => {
@@ -158,7 +162,7 @@ export default function OrdersPage({ toast, onCountChange }) {
                     })}
                   </td>
                   <td>
-                    <button className="btn sm light" onClick={() => openOrder(o)}>
+                    <button className="btn sm light">
                       Ochish
                     </button>
                   </td>
@@ -220,6 +224,7 @@ export default function OrdersPage({ toast, onCountChange }) {
                     <img
                       className="order-thumb sm"
                       src={i.image || PLACEHOLDER}
+                      style={frameStyle(i.image)}
                       alt=""
                       onError={onImgError}
                     />
@@ -245,9 +250,12 @@ export default function OrdersPage({ toast, onCountChange }) {
 
               <h4 style={{ margin: '18px 0 6px', fontSize: 14 }}>🧾 To'lov cheki</h4>
               {open.receiptUrl ? (
-                <a href={open.receiptUrl} target="_blank" rel="noreferrer">
-                  <img className="receipt-img" src={open.receiptUrl} alt="chek" />
-                </a>
+                <img
+                  className="receipt-img"
+                  src={open.receiptUrl}
+                  alt="chek"
+                  onClick={() => setZoom(open.receiptUrl)}
+                />
               ) : (
                 <div className="muted">Chek hali yuborilmagan</div>
               )}
@@ -300,7 +308,9 @@ export default function OrdersPage({ toast, onCountChange }) {
             <img
               src={lightbox.item?.image || PLACEHOLDER}
               alt=""
+              title="Butun ekranda ko'rish"
               onError={onImgError}
+              onClick={() => lightbox.item?.image && setZoom(lightbox.item.image)}
             />
             <div className="lightbox-info">
               <div className="lightbox-order">🧾 {lightbox.order.orderNumber}</div>
@@ -355,6 +365,8 @@ export default function OrdersPage({ toast, onCountChange }) {
           </div>
         </div>
       )}
+
+      {zoom && <ImageZoom src={zoom} onClose={() => setZoom(null)} />}
     </>
   );
 }
