@@ -205,7 +205,7 @@ function pushImages(count) {
 }
 
 // ---------------- 4. Bazaga yozish ----------------
-async function saveToDb(products, hideOld) {
+async function saveToDb(products, deleteOld) {
   const extras = readExtras();
   const cats = Object.fromEntries((await prisma.category.findMany()).map((c) => [c.slug, c.id]));
   const keepIds = [];
@@ -269,19 +269,20 @@ async function saveToDb(products, hideOld) {
     }
   }
 
-  let hidden = 0;
-  if (hideOld) {
-    const r = await prisma.product.updateMany({
+  // Eski (namunaviy) mahsulotlar butunlay o'chiriladi. Rasmlari va o'lchamlari ham
+  // o'chadi (Cascade). Eski buyurtmalarga ta'sir qilmaydi — ularda mahsulot nomi
+  // va narxi alohida saqlangan.
+  let deleted = 0;
+  if (deleteOld) {
+    const r = await prisma.product.deleteMany({
       where: {
         id: { notIn: keepIds },
-        isActive: true,
         images: { none: { url: { startsWith: '/uploads/mahsulot/' } } },
       },
-      data: { isActive: false },
     });
-    hidden = r.count;
+    deleted = r.count;
   }
-  return { created, updated, hidden };
+  return { created, updated, deleted };
 }
 
 // ---------------- 5. Yuklanganlarni olib qo'yish ----------------
@@ -338,11 +339,11 @@ async function main() {
     if (!(await ask(rl, `   ${products.length} ta mahsulot yuklansinmi?`))) return;
 
     const oldCount = await prisma.product.count({
-      where: { isActive: true, images: { none: { url: { startsWith: '/uploads/mahsulot/' } } } },
+      where: { images: { none: { url: { startsWith: '/uploads/mahsulot/' } } } },
     });
-    let hideOld = false;
+    let deleteOld = false;
     if (oldCount > 0 && !AUTO_YES) {
-      hideOld = await ask(rl, `   Do'konda ${oldCount} ta eski mahsulot bor. Ular yashirilsinmi? (o'chmaydi, admin paneldan qaytarsa bo'ladi)`);
+      deleteOld = await ask(rl, `   Do'konda ${oldCount} ta eski mahsulot bor. Ular butunlay O'CHIRILSINMI? (qaytarib bo'lmaydi)`);
     }
 
     console.log('\n   🖼  Rasmlar tayyorlanmoqda');
@@ -352,13 +353,13 @@ async function main() {
     const pushErr = pushImages(products.length);
 
     console.log('   🗄  Bazaga yozilmoqda...');
-    const r = await saveToDb(products, hideOld);
+    const r = await saveToDb(products, deleteOld);
     archive(products);
 
     console.log('');
     console.log(`   ✅ ${r.created} ta yangi mahsulot qo'shildi`);
     if (r.updated) console.log(`   ✅ ${r.updated} ta mahsulot yangilandi (nomi bir xil edi)`);
-    if (r.hidden) console.log(`   🙈 ${r.hidden} ta eski mahsulot yashirildi`);
+    if (r.deleted) console.log(`   🗑  ${r.deleted} ta eski mahsulot o'chirildi`);
     console.log('   📁 Yuklangan rasmlar MAHSULOTLAR/_yuklangan/ ga olib qo\'yildi');
 
     if (pushErr) {
