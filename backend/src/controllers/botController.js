@@ -311,7 +311,7 @@ export async function notifyAdmins(order) {
     `🔔 *Yangi buyurtma!*\n\n` +
     `🧾 ${order.orderNumber}${isWebUser(order.user) ? ' · 🌐 saytdan' : ''}\n` +
     `👤 ${order.customerName} · ${order.phone}\n` +
-    `📍 ${order.street}${order.detail ? ', ' + order.detail : ''}\n\n` +
+    `📍 ${order.zipCode ? `(${order.zipCode}) ` : ''}${order.street}${order.detail ? ', ' + order.detail : ''}\n\n` +
     `${items}\n\n` +
     `💰 *${money(order.total)}*`;
 

@@ -23,6 +23,8 @@ const INBOX = path.join(ROOT, 'MAHSULOTLAR');
 const DONE = path.join(INBOX, '_yuklangan');
 const OUT = path.resolve(__dirname, '../uploads/mahsulot');
 const RESIZE = path.join(__dirname, 'resize.ps1');
+// Ixtiyoriy: mahsulot nomi → { brand, descUz, descRu, variants } (MAHSULOTLAR/tavsiflar.json)
+const EXTRA_FILE = path.join(INBOX, 'tavsiflar.json');
 
 const AUTO_YES = process.argv.includes('--ha');
 const IMAGE_EXT = /\.(jpe?g|png|webp|bmp|gif)$/i;
@@ -91,6 +93,19 @@ function brandOf(name) {
     if (low === prefix || low.startsWith(prefix + ' ')) return brand;
   }
   return name.split(/\s+/)[0];
+}
+
+function readExtras() {
+  if (!fs.existsSync(EXTRA_FILE)) return {};
+  try {
+    const data = JSON.parse(fs.readFileSync(EXTRA_FILE, 'utf8'));
+    const out = {};
+    for (const [k, v] of Object.entries(data)) if (!k.startsWith('_')) out[k.toLowerCase()] = v;
+    return out;
+  } catch (e) {
+    console.log(`   ⚠️  tavsiflar.json o'qilmadi (${e.message}) — tavsifsiz yuklanadi`);
+    return {};
+  }
 }
 
 function slugify(s) {
@@ -191,6 +206,7 @@ function pushImages(count) {
 
 // ---------------- 4. Bazaga yozish ----------------
 async function saveToDb(products, hideOld) {
+  const extras = readExtras();
   const cats = Object.fromEntries((await prisma.category.findMany()).map((c) => [c.slug, c.id]));
   const keepIds = [];
   let created = 0;
@@ -204,11 +220,20 @@ async function saveToDb(products, hideOld) {
       where: { categoryId, nameUz: { equals: p.name, mode: 'insensitive' } },
     });
 
+    const extra = extras[p.name.toLowerCase()] || {};
+    const texts = {
+      ...(extra.brand ? { brand: extra.brand } : {}),
+      ...(extra.nameRu ? { nameRu: extra.nameRu } : {}),
+      ...(extra.descUz ? { descUz: extra.descUz } : {}),
+      ...(extra.descRu ? { descRu: extra.descRu } : {}),
+    };
+
     if (existing) {
       await prisma.productImage.deleteMany({ where: { productId: existing.id } });
       await prisma.product.update({
         where: { id: existing.id },
         data: {
+          ...texts,
           price: p.price,
           oldPrice: p.oldPrice,
           isActive: true,
@@ -218,12 +243,13 @@ async function saveToDb(products, hideOld) {
       keepIds.push(existing.id);
       updated++;
     } else {
-      const sizes = p.cat === 'shoes' ? SHOE_SIZES : ['Standart'];
+      const sizes = p.cat === 'shoes' ? SHOE_SIZES : extra.variants?.length ? extra.variants : ['Standart'];
       const saved = await prisma.product.create({
         data: {
           nameUz: p.name,
           nameRu: p.name,
           brand: brandOf(p.name),
+          ...texts,
           price: p.price,
           oldPrice: p.oldPrice,
           isNew: true,

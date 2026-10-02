@@ -22,6 +22,7 @@ export const OrderModel = {
         total: payload.total,
         customerName: payload.customerName,
         phone: payload.phone,
+        zipCode: payload.zipCode || null,
         street: payload.street,
         detail: payload.detail || null,
         comment: payload.comment || null,

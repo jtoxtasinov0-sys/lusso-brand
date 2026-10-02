@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { haptic } from '../telegram';
 import { onImgError } from './ProductCard';
+import Icon from './Icon';
 
 const DURATION = 5000; // har bir story necha ms turadi
 
@@ -78,7 +79,6 @@ export default function StoryViewer({ stories, startIndex = 0, lang, t, onClose,
 
   return (
     <div className="story-viewer">
-      {/* Yuqoridagi progress chiziqlari */}
       <div className="sv-bars">
         {stories.map((_, i) => (
           <div className="sv-bar" key={i}>
@@ -87,13 +87,12 @@ export default function StoryViewer({ stories, startIndex = 0, lang, t, onClose,
         ))}
       </div>
 
-      <button className="sv-close" onClick={onClose}>
-        ✕
+      <button className="sv-close" onClick={onClose} aria-label="✕">
+        <Icon name="close" />
       </button>
 
-      <img className="sv-img" src={story.imageUrl} alt={title} onError={onImgError} />
+      <img className="sv-img" key={index} src={story.imageUrl} alt={title} onError={onImgError} />
 
-      {/* Chap / o'ng bosish joylari */}
       <div
         className="sv-tap left"
         onClick={() => {
@@ -118,7 +117,7 @@ export default function StoryViewer({ stories, startIndex = 0, lang, t, onClose,
       <div className="sv-bottom">
         {title && <div className="sv-title">{title}</div>}
         <button
-          className="btn btn-gold"
+          className="btn"
           onClick={() => {
             haptic('light');
             onShop(story);

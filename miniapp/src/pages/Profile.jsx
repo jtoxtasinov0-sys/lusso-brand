@@ -1,76 +1,88 @@
-import { haptic } from '../telegram';
+import { haptic, openLink } from '../telegram';
+import { SUPPORT_URL } from '../constants';
+import { useFav } from '../store';
+import Icon from '../components/Icon';
 
-export default function Profile({ t, lang, setLang, user, settings, onOrders }) {
-  const name = user?.firstName || 'Mijoz';
+export default function Profile({ t, lang, setLang, user, settings, onOrders, onSaved }) {
+  const name = user?.firstName || t.guest;
+  const favCount = useFav((s) => s.ids.length);
+
+  const Row = ({ icon, label, onClick, right }) => (
+    <button
+      className="menu-item"
+      onClick={() => {
+        haptic('light');
+        onClick?.();
+      }}
+    >
+      <span className="mi">
+        <Icon name={icon} />
+      </span>
+      <span className="grow">{label}</span>
+      {right ?? (
+        <span className="arrow">
+          <Icon name="next" />
+        </span>
+      )}
+    </button>
+  );
 
   return (
     <div className="page">
-      <div className="profile-head">
+      <h1 className="page-title rise">{t.profile}</h1>
+
+      <div className="profile-card rise" style={{ '--i': 1 }}>
         <div className="av">{name.charAt(0).toUpperCase()}</div>
-        <h2>
-          {name} {user?.lastName || ''}
-        </h2>
-        <p>{user?.phone || (user?.username ? '@' + user.username : '')}</p>
+        <div>
+          <h2>
+            {name} {user?.lastName || ''}
+          </h2>
+          <p>{user?.phone || (user?.username ? '@' + user.username : t.welcomeMember)}</p>
+          <span className="tier">LUSSO MEMBER</span>
+        </div>
       </div>
 
-      <div className="menu-list">
-        <button className="menu-item" onClick={onOrders}>
-          <span>{t.myOrders}</span>
-          <span className="arrow">›</span>
-        </button>
-
+      <div className="menu rise" style={{ '--i': 2 }}>
+        <Row icon="receipt" label={t.myOrders} onClick={onOrders} />
+        <Row icon="heart" label={t.savedTitle} onClick={onSaved} right={<span className="val">{favCount}</span>} />
         <div className="menu-item">
-          <span>{t.language}</span>
+          <span className="mi">
+            <Icon name="globe" />
+          </span>
+          <span className="grow">{t.language}</span>
           <div className="lang-switch">
-            <button
-              className={lang === 'uz' ? 'on' : ''}
-              onClick={() => {
-                haptic('light');
-                setLang('uz');
-              }}
-            >
-              O'zbek
-            </button>
-            <button
-              className={lang === 'ru' ? 'on' : ''}
-              onClick={() => {
-                haptic('light');
-                setLang('ru');
-              }}
-            >
-              Русский
-            </button>
+            {[
+              ['uz', "O'zb"],
+              ['ru', 'Рус'],
+            ].map(([k, l]) => (
+              <button
+                key={k}
+                className={lang === k ? 'on' : ''}
+                onClick={() => {
+                  haptic('light');
+                  setLang(k);
+                }}
+              >
+                {l}
+              </button>
+            ))}
           </div>
         </div>
-
-        <a
-          className="menu-item"
-          href={`https://t.me/${settings?.supportUsername || 'lusso_brand_kr'}`}
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          <span>{t.support}</span>
-          <span className="arrow">›</span>
-        </a>
       </div>
 
-      <div
-        style={{
-          marginTop: 24,
-          fontSize: 13.5,
-          color: '#8e8e93',
-          lineHeight: 1.6,
-          textAlign: 'center',
-          padding: '0 10px',
-        }}
-      >
-        {lang === 'ru' ? settings?.aboutRu : settings?.aboutUz}
+      <div className="menu rise" style={{ '--i': 3 }}>
+        <Row icon="chat" label={t.support} onClick={() => openLink(SUPPORT_URL)} />
+        <Row
+          icon="truck"
+          label={t.deliveryInfo}
+          onClick={() => {}}
+          right={<span className="val">₩{Number(settings?.freeDeliveryFrom ?? 100000).toLocaleString('ko-KR')}+ {t.free}</span>}
+        />
+        <Row icon="shield" label={t.securePay} onClick={() => {}} right={<span className="val">{settings?.bankName || '계좌이체'}</span>} />
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: 18, fontSize: 12, color: '#c7c7cc' }}>
-        LUSSO BRAND KR · v1.0
-      </div>
+      <div className="about">{lang === 'ru' ? settings?.aboutRu : settings?.aboutUz}</div>
+      <div className="version">LUSSO BRAND KR · 2.0</div>
     </div>
   );
 }
