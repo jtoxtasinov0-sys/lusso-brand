@@ -185,7 +185,13 @@ export default function Home({
 
   return (
     <div className="page home">
-      <div className="home-arc" aria-hidden="true" />
+      <div className="home-arc" aria-hidden="true">
+        <span className="arc-blob" />
+        <span className="arc-orbit" />
+        <span className="arc-orbit o2" />
+        <span className="arc-star">✦</span>
+        <span className="arc-star s2">✦</span>
+      </div>
       <Hello greet={greet} name={firstName} sub={t.welcomeSub} lang={lang} onLang={onLang} />
 
       <button className="search-fake rise" style={{ '--i': 1 }} onClick={() => goCatalog(null, true)}>

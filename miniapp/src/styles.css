@@ -153,16 +153,78 @@ svg.ic {
   pointer-events: none;
 }
 
-.home-arc::before {
-  content: '';
+/* Oltin gradientli dog' + ichidagi yorug' ovallar */
+.arc-blob {
   position: absolute;
-  top: -130px;
-  right: -104px;
-  width: 270px;
+  top: -120px;
+  right: -96px;
+  width: 280px;
   height: 270px;
+  border-radius: 46% 54% 50% 50% / 52% 44% 56% 48%;
+  background:
+    radial-gradient(60% 38% at 30% 72%, rgba(255, 244, 210, 0.55), transparent 70%),
+    radial-gradient(48% 30% at 72% 40%, rgba(255, 240, 200, 0.4), transparent 70%),
+    linear-gradient(145deg, #f6e3a6 0%, #e2bd62 38%, #c99b3d 68%, #a8822e 100%);
+  box-shadow:
+    0 0 0 22px rgba(214, 174, 81, 0.1),
+    0 0 0 50px rgba(214, 174, 81, 0.05),
+    0 24px 50px rgba(168, 130, 46, 0.28);
+  animation: blob-float 9s ease-in-out infinite;
+}
+
+/* Yupqa orbita halqalari */
+.arc-orbit {
+  position: absolute;
+  top: 34px;
+  right: -40px;
+  width: 260px;
+  height: 74px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 70%, var(--ink-2), var(--ink) 70%);
-  box-shadow: 0 0 0 26px rgba(22, 21, 20, 0.05), 0 0 0 58px rgba(22, 21, 20, 0.03);
+  border: 1.5px solid rgba(201, 155, 61, 0.55);
+  transform: rotate(-16deg);
+}
+
+.arc-orbit.o2 {
+  top: 6px;
+  right: 20px;
+  width: 190px;
+  height: 46px;
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: rotate(-24deg);
+}
+
+/* Yulduzchalar */
+.arc-star {
+  position: absolute;
+  top: 128px;
+  right: 22px;
+  font-size: 22px;
+  line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: star-twinkle 3.2s ease-in-out infinite;
+}
+
+.arc-star.s2 {
+  top: 92px;
+  right: 168px;
+  font-size: 12px;
+  animation-delay: 1.4s;
+}
+
+@keyframes blob-float {
+  50% {
+    transform: translate(-6px, 6px) rotate(4deg);
+  }
+}
+
+@keyframes star-twinkle {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75) rotate(20deg);
+  }
 }
 
 .hello {
