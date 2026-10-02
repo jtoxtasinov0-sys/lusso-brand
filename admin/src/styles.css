@@ -1173,3 +1173,181 @@ tbody tr:hover {
 .layout.in-telegram .main {
   padding-top: calc(16px + env(safe-area-inset-top));
 }
+
+/* =====================================================================
+   YUMSHOQ OLTIN GRADIENTLAR — mini ilova bilan bir xil uslub
+   Fon: qaymoq ustida oltin/shampan dog'lari. Kartalar: shisha + oltin chegara.
+   ===================================================================== */
+:root {
+  --bg: #f6f1e7;
+  --line: rgba(168, 130, 46, 0.16);
+  --soft: linear-gradient(160deg, rgba(255, 255, 255, 0.9) 0%, rgba(253, 246, 228, 0.78) 100%);
+  --edge: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(214, 174, 81, 0.38) 55%, rgba(255, 255, 255, 0.7));
+  --grad: linear-gradient(120deg, #f3dc97 0%, #d9b45c 40%, #b88d34 75%, #9c7428 100%);
+  --bronze: radial-gradient(120% 130% at 100% 0%, #f1d58a 0%, #c99b3d 28%, #7a5719 62%, #2a1f10 100%);
+  --shadow: 0 10px 30px rgba(168, 130, 46, 0.1), 0 2px 6px rgba(20, 19, 18, 0.04);
+}
+
+body {
+  background:
+    radial-gradient(38% 30% at 92% 4%, rgba(241, 213, 138, 0.5), transparent 70%),
+    radial-gradient(42% 32% at 4% 40%, rgba(255, 224, 196, 0.55), transparent 70%),
+    radial-gradient(40% 30% at 96% 70%, rgba(232, 201, 130, 0.32), transparent 70%),
+    radial-gradient(46% 34% at 24% 100%, rgba(250, 230, 190, 0.55), transparent 70%),
+    linear-gradient(180deg, #faf6ee 0%, #f5eedf 100%);
+  background-attachment: fixed;
+}
+
+/* --- Shisha yuzalar --- */
+.card,
+.stat,
+.table-wrap,
+.modal,
+.story-pick,
+.login-card {
+  border: 1px solid transparent;
+  background: var(--soft) padding-box, var(--edge) border-box;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.login-card {
+  padding: 32px 26px;
+  border-radius: 22px;
+}
+
+.login-wrap {
+  background: none;
+}
+
+.login-card .logo,
+.page-head h1,
+.stat .v {
+  background: linear-gradient(120deg, #2a1f10 0%, #7a5719 55%, #b88d34 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Birinchi statistika kartasi — bronza-oltin urg'u */
+.stats .stat:first-child {
+  background: var(--bronze);
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(122, 87, 25, 0.25);
+}
+
+.stats .stat:first-child .t,
+.stats .stat:first-child .s {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.stats .stat:first-child .v {
+  background: none;
+  color: #fff;
+}
+
+thead th {
+  background: linear-gradient(180deg, rgba(253, 246, 228, 0.9), rgba(250, 240, 214, 0.7));
+}
+
+tbody tr:hover {
+  background: rgba(241, 213, 138, 0.12);
+}
+
+.input,
+select.input,
+textarea.input {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(214, 174, 81, 0.16);
+}
+
+/* --- Yon menyu --- */
+.sidebar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(253, 244, 222, 0.72));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-color: var(--line);
+}
+
+.sidebar .brand {
+  border-bottom: none;
+  background-image: linear-gradient(90deg, #f1d58a, #c99b3d, transparent);
+  background-size: 100% 2px;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.side-btn:hover {
+  background: rgba(241, 213, 138, 0.18);
+}
+
+.side-btn.on {
+  background: var(--grad);
+  color: #1a1610;
+  box-shadow: 0 8px 20px rgba(201, 155, 61, 0.35);
+}
+
+.side-btn .badge-count {
+  background: var(--bronze);
+  color: #fff;
+}
+
+.side-btn.on .badge-count {
+  background: #1a1610;
+  color: var(--gold);
+}
+
+/* --- Tugmalar va filtrlar --- */
+.btn {
+  background: var(--grad);
+  background-size: 160% 100%;
+  color: #1a1610;
+  box-shadow: 0 8px 20px rgba(201, 155, 61, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: opacity 0.15s, background-position 0.5s ease, transform 0.15s;
+}
+
+.btn:hover {
+  opacity: 1;
+  background-position: 100% 0;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn.light {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.btn.danger {
+  background: #fdecec;
+  box-shadow: none;
+}
+
+.filter {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.filter.on {
+  background: var(--grad);
+  border-color: transparent;
+  color: #1a1610;
+  box-shadow: 0 6px 16px rgba(201, 155, 61, 0.3);
+}
+
+.modal-backdrop {
+  background: rgba(42, 31, 16, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.uploader {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.7), rgba(253, 244, 222, 0.6));
+}
