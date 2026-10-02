@@ -5,7 +5,7 @@ export default function Onboarding({ t, onDone }) {
   const [step, setStep] = useState(0);
 
   const slides = [
-    { visual: <img src="/logo.svg" alt="LUSSO" />, kicker: 'LUSSO · 루쏘', title: t.ob1Title, text: t.ob1Text },
+    { visual: <img src="/logo.png" alt="LUSSO" />, kicker: 'LUSSO · 루쏘', title: t.ob1Title, text: t.ob1Text },
     { visual: <span className="em">📦</span>, kicker: '택배 · DELIVERY', title: t.ob2Title, text: t.ob2Text },
     { visual: <span className="em">🇰🇷</span>, kicker: '전국 배송 · KOREA', title: t.ob3Title, text: t.ob3Text },
   ];

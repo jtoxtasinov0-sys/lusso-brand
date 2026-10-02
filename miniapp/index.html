@@ -8,19 +8,19 @@
     />
     <title>LUSSO BRAND KR</title>
     <meta name="description" content="LUSSO BRAND KR — Koreyadagi premium brend do'kon" />
-    <meta name="theme-color" content="#faf7f1" />
+    <meta name="theme-color" content="#f2f0eb" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Manrope:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap"
     />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="apple-touch-icon" href="/logo.svg" />
+    <link rel="icon" type="image/png" href="/icon-64.png" />
+    <link rel="apple-touch-icon" href="/icon-180.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta property="og:title" content="LUSSO BRAND KR" />
     <meta property="og:description" content="Koreyadagi premium brend do'kon" />
-    <meta property="og:image" content="/logo.svg" />
+    <meta property="og:image" content="/icon-512.png" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
       /* Ilova yuklanguncha ko'rinadigan logo ekrani (JS kutmasdan darhol chiqadi) */
@@ -33,7 +33,7 @@
         align-items: center;
         justify-content: center;
         gap: 22px;
-        background: #faf7f1;
+        background: radial-gradient(circle at 50% 42%, #2c2925 0%, #161514 62%);
         transition: opacity 0.45s ease, visibility 0.45s ease;
       }
       #splash.hide {
@@ -41,15 +41,15 @@
         visibility: hidden;
       }
       #splash img {
-        width: 116px;
-        height: 116px;
-        border-radius: 28px;
-        box-shadow: 0 14px 40px rgba(168, 130, 46, 0.25);
+        width: 168px;
+        height: 168px;
+        border-radius: 50%;
+        box-shadow: 0 0 80px rgba(214, 174, 81, 0.28);
         animation: splash-in 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both;
       }
       #splash .brand {
-        color: #a8822e;
-        font: 600 15px/1 Georgia, 'Times New Roman', serif;
+        color: #d6ae51;
+        font: 700 14px/1 'Onest', -apple-system, 'Segoe UI', sans-serif;
         letter-spacing: 0.42em;
         padding-left: 0.42em;
         animation: splash-in 0.7s 0.15s cubic-bezier(0.2, 0.9, 0.3, 1) both;
@@ -87,7 +87,7 @@
   </head>
   <body>
     <div id="splash">
-      <img src="/logo.svg" alt="LUSSO BRAND KR" />
+      <img src="/logo.png" alt="LUSSO BRAND KR" />
       <div class="brand">LUSSO BRAND KR</div>
       <div class="bar"></div>
     </div>

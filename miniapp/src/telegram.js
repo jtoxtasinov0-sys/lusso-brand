@@ -6,9 +6,9 @@ export function initTelegram() {
   tg.ready();
   tg.expand();
   try {
-    tg.setHeaderColor('#faf7f1');
-    tg.setBackgroundColor('#faf7f1');
-    tg.setBottomBarColor?.('#faf7f1');
+    tg.setHeaderColor('#f2f0eb');
+    tg.setBackgroundColor('#f2f0eb');
+    tg.setBottomBarColor?.('#f2f0eb');
     tg.disableVerticalSwipes?.();
   } catch {
     /* eski versiyalarda mavjud emas */

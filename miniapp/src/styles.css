@@ -1,29 +1,31 @@
-/* ================= LUSSO BRAND KR — "Ivory" interfeysi =================
-   Och, sodda dizayn: fil suyagi rangidagi fon, oq kartalar va logodagi oltin.
-   Logo ranglari: oltin gradient (#f1d58a → #d6ae51 → #a8822e).
+/* ================= LUSSO BRAND KR — interfeys =================
+   Sodda dizayn: och kulrang-qaymoq fon, oq kartalar, to'q (deyarli qora) bloklar
+   va logodagi oltin urg'u. Shrift — Onest (jiddiy, o'qilishi oson).
    Ranglarni almashtirish uchun faqat :root dagi o'zgaruvchilarni o'zgartiring.
    ===================================================================== */
 :root {
-  --bg: #faf7f1;
-  --bg-2: #f4eee3;
+  --bg: #f2f0eb;
+  --bg-2: #e9e6df;
   --card: #ffffff;
-  --card-2: #f6f1e7;
-  --line: rgba(140, 110, 50, 0.12);
-  --line-2: rgba(140, 110, 50, 0.22);
-  --text: #2b2721;
-  --muted: #8b8274;
-  --dim: #b5ac9d;
-  --on-gold: #2b2316; /* oltin tugma ustidagi yozuv */
+  --card-2: #f5f3ef;
+  --line: rgba(20, 19, 18, 0.07);
+  --line-2: rgba(20, 19, 18, 0.13);
+  --text: #17161a;
+  --muted: #7d7973;
+  --dim: #aaa59d;
+  --ink: #161514; /* to'q bloklar: promo, savat tugmasi, asosiy tugmalar */
+  --ink-2: #2c2925;
+  --on-gold: #1a1610; /* oltin fon ustidagi yozuv */
 
-  --gold: #b88a2e;
+  --gold: #a87f26;
   --gold-hi: #f1d58a;
   --gold-lo: #a8822e;
-  --gold-soft: rgba(214, 174, 81, 0.14);
+  --gold-soft: rgba(214, 174, 81, 0.16);
   --grad: linear-gradient(135deg, #f1d58a 0%, #d6ae51 48%, #a8822e 100%);
   --grad-text: linear-gradient(135deg, #c99b3d 0%, #a8822e 100%);
-  --plate: #f3eee5; /* mahsulot rasmi turadigan och "lavha" */
-  --shadow: 0 6px 22px rgba(120, 92, 40, 0.08);
-  --shadow-l: 0 16px 40px rgba(120, 92, 40, 0.16);
+  --plate: #ebe8e2; /* rasm yuklanguncha fon */
+  --shadow: 0 8px 24px rgba(20, 19, 18, 0.06);
+  --shadow-l: 0 18px 40px rgba(20, 19, 18, 0.14);
 
   --red: #e04848;
   --green: #2e9d6a;
@@ -36,8 +38,8 @@
 
   --dock-h: 64px;
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --serif: var(--sans); /* sarlavhalar ham Onest — qalinroq */
 }
 
 * {
@@ -54,17 +56,6 @@ body {
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
-}
-
-body::before {
-  /* fonda juda yengil oltin nur */
-  content: '';
-  position: fixed;
-  inset: -20% -20% auto;
-  height: 60vh;
-  background: radial-gradient(closest-side, rgba(214, 174, 81, 0.09), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 #root {
@@ -108,7 +99,7 @@ svg.ic {
 }
 
 .serif {
-  font-family: var(--serif);
+  letter-spacing: -0.02em;
 }
 
 /* ================= SAHIFA ================= */
@@ -137,44 +128,75 @@ svg.ic {
   }
 }
 
-/* ================= YUQORI PANEL ================= */
-.topbar {
+/* ================= YUQORI QISM ================= */
+.home {
+  position: relative;
+}
+
+/* O'ng yuqori burchakdagi to'q yoy */
+.home-arc {
+  position: absolute;
+  z-index: -1;
+  top: -130px;
+  right: -120px;
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 70%, var(--ink-2), var(--ink) 70%);
+  box-shadow: 0 0 0 26px rgba(22, 21, 20, 0.05), 0 0 0 58px rgba(22, 21, 20, 0.03);
+}
+
+.hello {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 14px 0 6px;
+  gap: 12px;
+  padding: 22px 0 18px;
 }
 
-.wordmark {
+.hello h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.hello h1 span {
+  color: var(--gold);
+}
+
+.hello p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.hello-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.wordmark img {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-}
-
-.wordmark b {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-}
-
-.wordmark small {
-  display: block;
-  font-size: 9px;
-  letter-spacing: 0.4em;
-  color: var(--muted);
-  margin-top: 1px;
-}
-
-.top-actions {
-  display: flex;
   gap: 8px;
+  flex-shrink: 0;
+}
+
+.hello-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.lang-pill {
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 19px;
+  background: var(--card);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  box-shadow: var(--shadow);
 }
 
 .icon-btn {
@@ -198,40 +220,32 @@ svg.ic {
   height: 19px;
 }
 
-.icon-btn .count {
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  min-width: 17px;
-  height: 17px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: var(--grad);
-  color: var(--on-gold);
-  font-size: 10px;
-  font-weight: 800;
-  display: grid;
-  place-items: center;
+.search-fake {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dim);
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.lang-pill {
-  height: 40px;
-  padding: 0 12px;
-  border-radius: 20px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--gold);
+.search-fake svg.ic {
+  width: 19px;
+  height: 19px;
+  color: var(--text);
 }
 
 .page-title {
-  font-family: var(--serif);
-  font-size: 34px;
-  font-weight: 600;
-  margin: 10px 0 4px;
-  letter-spacing: 0.01em;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 18px 0 4px;
 }
 
 .page-sub {
@@ -240,36 +254,12 @@ svg.ic {
   margin-bottom: 16px;
 }
 
-/* ================= SALOMLASHISH ================= */
-.greet {
-  margin: 18px 0 18px;
-}
-
-.greet .kr {
-  font-size: 12px;
-  letter-spacing: 0.25em;
-  color: var(--gold);
-  text-transform: uppercase;
-}
-
-.greet h1 {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 32px;
-  line-height: 1.1;
-  margin: 6px 0 0;
-}
-
-.greet h1 i {
-  font-style: italic;
-}
-
 /* ================= STORYLAR ================= */
 .stories {
   display: flex;
   gap: 14px;
   overflow-x: auto;
-  margin: 0 -16px 22px;
+  margin: 0 -16px 6px;
   padding: 4px 16px;
   scrollbar-width: none;
 }
@@ -280,42 +270,32 @@ svg.ic {
 
 .story {
   flex-shrink: 0;
-  width: 70px;
+  width: 74px;
   text-align: center;
 }
 
 .story-ring {
-  position: relative;
-  width: 70px;
-  height: 70px;
+  width: 74px;
+  height: 74px;
   border-radius: 50%;
   padding: 3px;
-  overflow: hidden;
-}
-
-.story-ring::before {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  background: conic-gradient(from 0deg, #f1d58a, #a8822e, #f1d58a, #6b5320, #f1d58a);
-  animation: spin 4s linear infinite;
+  background: var(--card);
+  box-shadow: 0 0 0 2px var(--gold-lo), var(--shadow);
 }
 
 .story-ring img {
-  position: relative;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid var(--bg);
   background: var(--plate);
 }
 
 .story span {
   display: block;
-  font-size: 11px;
-  margin-top: 6px;
-  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-top: 7px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -327,7 +307,104 @@ svg.ic {
   }
 }
 
-/* ================= SHOWCASE (asosiy karusel) ================= */
+/* ================= KATEGORIYALAR ================= */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cat-card {
+  padding: 10px;
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  text-align: left;
+  transition: transform 0.25s var(--spring);
+}
+
+.cat-card:last-child:nth-child(odd) {
+  grid-column: span 2;
+}
+
+.cat-card:last-child:nth-child(odd) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cat-card:last-child:nth-child(odd) .cat-img {
+  flex: 0 0 96px;
+}
+
+.cat-card:last-child:nth-child(odd) .cat-meta {
+  flex: 1;
+  align-items: center;
+  padding: 0 4px 0 0;
+}
+
+.cat-card:active {
+  transform: scale(0.97);
+}
+
+.cat-img {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--plate);
+  display: grid;
+  place-items: center;
+}
+
+.cat-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(var(--z, 1));
+}
+
+.cat-img .emo {
+  font-size: 34px;
+}
+
+.cat-meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px 4px 2px;
+}
+
+.cat-meta b {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cat-meta small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cat-go {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card-2);
+}
+
+.cat-go svg.ic {
+  width: 16px;
+  height: 16px;
+}
+
+/* ================= PROMO (to'q karusel) ================= */
 .showcase {
   position: relative;
   margin: 0 -16px;
@@ -350,101 +427,88 @@ svg.ic {
   position: relative;
   flex: 0 0 100%;
   scroll-snap-align: center;
-  height: 380px;
-  border-radius: var(--r-l);
+  min-height: 210px;
+  border-radius: 26px;
   overflow: hidden;
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  display: flex;
+  background: radial-gradient(130% 120% at 100% 100%, var(--ink-2) 0%, var(--ink) 60%);
+  color: #fff;
+  box-shadow: var(--shadow-l);
 }
 
-.slide-img {
-  position: absolute;
-  inset: 0 0 34%;
-  background: var(--plate);
-  overflow: hidden;
-}
-
-.slide-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(calc(var(--z, 1) * 1.04));
-}
-
-.slide.active .slide-img img {
-  animation: kenburns 6s ease-out both;
-}
-
-@keyframes kenburns {
-  from {
-    transform: scale(calc(var(--z, 1) * 1.18)) translateY(6px);
-  }
-  to {
-    transform: scale(calc(var(--z, 1) * 1.04));
-  }
-}
-
-.slide-img::after {
+.slide::before {
+  /* nozik oltin halqa */
   content: '';
   position: absolute;
-  inset: auto 0 0;
-  height: 70px;
-  background: linear-gradient(rgba(255, 255, 255, 0), var(--card));
+  right: -60px;
+  bottom: -70px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(241, 213, 138, 0.25);
 }
 
 .slide-info {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  padding: 20px 4px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .slide-info .tag {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--on-gold);
-  background: var(--grad);
-  padding: 5px 10px;
-  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-hi);
 }
 
 .slide-info h3 {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1.1;
-  margin: 10px 0 8px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 8px 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.slide.active .slide-info > * {
-  animation: rise 0.7s var(--ease) both;
-}
-
-.slide.active .slide-info > *:nth-child(2) {
-  animation-delay: 0.08s;
-}
-
-.slide.active .slide-info > *:nth-child(3) {
-  animation-delay: 0.16s;
-}
-
-.slide-row {
+.slide-price {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 17px;
+}
+
+.slide-price s {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .slide-go {
-  display: flex;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.slide-go {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+}
+
+.slide-info .slide-go {
+  height: 40px;
+  margin-top: auto;
+  padding: 0 16px;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13.5px;
   font-weight: 700;
-  color: var(--gold);
 }
 
 .slide-go svg.ic {
@@ -452,193 +516,90 @@ svg.ic {
   height: 16px;
 }
 
-.showcase-bars {
+.slide-img {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 42%;
+  margin: 12px 12px 12px 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--ink-2);
+}
+
+.slide-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(var(--z, 1));
+}
+
+.slide.active .slide-info > * {
+  animation: rise 0.6s var(--ease) both;
+}
+
+.slide.active .slide-info > *:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.slide.active .slide-info > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.showcase-dots {
   display: flex;
   gap: 6px;
   justify-content: center;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
-.showcase-bars span {
-  width: 18px;
-  height: 3px;
-  border-radius: 2px;
+.showcase-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
   background: var(--line-2);
-  overflow: hidden;
-  transition: width 0.4s var(--ease);
+  transition: width 0.35s var(--ease), background 0.3s;
 }
 
-.showcase-bars span.on {
-  width: 42px;
-}
-
-.showcase-bars span.on::after {
-  content: '';
-  display: block;
-  height: 100%;
-  background: var(--grad);
-  animation: fill var(--dur, 4.5s) linear both;
-}
-
-@keyframes fill {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-/* ================= YUGURUVCHI QATOR (afzalliklar) ================= */
-.marquee {
-  margin: 24px -16px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  overflow: hidden;
-  white-space: nowrap;
-  background: var(--bg-2);
-}
-
-.marquee-inner {
-  display: inline-flex;
-  animation: marquee 26s linear infinite;
-  padding: 12px 0;
-}
-
-.marquee-inner span {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 18px;
-}
-
-.marquee-inner span b {
-  color: var(--gold);
-  margin-right: 18px;
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ================= KATEGORIYA BENTO ================= */
-.bento {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  grid-template-rows: 120px 120px;
-  gap: 10px;
-}
-
-.bento-tile {
-  position: relative;
-  border-radius: var(--r);
-  overflow: hidden;
-  background: var(--card);
-  border: 1px solid var(--line);
-  text-align: left;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  transition: transform 0.25s var(--spring);
-}
-
-.bento-tile:active {
-  transform: scale(0.97);
-}
-
-.bento-tile:first-child {
-  grid-row: span 2;
-}
-
-.bento-tile img {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 48%;
-  height: 54%;
-  object-fit: contain;
-  border-radius: 16px;
-  background: var(--plate);
-  transform: rotate(-8deg);
-  box-shadow: var(--shadow-l);
-  transition: transform 0.6s var(--ease);
-}
-
-.bento-tile:first-child img {
-  right: -10%;
-  top: 12%;
-  width: 92%;
-  height: 56%;
-}
-
-.bento-tile:active img {
-  transform: rotate(-3deg) scale(1.05);
-}
-
-.bento-tile .emo {
-  position: absolute;
-  top: 12px;
-  left: 14px;
-  font-size: 20px;
-}
-
-.bento-tile b {
-  position: relative;
-  font-family: var(--serif);
-  font-size: 21px;
-  font-weight: 600;
-}
-
-.bento-tile small {
-  position: relative;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
+.showcase-dots span.on {
+  width: 22px;
+  background: var(--ink);
 }
 
 /* ================= BO'LIM SARLAVHASI ================= */
 .section-head {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  margin: 30px 0 14px;
+  margin: 28px 0 14px;
 }
 
 .section-head h2 {
-  font-family: var(--serif);
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
-.section-head h2 small {
-  display: block;
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  color: var(--gold);
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
 .section-head button {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--muted);
+  color: var(--gold);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+}
+
+.section-head .pill-link {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: var(--shadow);
 }
 
 .section-head button svg.ic {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
 }
 
 /* ================= MAHSULOT KARTASI ================= */
@@ -671,12 +632,20 @@ svg.ic {
 .card {
   position: relative;
   cursor: pointer;
+  padding: 7px 7px 12px;
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.card > :not(.card-img) {
+  padding: 0 5px;
 }
 
 .card-img {
   position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: var(--r);
+  border-radius: 16px;
   background: var(--plate);
   overflow: hidden;
 }
@@ -730,7 +699,7 @@ svg.ic {
   font-weight: 800;
   padding: 4px 8px;
   border-radius: 8px;
-  background: var(--text);
+  background: var(--ink);
   color: var(--gold-hi);
   letter-spacing: 0.04em;
 }
@@ -785,9 +754,9 @@ svg.ic {
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: var(--grad);
-  color: var(--on-gold);
-  box-shadow: 0 6px 16px rgba(168, 130, 46, 0.3);
+  background: var(--ink);
+  color: var(--gold-hi);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   transition: transform 0.25s var(--spring), background 0.3s;
 }
 
@@ -807,9 +776,9 @@ svg.ic {
 }
 
 .card-brand {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold);
   margin-top: 10px;
@@ -837,7 +806,8 @@ svg.ic {
 
 .price-new {
   font-weight: 800;
-  font-size: 15px;
+  font-size: 15.5px;
+  letter-spacing: -0.01em;
 }
 
 .price-old {
@@ -1016,9 +986,9 @@ svg.ic {
 }
 
 .empty h3 {
-  font-family: var(--serif);
   font-size: 24px;
   margin: 0 0 6px;
+  letter-spacing: -0.02em;
 }
 
 .empty p {
@@ -1033,18 +1003,22 @@ svg.ic {
   width: 100%;
   height: 56px;
   border-radius: 18px;
-  background: var(--grad);
-  color: var(--on-gold);
+  background: var(--ink);
+  color: #fff;
   font-size: 15.5px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: transform 0.2s var(--spring), opacity 0.2s;
-  box-shadow: 0 10px 30px rgba(214, 174, 81, 0.22);
+  box-shadow: 0 12px 28px rgba(20, 19, 18, 0.22);
+}
+
+.btn svg.ic {
+  color: var(--gold-hi);
 }
 
 .btn::after {
@@ -1055,7 +1029,7 @@ svg.ic {
   bottom: 0;
   width: 40%;
   left: -60%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  background: linear-gradient(100deg, transparent, rgba(241, 213, 138, 0.18), transparent);
   transform: skewX(-20deg);
   animation: sheen 3.2s ease-in-out infinite;
 }
@@ -1079,10 +1053,14 @@ svg.ic {
 }
 
 .btn.dark {
-  background: var(--card-2);
+  background: var(--card);
   color: var(--text);
-  border: 1px solid var(--line-2);
-  box-shadow: none;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.btn.dark svg.ic {
+  color: var(--text);
 }
 
 .btn.dark::after {
@@ -1124,68 +1102,110 @@ svg.ic {
   height: 17px;
 }
 
-/* ================= PASTKI DOCK (navigatsiya) ================= */
+/* ================= PASTKI MENYU ================= */
 .dock {
   position: fixed;
   z-index: 50;
-  left: 50%;
-  bottom: calc(12px + var(--safe-b));
-  transform: translateX(-50%);
+  left: 12px;
+  right: 12px;
+  bottom: calc(10px + var(--safe-b));
+  height: var(--dock-h);
   display: flex;
-  gap: 4px;
-  padding: 6px;
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.88);
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid var(--line-2);
+  border: 1px solid var(--line);
   box-shadow: var(--shadow-l);
-  max-width: calc(100% - 16px);
   animation: dock-in 0.7s var(--spring) both;
 }
 
 @keyframes dock-in {
   from {
-    transform: translate(-50%, 120%);
+    transform: translateY(120%);
   }
 }
 
-.dock button {
-  position: relative;
-  height: 50px;
-  min-width: 44px;
-  padding: 0 11px;
-  border-radius: 20px;
+.nav-item,
+.nav-gap {
+  flex: 1;
+}
+
+.nav-item {
+  height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 7px;
-  color: var(--muted);
-  font-size: 12.5px;
-  font-weight: 800;
-  transition: background 0.4s var(--ease), color 0.3s, padding 0.4s var(--ease);
+  justify-content: center;
+  gap: 3px;
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 600;
+  transition: color 0.3s;
 }
 
-.dock button .lbl {
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: max-width 0.45s var(--ease);
+.nav-ic {
+  position: relative;
+  width: 46px;
+  height: 30px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  transition: background 0.35s var(--ease);
 }
 
-.dock button.on {
-  background: var(--grad);
-  color: var(--on-gold);
-  padding: 0 13px;
+.nav-ic svg.ic {
+  width: 21px;
+  height: 21px;
 }
 
-.dock button.on .lbl {
-  max-width: 76px;
+.nav-item.on {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.nav-item.on .nav-ic {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+
+/* O'rtadagi suzuvchi savat tugmasi */
+.nav-cart {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 25%, var(--ink-2), var(--ink) 70%);
+  color: var(--gold-hi);
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 7px rgba(22, 21, 20, 0.07), 0 12px 26px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s var(--spring);
+}
+
+.nav-cart svg.ic {
+  width: 25px;
+  height: 25px;
+}
+
+.nav-cart:active {
+  transform: scale(0.92);
+}
+
+.nav-cart.on {
+  box-shadow: 0 0 0 7px var(--gold-soft), 0 12px 26px rgba(0, 0, 0, 0.28);
 }
 
 .dock .badge {
   position: absolute;
-  top: 6px;
-  left: 30px;
+  top: -4px;
+  right: 2px;
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
@@ -1199,18 +1219,24 @@ svg.ic {
   animation: pop 0.45s var(--spring);
 }
 
-.dock button.on .badge {
-  background: var(--text);
-  color: var(--gold-hi);
+.nav-cart .badge {
+  top: -2px;
+  right: -2px;
+  background: var(--grad);
+  color: var(--on-gold);
+  border: 2px solid #fff;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
 }
 
-.dock button.bump {
+.nav-cart.bump {
   animation: bump 0.6s var(--spring);
 }
 
 @keyframes bump {
   30% {
-    transform: scale(1.25) rotate(-8deg);
+    transform: scale(1.18) rotate(-8deg);
   }
   60% {
     transform: scale(0.95) rotate(4deg);
@@ -1518,11 +1544,11 @@ svg.ic {
 }
 
 .sheet-info h2 {
-  font-family: var(--serif);
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.08;
   margin: 6px 0 10px;
+  letter-spacing: -0.02em;
 }
 
 .sheet-price {
@@ -1984,10 +2010,10 @@ svg.ic {
 }
 
 .screen-head h1 {
-  font-family: var(--serif);
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 800;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .screen-body {
@@ -2231,10 +2257,10 @@ svg.ic {
 }
 
 .success h2 {
-  font-family: var(--serif);
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 800;
   margin: 0 0 6px;
+  letter-spacing: -0.02em;
 }
 
 .success p {
@@ -2261,8 +2287,9 @@ svg.ic {
   margin: 20px 0 14px;
   padding: 20px;
   border-radius: 24px;
-  background: radial-gradient(120% 140% at 100% 0%, #f6e7c1 0%, #ffffff 60%), #fff;
-  border: 1px solid rgba(214, 174, 81, 0.45);
+  background: radial-gradient(130% 140% at 100% 0%, var(--ink-2) 0%, var(--ink) 60%);
+  color: #fff;
+  border: 1px solid rgba(214, 174, 81, 0.35);
   box-shadow: var(--shadow-l);
   overflow: hidden;
   animation: rise 0.7s 0.3s var(--ease) both;
@@ -2272,7 +2299,7 @@ svg.ic {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+  background: linear-gradient(115deg, transparent 35%, rgba(241, 213, 138, 0.1) 50%, transparent 65%);
   background-size: 250% 100%;
   animation: shimmer 4s linear infinite;
   pointer-events: none;
@@ -2294,7 +2321,6 @@ svg.ic {
 }
 
 .bank-top b {
-  font-family: var(--serif);
   font-size: 18px;
   letter-spacing: 0.08em;
 }
@@ -2320,11 +2346,20 @@ svg.ic {
   text-transform: uppercase;
 }
 
+.bank-card .bank-meta {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.bank-card .gold-text,
+.profile-card .gold-text {
+  background-image: var(--grad);
+}
+
 .bank-meta b {
   display: block;
   margin-top: 3px;
   font-size: 15px;
-  color: var(--text);
+  color: #fff;
   letter-spacing: 0.02em;
   text-transform: none;
 }
@@ -2336,11 +2371,11 @@ svg.ic {
   height: 32px;
   padding: 0 12px;
   border-radius: 10px;
-  background: var(--gold-soft);
-  border: 1px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   font-size: 12px;
   font-weight: 800;
-  color: var(--gold);
+  color: var(--gold-hi);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -2584,9 +2619,9 @@ svg.ic {
   margin-top: 8px;
   padding: 22px 18px;
   border-radius: var(--r-l);
-  background: radial-gradient(120% 140% at 0% 0%, #f6e7c1 0%, #ffffff 65%);
-  border: 1px solid rgba(214, 174, 81, 0.4);
-  box-shadow: var(--shadow);
+  background: radial-gradient(130% 140% at 0% 0%, var(--ink-2) 0%, var(--ink) 60%);
+  color: #fff;
+  box-shadow: var(--shadow-l);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -2600,12 +2635,12 @@ svg.ic {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-family: var(--serif);
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--on-gold);
   background: var(--grad);
   flex-shrink: 0;
+  letter-spacing: -0.02em;
 }
 
 .profile-card .av::after {
@@ -2618,16 +2653,16 @@ svg.ic {
 }
 
 .profile-card h2 {
-  font-family: var(--serif);
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 800;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .profile-card p {
   margin: 3px 0 0;
   font-size: 13px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .profile-card .tier {
@@ -2638,8 +2673,8 @@ svg.ic {
   letter-spacing: 0.2em;
   padding: 4px 9px;
   border-radius: 12px;
-  background: var(--gold-soft);
-  color: var(--gold);
+  background: rgba(241, 213, 138, 0.14);
+  color: var(--gold-hi);
 }
 
 .menu {
@@ -2854,9 +2889,9 @@ svg.ic {
 }
 
 .ob-orb img {
-  width: 108px;
-  height: 108px;
-  border-radius: 28px;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
   box-shadow: 0 0 70px rgba(214, 174, 81, 0.35);
   animation: float 4s ease-in-out infinite;
 }
@@ -2878,11 +2913,11 @@ svg.ic {
 }
 
 .ob-text h1 {
-  font-family: var(--serif);
   font-size: 38px;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.08;
   margin: 12px 0 14px;
+  letter-spacing: -0.02em;
 }
 
 .ob-text p {
@@ -2978,12 +3013,12 @@ svg.ic {
 }
 
 .sv-title {
-  font-family: var(--serif);
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 800;
   margin-bottom: 14px;
   color: #fff;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  letter-spacing: -0.02em;
 }
 
 /* ================= TOAST ================= */
@@ -3041,7 +3076,6 @@ svg.ic {
 }
 
 .bot-only h1 {
-  font-family: var(--serif);
   font-size: 30px;
   letter-spacing: 0.2em;
   margin: 26px 0 10px;

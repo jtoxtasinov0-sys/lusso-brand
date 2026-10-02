@@ -32,6 +32,8 @@ services:
         value: ""
       - key: PUBLIC_URL         # https://lusso-brand.onrender.com
         sync: false
+      - key: TELEGRAM_ORDERS    # true — buyurtma Telegram ilovasining o'zida
+        value: "true"
       - key: SKIP_INITDATA_CHECK
         value: "false"          # PRODUCTION'da doimo false!
       - key: NODE_VERSION

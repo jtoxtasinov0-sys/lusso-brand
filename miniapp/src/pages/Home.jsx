@@ -18,27 +18,23 @@ function seoulHour() {
   }
 }
 
-export function TopBar({ lang, onLang, onSearch }) {
+// Bosh sahifa sarlavhasi: salomlashish, til va logo. Orqada to'q yoy (dizayn elementi).
+function Hello({ greet, name, sub, lang, onLang }) {
   return (
-    <div className="topbar">
-      <div className="wordmark">
-        <img src="/logo.svg" alt="" />
-        <div>
-          <b className="gold-text">LUSSO</b>
-          <small>BRAND · KOREA</small>
-        </div>
+    <header className="hello rise">
+      <div className="hello-text">
+        <h1>
+          {greet}, <span>{name}</span>
+        </h1>
+        <p>{sub}</p>
       </div>
-      <div className="top-actions">
+      <div className="hello-actions">
         <button className="lang-pill" onClick={onLang}>
           {lang === 'ru' ? 'RU' : 'UZ'}
         </button>
-        {onSearch && (
-          <button className="icon-btn" onClick={onSearch} aria-label="search">
-            <Icon name="search" />
-          </button>
-        )}
+        <img className="hello-logo" src="/logo.png" alt="LUSSO" />
       </div>
-    </div>
+    </header>
   );
 }
 
@@ -65,7 +61,7 @@ function Showcase({ items, lang, t, onOpen }) {
     if (i !== active && i >= 0 && i < items.length) setActive(i);
   };
 
-  if (!items.length) return <div className="skel" style={{ height: 380 }} />;
+  if (!items.length) return <div className="skel" style={{ height: 210 }} />;
 
   return (
     <div className="showcase">
@@ -87,38 +83,33 @@ function Showcase({ items, lang, t, onOpen }) {
                 onOpen(p);
               }}
             >
+              <div className="slide-info">
+                <span className="tag">{d > 0 ? `−${d}% · ${t.sale}` : t.promoKicker}</span>
+                <h3>{lang === 'ru' ? p.nameRu : p.nameUz}</h3>
+                <div className="slide-price">
+                  <b>{money(p.price)}</b>
+                  {d > 0 && <s>{money(p.oldPrice)}</s>}
+                </div>
+                <span className="slide-go">
+                  {t.view} <Icon name="arrow" />
+                </span>
+              </div>
               <div className="slide-img">
                 <img
                   src={p.images?.[0]?.url || PLACEHOLDER}
                   alt=""
-                  className="framed"
                   style={frameStyle(p.images?.[0]?.url)}
                   onError={onImgError}
                 />
-              </div>
-              <div className="slide-info">
-                <span className="tag">{d > 0 ? `−${d}% · ${t.sale}` : p.brand || 'LUSSO'}</span>
-                <h3>{lang === 'ru' ? p.nameRu : p.nameUz}</h3>
-                <div className="slide-row">
-                  <div className="price-row" style={{ marginTop: 0 }}>
-                    <span className="price-new" style={{ fontSize: 18 }}>
-                      {money(p.price)}
-                    </span>
-                    {d > 0 && <span className="price-old">{money(p.oldPrice)}</span>}
-                  </div>
-                  <span className="slide-go">
-                    {t.view} <Icon name="arrow" />
-                  </span>
-                </div>
               </div>
             </div>
           );
         })}
       </div>
       {items.length > 1 && (
-        <div className="showcase-bars" style={{ '--dur': `${SLIDE_MS}ms` }}>
+        <div className="showcase-dots">
           {items.map((p, i) => (
-            <span key={p.id + '-' + (i === active ? active : 'x')} className={i === active ? 'on' : ''} />
+            <span key={p.id} className={i === active ? 'on' : ''} />
           ))}
         </div>
       )}
@@ -126,18 +117,15 @@ function Showcase({ items, lang, t, onOpen }) {
   );
 }
 
-function Rail({ title, kicker, items, lang, t, onOpen, onQuickAdd, onAll }) {
+function Rail({ title, items, lang, t, onOpen, onQuickAdd, onAll }) {
   if (!items.length) return null;
   return (
     <>
       <div className="section-head">
-        <h2>
-          <small>{kicker}</small>
-          {title}
-        </h2>
+        <h2>{title}</h2>
         {onAll && (
           <button onClick={onAll}>
-            {t.seeAll} <Icon name="next" />
+            {t.seeAll} <Icon name="arrow" />
           </button>
         )}
       </div>
@@ -195,18 +183,15 @@ export default function Home({
   const catCover = (slug) => products.find((p) => p.category?.slug === slug)?.images?.[0]?.url;
   const catCount = (slug) => products.filter((p) => p.category?.slug === slug).length;
 
-  const perks = [t.mqDelivery, t.mqFree, t.mqPay, t.mqSupport];
-
   return (
     <div className="page">
-      <TopBar lang={lang} onLang={onLang} onSearch={() => goCatalog(null, true)} />
+      <div className="home-arc" aria-hidden="true" />
+      <Hello greet={greet} name={firstName} sub={t.welcomeSub} lang={lang} onLang={onLang} />
 
-      <div className="greet rise">
-        <div className="kr">안녕하세요 · {greet}</div>
-        <h1>
-          {firstName}, <i className="gold-text">{t.welcomeSub}</i>
-        </h1>
-      </div>
+      <button className="search-fake rise" style={{ '--i': 1 }} onClick={() => goCatalog(null, true)}>
+        <Icon name="search" />
+        <span>{t.search}</span>
+      </button>
 
       {stories.length > 0 && (
         <div className="stories">
@@ -221,57 +206,60 @@ export default function Home({
         </div>
       )}
 
-      {loading && !products.length ? (
-        <div className="skel" style={{ height: 380 }} />
-      ) : (
-        <Showcase items={showcase} lang={lang} t={t} onOpen={onOpen} />
-      )}
-
-      <div className="marquee">
-        <div className="marquee-inner">
-          {[...perks, ...perks].map((p, i) => (
-            <span key={i}>
-              <b>✦</b>
-              {p}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {categories.length > 0 && (
         <>
-          <div className="section-head" style={{ marginTop: 0 }}>
-            <h2>
-              <small>{t.collections}</small>
-              {t.categories}
-            </h2>
+          <div className="section-head">
+            <h2>{t.categories}</h2>
+            <button className="pill-link" onClick={() => goCatalog()}>
+              {t.seeAll} <Icon name="arrow" />
+            </button>
           </div>
-          <div className="bento">
-            {categories.slice(0, 3).map((c, i) => (
+          <div className="cat-grid">
+            {categories.map((c, i) => (
               <button
                 key={c.id}
-                className="bento-tile rise"
+                className="cat-card rise"
                 style={{ '--i': i }}
                 onClick={() => {
                   haptic('light');
                   goCatalog(c.slug);
                 }}
               >
-                {catCover(c.slug) && <img src={catCover(c.slug)} alt="" onError={onImgError} />}
-                <span className="emo">{c.emoji}</span>
-                <b>{lang === 'ru' ? c.nameRu : c.nameUz}</b>
-                <small>
-                  {catCount(c.slug)} {t.items}
-                </small>
+                <div className="cat-img">
+                  {catCover(c.slug) ? (
+                    <img src={catCover(c.slug)} alt="" style={frameStyle(catCover(c.slug))} onError={onImgError} />
+                  ) : (
+                    <span className="emo">{c.emoji}</span>
+                  )}
+                </div>
+                <div className="cat-meta">
+                  <div>
+                    <b>{lang === 'ru' ? c.nameRu : c.nameUz}</b>
+                    <small>
+                      {catCount(c.slug)} {t.items}
+                    </small>
+                  </div>
+                  <span className="cat-go">
+                    <Icon name="arrow" />
+                  </span>
+                </div>
               </button>
             ))}
           </div>
         </>
       )}
 
+      <div className="section-head">
+        <h2>{t.promoTitle}</h2>
+      </div>
+      {loading && !products.length ? (
+        <div className="skel" style={{ height: 210 }} />
+      ) : (
+        <Showcase items={showcase} lang={lang} t={t} onOpen={onOpen} />
+      )}
+
       <Rail
         title={t.bestsellers}
-        kicker="BEST"
         items={bestsellers}
         lang={lang}
         t={t}
@@ -282,7 +270,6 @@ export default function Home({
 
       <Rail
         title={t.newArrivals}
-        kicker="NEW IN"
         items={newOnes}
         lang={lang}
         t={t}
@@ -294,10 +281,7 @@ export default function Home({
       {sale.length > 0 && (
         <>
           <div className="section-head">
-            <h2>
-              <small>SALE · 할인</small>
-              {t.discounted}
-            </h2>
+            <h2>{t.discounted}</h2>
           </div>
           <div className="grid">
             {sale.slice(0, 6).map((p, i) => (

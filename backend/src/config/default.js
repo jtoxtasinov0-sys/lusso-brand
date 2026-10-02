@@ -88,10 +88,9 @@ export const config = {
   skipInitDataCheck: String(process.env.SKIP_INITDATA_CHECK || '').toLowerCase() === 'true',
   devTelegramId: process.env.DEV_TELEGRAM_ID || '999000111',
 
-  // Telegram ilovasi (Mini App) ichidan buyurtma berish. Hozircha o'chiq:
-  // buyurtma faqat sayt (brauzer) orqali qabul qilinadi. Qo'shimcha to'lovdan
-  // keyin serverda TELEGRAM_ORDERS=true qilinsa, ilovada ham yoqiladi.
-  telegramOrders: String(process.env.TELEGRAM_ORDERS || '').toLowerCase() === 'true',
+  // Telegram ilovasi (Mini App) ichidan buyurtma berish — standart holatda yoqiq.
+  // Serverda TELEGRAM_ORDERS=false qilinsa, buyurtma faqat sayt (brauzer) orqali qabul qilinadi.
+  telegramOrders: String(process.env.TELEGRAM_ORDERS || '').toLowerCase() !== 'false',
 
   // Do'kon egasining Telegram profili (savol-javob uchun tugma/havola)
   ownerContactUrl: (process.env.OWNER_CONTACT_URL || 'https://t.me/Nurillo_0304').trim(),

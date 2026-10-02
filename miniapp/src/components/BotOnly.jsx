@@ -3,7 +3,7 @@
 export default function BotOnly({ botUrl }) {
   return (
     <div className="bot-only">
-      <img src="/logo.svg" alt="LUSSO BRAND KR" />
+      <img src="/logo.png" alt="LUSSO BRAND KR" />
       <h1>LUSSO BRAND KR</h1>
       <p>Do'kon Telegram bot orqali ishlaydi. Xarid qilish uchun botni oching.</p>
       {botUrl && (
