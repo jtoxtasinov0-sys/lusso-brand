@@ -1,109 +1,135 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import Icon from '../components/Icon';
 import { haptic } from '../telegram';
 
 export default function Catalog({
   t,
   lang,
   categories,
+  brands = [],
   products,
   loading,
   category,
   setCategory,
+  brand,
+  setBrand,
   search,
   setSearch,
   sort,
   setSort,
   onOpen,
   onQuickAdd,
+  autoFocus,
 }) {
-  const [showSort, setShowSort] = useState(false);
+  const segRef = useRef(null);
+  const [glider, setGlider] = useState({ left: 4, width: 0 });
 
   const sorts = [
+    { key: '', label: t.sortDefault },
     { key: 'new', label: t.sortNew },
     { key: 'price_asc', label: t.sortCheap },
     { key: 'price_desc', label: t.sortExpensive },
   ];
+  const sortIdx = Math.max(0, sorts.findIndex((s) => s.key === sort));
+
+  const segs = [{ slug: 'all', label: t.all }, ...categories.map((c) => ({ slug: c.slug, label: lang === 'ru' ? c.nameRu : c.nameUz }))];
+
+  // Oltin "glider" tanlangan kategoriya ostiga suriladi
+  useLayoutEffect(() => {
+    const el = segRef.current?.querySelector('button.on');
+    if (el) setGlider({ left: el.offsetLeft, width: el.offsetWidth });
+  }, [category, categories, lang]);
 
   return (
     <div className="page">
-      <div className="header">
-        <div className="name">{t.navCatalog}</div>
-        <button className="avatar" onClick={() => setShowSort(!showSort)}>
-          ⇅
-        </button>
+      <h1 className="page-title rise">{t.navCatalog}</h1>
+      <div className="page-sub rise" style={{ '--i': 1 }}>
+        {t.catalogSub}
       </div>
 
-      <div className="search-box">
-        <span>🔍</span>
+      <label className="search rise" style={{ '--i': 2 }}>
+        <Icon name="search" />
         <input
           value={search}
+          autoFocus={autoFocus}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t.search}
         />
-        {search && <button onClick={() => setSearch('')}>✕</button>}
+        {search && (
+          <button onClick={() => setSearch('')} aria-label="✕">
+            <Icon name="close" />
+          </button>
+        )}
+      </label>
+
+      <div className="seg" ref={segRef}>
+        <div className="seg-glider" style={{ left: glider.left, width: glider.width }} />
+        {segs.map((s) => (
+          <button
+            key={s.slug}
+            className={category === s.slug ? 'on' : ''}
+            onClick={() => {
+              haptic('light');
+              setCategory(s.slug);
+              setBrand('');
+            }}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
 
-      {showSort && (
-        <div className="chips" style={{ marginTop: 10 }}>
-          {sorts.map((s) => (
+      {brands.length > 1 && (
+        <div className="chips">
+          <button className={`chip ${!brand ? 'on' : ''}`} onClick={() => setBrand('')}>
+            {t.allBrands}
+          </button>
+          {brands.map((b) => (
             <button
-              key={s.key}
-              className={`chip ${sort === s.key ? 'on' : ''}`}
-              onClick={() => setSort(sort === s.key ? '' : s.key)}
+              key={b}
+              className={`chip ${brand === b ? 'on' : ''}`}
+              onClick={() => {
+                haptic('light');
+                setBrand(brand === b ? '' : b);
+              }}
             >
-              {s.label}
+              {b}
             </button>
           ))}
         </div>
       )}
 
-      <div className="chips" style={{ marginTop: 14 }}>
+      <div className="result-bar">
+        <span>
+          {loading ? '…' : products.length} {t.items}
+        </span>
         <button
-          className={`chip ${category === 'all' ? 'on' : ''}`}
           onClick={() => {
             haptic('light');
-            setCategory('all');
+            setSort(sorts[(sortIdx + 1) % sorts.length].key);
           }}
         >
-          {t.all}
+          <Icon name="sort" /> {sorts[sortIdx].label}
         </button>
-        {categories.map((c) => (
-          <button
-            key={c.id}
-            className={`chip ${category === c.slug ? 'on' : ''}`}
-            onClick={() => {
-              haptic('light');
-              setCategory(c.slug);
-            }}
-          >
-            <span>{c.emoji}</span>
-            {lang === 'ru' ? c.nameRu : c.nameUz}
-          </button>
-        ))}
       </div>
 
       {loading ? (
         <div className="grid">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+          {[1, 2, 3, 4].map((i) => (
             <div key={i} className="skel skel-card" />
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="center-empty">
-          <div className="emoji">🔍</div>
+        <div className="empty">
+          <div className="em">🔍</div>
           <h3>{t.nothingFound}</h3>
+          <p>{t.nothingFoundText}</p>
         </div>
       ) : (
-        <div className="grid">
-          {products.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              lang={lang}
-              onOpen={onOpen}
-              onQuickAdd={onQuickAdd}
-            />
+        <div className="grid" key={category + brand + sort}>
+          {products.map((p, i) => (
+            <ProductCard key={p.id} index={i} product={p} lang={lang} t={t} onOpen={onOpen} onQuickAdd={onQuickAdd} />
           ))}
         </div>
       )}

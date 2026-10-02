@@ -90,3 +90,15 @@ export function importCartFromUrl() {
 }
 
 export { keyOf };
+
+// Sevimlilar (♡) — faqat shu telefonda saqlanadi
+export const useFav = create(
+  persist(
+    (set, get) => ({
+      ids: [],
+      toggle: (id) =>
+        set({ ids: get().ids.includes(id) ? get().ids.filter((x) => x !== id) : [id, ...get().ids] }),
+    }),
+    { name: 'lusso-fav' }
+  )
+);

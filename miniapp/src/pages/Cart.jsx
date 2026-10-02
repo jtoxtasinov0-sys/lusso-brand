@@ -1,7 +1,58 @@
+import { useState } from 'react';
 import { money } from '../i18n';
 import { keyOf } from '../store';
 import { haptic } from '../telegram';
 import { PLACEHOLDER, onImgError } from '../components/ProductCard';
+import Icon from '../components/Icon';
+
+function CartItem({ item, index, inc, dec, remove }) {
+  const [leaving, setLeaving] = useState(false);
+  const key = keyOf(item);
+
+  const drop = () => {
+    haptic('warning');
+    setLeaving(true);
+    setTimeout(() => remove(key), 320);
+  };
+
+  return (
+    <div className={`cart-item rise ${leaving ? 'leaving' : ''}`} style={{ '--i': index }}>
+      <img src={item.image || PLACEHOLDER} alt="" onError={onImgError} />
+      <div className="info">
+        <div className="t">{item.name}</div>
+        {item.variant && item.variant !== 'Standart' && <div className="v">{item.variant}</div>}
+        <div className="bottom">
+          <div className="p">{money(item.price * item.qty)}</div>
+          <div className="stepper">
+            <button
+              onClick={() => {
+                haptic('light');
+                if (item.qty <= 1) drop();
+                else dec(key);
+              }}
+            >
+              −
+            </button>
+            <span className="tick" key={item.qty}>
+              {item.qty}
+            </span>
+            <button
+              onClick={() => {
+                haptic('light');
+                inc(key);
+              }}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+      <button className="rm" onClick={drop} aria-label="✕">
+        <Icon name="trash" />
+      </button>
+    </div>
+  );
+}
 
 export default function Cart({
   t,
@@ -21,14 +72,12 @@ export default function Cart({
   if (!items.length) {
     return (
       <div className="page">
-        <div className="header">
-          <div className="name">{t.cartTitle}</div>
-        </div>
-        <div className="center-empty">
-          <div className="emoji">🛒</div>
+        <h1 className="page-title rise">{t.cartTitle}</h1>
+        <div className="empty">
+          <div className="em">🛍</div>
           <h3>{t.cartEmpty}</h3>
           <p>{t.cartEmptyText}</p>
-          <button className="btn btn-light" onClick={goCatalog}>
+          <button className="btn ghost" onClick={goCatalog}>
             {t.goCatalog}
           </button>
         </div>
@@ -36,68 +85,48 @@ export default function Cart({
     );
   }
 
+  const count = items.reduce((s, i) => s + i.qty, 0);
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   const freeFrom = settings?.freeDeliveryFrom ?? 100000;
-  const fee = subtotal >= freeFrom ? 0 : settings?.deliveryFee ?? 3500;
+  const fee = subtotal >= freeFrom ? 0 : settings?.deliveryFee ?? 3000;
   const total = subtotal + fee;
   const left = freeFrom - subtotal;
+  const pct = Math.min(100, Math.round((subtotal / freeFrom) * 100));
 
   return (
     <div className="page">
-      <div className="header">
-        <div className="name">{t.cartTitle}</div>
+      <h1 className="page-title rise">{t.cartTitle}</h1>
+      <div className="page-sub rise" style={{ '--i': 1 }}>
+        {count} {t.items}
       </div>
 
-      {items.map((i) => (
-        <div className="cart-item" key={keyOf(i)}>
-          <img src={i.image} alt="" onError={onImgError} />
-          <div className="info">
-            <div className="t">{i.name}</div>
-            {i.variant && <div className="v">{i.variant}</div>}
-            <div className="qty">
-              <button
-                onClick={() => {
-                  haptic('light');
-                  dec(keyOf(i));
-                }}
-              >
-                −
-              </button>
-              <span>{i.qty}</span>
-              <button
-                onClick={() => {
-                  haptic('light');
-                  inc(keyOf(i));
-                }}
-              >
-                +
-              </button>
-              <button style={{ marginLeft: 'auto' }} onClick={() => remove(keyOf(i))}>
-                🗑
-              </button>
-            </div>
-          </div>
-          <div className="p">{money(i.price * i.qty)}</div>
+      <div className="free-meter rise" style={{ '--i': 1 }}>
+        <p>
+          {left > 0 ? (
+            <>
+              🚚 {t.freeHint.split('{x}')[0]}
+              <b>{money(left)}</b>
+              {t.freeHint.split('{x}')[1]}
+            </>
+          ) : (
+            <b>🎉 {t.freeReached}</b>
+          )}
+        </p>
+        <div className="meter">
+          <i style={{ width: pct + '%' }} />
         </div>
+      </div>
+
+      {items.map((i, idx) => (
+        <CartItem key={keyOf(i)} item={i} index={idx} inc={inc} dec={dec} remove={remove} />
       ))}
 
       {upsell && (
-        <div className="upsell">
-          <img
-            className="upsell-img"
-            src={upsell.images?.[0]?.url || PLACEHOLDER}
-            alt=""
-            onError={onImgError}
-          />
+        <div className="upsell rise">
+          <img src={upsell.images?.[0]?.url || PLACEHOLDER} alt="" onError={onImgError} />
           <div className="txt">
-            <b>
-              {lang === 'ru'
-                ? `Добавить ${upsell.nameRu}?`
-                : `${upsell.nameUz} ni ham qo'shasizmi?`}
-            </b>
-            {lang === 'ru'
-              ? `Всего ${money(upsell.price)} — отличный подарок`
-              : `Atigi ${money(upsell.price)} — ajoyib sovg'a bo'ladi`}
+            <b>{t.upsellTitle(lang === 'ru' ? upsell.nameRu : upsell.nameUz)}</b>
+            {t.upsellText(money(upsell.price))}
           </div>
           <div
             className={`switch ${upsellOn ? 'on' : ''}`}
@@ -117,10 +146,8 @@ export default function Cart({
           <span>{money(subtotal)}</span>
         </div>
         <div className="line">
-          <span>{t.delivery}</span>
-          <span style={fee === 0 ? { color: '#21b573', fontWeight: 700 } : {}}>
-            {fee === 0 ? t.free : money(fee)}
-          </span>
+          <span>{t.delivery} · 택배</span>
+          {fee === 0 ? <span className="free">{t.free}</span> : <span>{money(fee)}</span>}
         </div>
         <div className="line total">
           <span>{t.total}</span>
@@ -128,13 +155,11 @@ export default function Cart({
         </div>
       </div>
 
-      {left > 0 && <div className="free-hint">🚚 {t.freeHint(money(left))}</div>}
+      {orderInBrowser && <div className="note">🌐 {t.orderInBrowserHint}</div>}
 
-      {orderInBrowser && <div className="free-hint">🌐 {t.orderInBrowserHint}</div>}
-
-      <div className="sticky-bottom">
+      <div className="sticky-cta">
         <button className="btn" onClick={onCheckout}>
-          {orderInBrowser ? t.orderInBrowser : t.checkout} — {money(total)}
+          {orderInBrowser ? t.orderInBrowser : t.checkout} · {money(total)}
         </button>
       </div>
     </div>

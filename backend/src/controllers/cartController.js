@@ -66,7 +66,7 @@ export async function createOrder(req, res) {
   }
 
   try {
-    const { items = [], customerName, phone, street, detail, comment, saveAddress } = req.body;
+    const { items = [], customerName, phone, zipCode, street, detail, comment, saveAddress } = req.body;
 
     if (!items.length) return res.status(400).json({ error: "Savat bo'sh" });
     if (!customerName || !phone || !street) {
@@ -124,6 +124,7 @@ export async function createOrder(req, res) {
       total,
       customerName,
       phone,
+      zipCode,
       street,
       detail,
       comment,
@@ -145,6 +146,7 @@ export async function createOrder(req, res) {
     if (saveAddress) {
       await UserModel.saveAddress(user.id, {
         title: 'Uy',
+        zipCode: zipCode || null,
         street,
         detail: detail || null,
         isDefault: true,

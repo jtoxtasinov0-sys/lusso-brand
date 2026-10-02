@@ -1,8 +1,53 @@
 import { useRef, useState } from 'react';
 import { money } from '../i18n';
 import api from '../api';
-import { haptic, closeApp, openLink } from '../telegram';
+import { haptic, closeApp, openLink, isTelegram } from '../telegram';
 import { SUPPORT_URL } from '../constants';
+import Icon from '../components/Icon';
+
+// Toss ilovasi tushunadigan bank nomlari
+const TOSS_BANKS = [
+  [/shinhan|신한/i, '신한'],
+  [/kb|kookmin|국민/i, '국민'],
+  [/woori|우리/i, '우리'],
+  [/hana|하나/i, '하나'],
+  [/nh|nonghyup|농협/i, '농협'],
+  [/ibk|기업/i, '기업'],
+  [/kakao|카카오/i, '카카오뱅크'],
+  [/toss|토스/i, '토스뱅크'],
+  [/sc|제일/i, 'SC제일'],
+];
+
+function tossLink(bank, total) {
+  const name = TOSS_BANKS.find(([re]) => re.test(bank?.name || ''))?.[1] || bank?.name || '';
+  const acc = String(bank?.account || '').replace(/\D/g, '');
+  return `supertoss://send?bank=${encodeURIComponent(name)}&accountNo=${acc}&amount=${total}`;
+}
+
+function SuccessMark() {
+  return (
+    <div className="success-mark">
+      <svg viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="okg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#f1d58a" />
+            <stop offset=".5" stopColor="#d6ae51" />
+            <stop offset="1" stopColor="#a8822e" />
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="url(#okg)" strokeWidth="3" />
+        <path d="M31 51 l13 13 l26 -28" fill="none" stroke="url(#okg)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {Array.from({ length: 14 }).map((_, i) => (
+        <i
+          key={i}
+          className="confetti"
+          style={{ '--a': `${(360 / 14) * i}deg`, background: i % 2 ? '#f1d58a' : '#a8822e' }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Payment({ t, order, bank, onDone }) {
   const [copied, setCopied] = useState('');
@@ -21,8 +66,6 @@ export default function Payment({ t, order, bank, onDone }) {
     setTimeout(() => setCopied(''), 1600);
   };
 
-  const pickFile = () => fileRef.current?.click();
-
   const onFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -39,82 +82,110 @@ export default function Payment({ t, order, bank, onDone }) {
     }
   };
 
+  const CopyBtn = ({ value, k }) => (
+    <button className={`copy ${copied === k ? 'ok' : ''}`} onClick={() => copy(value, k)}>
+      <Icon name={copied === k ? 'check' : 'copy'} />
+      {copied === k ? t.copied : t.copy}
+    </button>
+  );
+
   return (
     <div className="screen">
-      <div className="screen-body" style={{ paddingTop: 12 }}>
-        <div className="pay-success">
-          <div className="ok">✓</div>
+      <div className="screen-body" style={{ paddingTop: 24 }}>
+        <div className="steps">
+          <span className="on" />
+          <span className="on" />
+          <span className="on" />
+        </div>
+
+        <div className="success">
+          <SuccessMark />
           <h2>{t.paySuccess}</h2>
-          <p>
-            {t.orderNo}: <b>{order.orderNumber}</b>
-            <br />
-            {t.payText}
-          </p>
+          <div className="no">№ {order.orderNumber}</div>
+          <p>{t.payText}</p>
         </div>
 
         <div className="bank-card">
-          <div className="bank-row">
-            <span>{t.bank}</span>
-            <b>{bank?.name}</b>
+          <div className="bank-top">
+            <b className="gold-text">{bank?.name}</b>
+            <span className="chip-ic" />
           </div>
-          <div className="bank-row">
-            <span>{t.account}</span>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <b>{bank?.account}</b>
-              <button className="copy-btn" onClick={() => copy(bank?.account, 'acc')}>
-                {copied === 'acc' ? '✓' : t.copy}
-              </button>
+          <div className="bank-acc">
+            <span>{bank?.account}</span>
+            <CopyBtn value={bank?.account || ''} k="acc" />
+          </div>
+          <div className="bank-meta">
+            <div>
+              {t.holder}
+              <b>{bank?.holder}</b>
             </div>
-          </div>
-          <div className="bank-row">
-            <span>{t.holder}</span>
-            <b>{bank?.holder}</b>
-          </div>
-          <div className="bank-row" style={{ borderTop: '1px solid #e6e6e8', marginTop: 6, paddingTop: 12 }}>
-            <span>{t.amount}</span>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <b style={{ fontSize: 17 }}>{money(order.total)}</b>
-              <button className="copy-btn" onClick={() => copy(String(order.total), 'sum')}>
-                {copied === 'sum' ? '✓' : t.copy}
-              </button>
+            <div style={{ textAlign: 'right' }}>
+              {t.amount}
+              <b className="gold-text" style={{ fontSize: 20 }}>
+                {money(order.total)}
+              </b>
             </div>
           </div>
         </div>
 
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={onFile}
-        />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn dark" style={{ height: 48, fontSize: 13.5 }} onClick={() => copy(String(order.total), 'sum')}>
+            <Icon name={copied === 'sum' ? 'check' : 'copy'} /> {t.copyAmount}
+          </button>
+          <button
+            className="btn dark"
+            style={{ height: 48, fontSize: 13.5 }}
+            onClick={() => {
+              haptic('light');
+              window.location.href = tossLink(bank, order.total);
+            }}
+          >
+            💸 {t.openToss}
+          </button>
+        </div>
 
-        <div className={`upload-area ${uploaded ? 'done' : ''}`} onClick={uploaded ? undefined : pickFile}>
-          {busy ? '⏳ ...' : uploaded ? t.receiptSent : t.uploadReceipt}
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={onFile} />
+
+        <div className={`upload ${uploaded ? 'done' : ''}`} onClick={uploaded || busy ? undefined : () => fileRef.current?.click()}>
+          {busy ? (
+            '⏳ …'
+          ) : uploaded ? (
+            <>
+              <Icon name="check" /> {t.receiptSent}
+            </>
+          ) : (
+            <>
+              <Icon name="camera" /> {t.uploadReceipt}
+            </>
+          )}
         </div>
 
         <button
           className="btn"
-          style={{ marginTop: 18 }}
+          style={{ marginTop: 16 }}
           onClick={() => {
             haptic('success');
             onDone();
-            closeApp();
+            if (isTelegram()) closeApp();
           }}
         >
-          {uploaded ? t.done : t.laterPay}
+          {isTelegram() ? (uploaded ? t.done : t.laterPay) : t.toHome}
         </button>
+
+        <div className="note">
+          {isTelegram() ? t.afterPayTg : t.afterPayWeb}
+        </div>
 
         <button
           type="button"
-          className="support-btn"
+          className="link-btn"
           style={{ marginTop: 12 }}
           onClick={() => {
             haptic('light');
             openLink(SUPPORT_URL);
           }}
         >
-          {t.supportAfterOrder}
+          <Icon name="chat" /> {t.supportAfterOrder}
         </button>
       </div>
     </div>

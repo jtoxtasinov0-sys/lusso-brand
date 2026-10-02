@@ -188,6 +188,12 @@ export default function OrdersPage({ toast, onCountChange }) {
               </div>
 
               <h4 style={{ margin: '18px 0 8px', fontSize: 14 }}>📍 Manzil</h4>
+              {open.zipCode && (
+                <div className="info-row">
+                  <span>우편번호 (indeks)</span>
+                  <b>{open.zipCode}</b>
+                </div>
+              )}
               <div className="info-row">
                 <span>주소</span>
                 <b style={{ textAlign: 'right' }}>{open.street}</b>

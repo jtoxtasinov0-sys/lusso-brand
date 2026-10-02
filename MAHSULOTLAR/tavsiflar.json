@@ -1,0 +1,223 @@
+{
+  "_izoh": "6-MAHSULOT-YUKLASH.bat shu fayldan brend, tavsif (uz/ru) va variantlarni oladi. Kalit — rasm nomidagi mahsulot nomi. variants: rang yoki hajm; rasmlar soni variantlar soniga teng bo'lsa, mijoz rangni tanlaganda o'sha rasm ochiladi.",
+
+  "Rave Now": {
+    "brand": "Rave",
+    "variants": ["Intense", "White", "Black"],
+    "descUz": "100 ml · Eau de Parfum\nIntense — ziravorli, yog'ochli\nWhite — yengil, gulli-mushkli\nBlack — chuqur, kechki hid",
+    "descRu": "100 ml · Eau de Parfum\nIntense — пряный, древесный\nWhite — лёгкий, цветочно-мускусный\nBlack — глубокий, вечерний"
+  },
+  "Clive Christian XXI Art Deco": {
+    "brand": "Clive Christian",
+    "variants": ["50 ml"],
+    "descUz": "50 ml · Perfume\nYog'ochli-ziravorli, sarv daraxti notalari\nUzoq saqlanadi",
+    "descRu": "50 ml · Perfume\nДревесно-пряный, ноты кипариса\nДолго держится"
+  },
+  "Afnan 9PM Night Out": {
+    "brand": "Afnan",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Extrait de Parfum\nShirin, ziravorli — kechki uchrashuvlar uchun",
+    "descRu": "100 ml · Extrait de Parfum\nСладкий, пряный — для вечерних встреч"
+  },
+  "Dior Miss Dior Parfum": {
+    "brand": "Dior",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Parfum\nGulli-mevali, nozik hid\nAyolingizga ajoyib sovg'a",
+    "descRu": "100 ml · Parfum\nЦветочно-фруктовый, нежный\nОтличный подарок для неё"
+  },
+  "YSL Libre": {
+    "brand": "Yves Saint Laurent",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nLavanda va apelsin guli\nAyollar uchun sovg'a",
+    "descRu": "100 ml · Eau de Parfum\nЛаванда и цветок апельсина\nПодарок для неё"
+  },
+  "Emporio Armani Stronger With You": {
+    "brand": "Emporio Armani",
+    "variants": ["Intensely", "Powerfully", "Freeze", "Absolutely"],
+    "descUz": "100 ml\nIntensely — vanil va kashtan, issiq\nPowerfully — chuqur, ziravorli\nFreeze — salqin, yozgi\nAbsolutely — rom va yog'och, kechki",
+    "descRu": "100 ml\nIntensely — ваниль и каштан, тёплый\nPowerfully — глубокий, пряный\nFreeze — свежий, летний\nAbsolutely — ром и дерево, вечерний"
+  },
+  "Maison Crivelli Oud Maracuja": {
+    "brand": "Maison Crivelli",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Extrait de Parfum\nUd va marakuya — nish (niche) hid",
+    "descRu": "100 ml · Extrait de Parfum\nУд и маракуйя — нишевый аромат"
+  },
+  "Le Labo Bergamote 22": {
+    "brand": "Le Labo",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nBergamot va greypfrut — toza, yengil\nHar kungi kiyim uchun",
+    "descRu": "100 ml · Eau de Parfum\nБергамот и грейпфрут — чистый, лёгкий\nНа каждый день"
+  },
+  "Tom Ford Oud Wood": {
+    "brand": "Tom Ford",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nUd, sandal, kardamon — klassik yog'ochli hid",
+    "descRu": "100 ml · Eau de Parfum\nУд, сандал, кардамон — классический древесный"
+  },
+  "Chanel Allure Homme Sport Eau Extreme": {
+    "brand": "Chanel",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau Extrême\nYalpiz va sitrus — sportiv, salqin",
+    "descRu": "100 ml · Eau Extrême\nМята и цитрус — спортивный, свежий"
+  },
+  "Versace Eros Parfum": {
+    "brand": "Versace",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Parfum\nYalpiz, vanil, ambra — kuchli va jozibali",
+    "descRu": "100 ml · Parfum\nМята, ваниль, амбра — мощный и притягательный"
+  },
+  "Ex Nihilo Blue Talisman": {
+    "brand": "Ex Nihilo",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nNok va bergamot — yorqin, mevali",
+    "descRu": "100 ml · Eau de Parfum\nГруша и бергамот — яркий, фруктовый"
+  },
+  "Paco Rabanne Invictus Parfum": {
+    "brand": "Paco Rabanne",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Parfum\nDengiz notalari va ambra — sportiv",
+    "descRu": "100 ml · Parfum\nМорские ноты и амбра — спортивный"
+  },
+  "YSL Y Eau Fraiche": {
+    "brand": "Yves Saint Laurent",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau Fraîche\nSalqin, sitrusli — yoz uchun",
+    "descRu": "100 ml · Eau Fraîche\nСвежий, цитрусовый — для лета"
+  },
+  "Ex Nihilo Fleur Narcotique": {
+    "brand": "Ex Nihilo",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nGulli-mevali, uniseks",
+    "descRu": "100 ml · Eau de Parfum\nЦветочно-фруктовый, унисекс"
+  },
+  "Escentric Molecules Escentric 02": {
+    "brand": "Escentric Molecules",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Toilette\nAmbroksan va vetiver — teriga moslashadigan hid",
+    "descRu": "100 ml · Eau de Toilette\nАмброксан и ветивер — раскрывается на коже"
+  },
+  "Hormone Paris Gaba": {
+    "brand": "Hormone Paris",
+    "variants": ["100 ml"],
+    "descUz": "100 ml · Eau de Parfum\nTinchlantiruvchi, yumshoq hid",
+    "descRu": "100 ml · Eau de Parfum\nУспокаивающий, мягкий аромат"
+  },
+  "Bvlgari Le Gemme Tygar": {
+    "brand": "Bvlgari",
+    "variants": ["125 ml"],
+    "descUz": "125 ml · Eau de Parfum\nGreypfrut va ambra — yorqin, hashamatli",
+    "descRu": "125 ml · Eau de Parfum\nГрейпфрут и амбра — яркий, роскошный"
+  },
+  "Kilian Apple Brandy on the Rocks": {
+    "brand": "Kilian",
+    "variants": ["50 ml"],
+    "descUz": "50 ml · Eau de Parfum\nOlma va brendi — shirin, iliq",
+    "descRu": "50 ml · Eau de Parfum\nЯблоко и бренди — сладкий, тёплый"
+  },
+
+  "Nike LDWaffle sacai Fragment Grey": {
+    "brand": "Nike",
+    "descUz": "Rang: kulrang\nYengil, qulay taglik\nO'lchamlar: 240–285 mm",
+    "descRu": "Цвет: серый\nЛёгкая, удобная подошва\nРазмеры: 240–285 мм"
+  },
+  "Nike LDWaffle sacai Fragment Blue": {
+    "brand": "Nike",
+    "descUz": "Rang: to'q ko'k\nYengil, qulay taglik\nO'lchamlar: 240–285 mm",
+    "descRu": "Цвет: тёмно-синий\nЛёгкая, удобная подошва\nРазмеры: 240–285 мм"
+  },
+  "Nike Air Force 1 Low Black": {
+    "brand": "Nike",
+    "descUz": "Rang: qora\nCharm, klassik model\nO'lchamlar: 240–285 mm",
+    "descRu": "Цвет: чёрный\nКожа, классическая модель\nРазмеры: 240–285 мм"
+  },
+  "Nike Air Force 1 Low White": {
+    "brand": "Nike",
+    "descUz": "Rang: oq, qora belgi\nCharm, klassik model\nO'lchamlar: 240–285 mm",
+    "descRu": "Цвет: белый, чёрный логотип\nКожа, классическая модель\nРазмеры: 240–285 мм"
+  },
+  "New Balance 327 Sea Salt": {
+    "brand": "New Balance",
+    "descUz": "Rang: krem / qora\nZamsh va to'qima\nO'lchamlar: 240–285 mm",
+    "descRu": "Цвет: кремовый / чёрный\nЗамша и текстиль\nРазмеры: 240–285 мм"
+  },
+
+  "Burberry Rimless Pilot": {
+    "brand": "Burberry",
+    "variants": ["Kumush / ko'k"],
+    "descUz": "Gardishsiz pilot shakli\nKo'k gradient linza, UV400\nG'ilof va salfetka bilan",
+    "descRu": "Пилоты без оправы\nГолубые градиентные линзы, UV400\nВ комплекте футляр и салфетка"
+  },
+  "Cartier Rimless Gold": {
+    "brand": "Cartier",
+    "variants": ["Jigarrang", "Kulrang"],
+    "descUz": "Gardishsiz to'rtburchak, oltin rang\nUV400 himoya\nQizil Cartier g'ilofi bilan",
+    "descRu": "Прямоугольные без оправы, золото\nЗащита UV400\nС красным футляром Cartier"
+  },
+  "Cartier 017 Black": {
+    "brand": "Cartier",
+    "variants": ["Qora"],
+    "descUz": "Gardishsiz to'rtburchak, qora\nUV400 himoya\nG'ilof bilan",
+    "descRu": "Прямоугольные без оправы, чёрные\nЗащита UV400\nС футляром"
+  },
+  "Maybach Gold Classic": {
+    "brand": "Maybach",
+    "variants": ["Jigarrang", "Kulrang"],
+    "descUz": "Oltin rang metall gardish\nToshbaqa rangli dastalar\nG'ilof va sertifikat bilan",
+    "descRu": "Металлическая оправа, золото\nЧерепаховые дужки\nС футляром и сертификатом"
+  },
+  "Maybach 23262 Pilot": {
+    "brand": "Maybach",
+    "variants": ["Gunmetal", "Oltin"],
+    "descUz": "Kvadrat pilot shakli\nGradient linza, UV400\nG'ilof bilan",
+    "descRu": "Квадратные пилоты\nГрадиентные линзы, UV400\nС футляром"
+  },
+  "Prada Linea Rossa 22421": {
+    "brand": "Prada",
+    "variants": ["Gunmetal / binafsha", "Kumush / ko'k"],
+    "descUz": "Kvadrat pilot, metall gardish\nGradient linza, UV400\nG'ilof bilan",
+    "descRu": "Квадратные пилоты, металл\nГрадиентные линзы, UV400\nС футляром"
+  },
+  "Prada Linea Rossa 0120": {
+    "brand": "Prada",
+    "variants": ["Oltin", "Qora"],
+    "descUz": "To'rtburchak sport shakli\nPolyarizatsiya, UV400\nG'ilof bilan",
+    "descRu": "Прямоугольные, спортивные\nПоляризация, UV400\nС футляром"
+  },
+  "Ray-Ban 3138 Polarized": {
+    "brand": "Ray-Ban",
+    "variants": ["Qora"],
+    "descUz": "To'rtburchak, karbon dastalar\nPolyarizatsiya, UV400\nG'ilof bilan",
+    "descRu": "Прямоугольные, карбоновые дужки\nПоляризация, UV400\nС футляром"
+  },
+  "Ray-Ban 8397 Polarized": {
+    "brand": "Ray-Ban",
+    "variants": ["Jigarrang", "Shaffof", "Qora"],
+    "descUz": "Yumaloq panto shakli\nPolyarizatsiya, UV400\nG'ilof bilan",
+    "descRu": "Круглые, форма panto\nПоляризация, UV400\nС футляром"
+  },
+  "Ray-Ban 8948 Polarized": {
+    "brand": "Ray-Ban",
+    "variants": ["Qora", "Shaffof"],
+    "descUz": "Kvadrat shakl, yengil\nPolyarizatsiya, UV400\nG'ilof bilan",
+    "descRu": "Квадратные, лёгкие\nПоляризация, UV400\nС футляром"
+  },
+  "Prada Symbole Hexagon": {
+    "brand": "Prada",
+    "variants": ["Oltin / jigarrang", "Kumush / ko'k", "Oltin / yashil", "Qora"],
+    "descUz": "Olti burchakli metall gardish\nUchburchak Prada belgisi\nUV400, g'ilof bilan",
+    "descRu": "Шестигранная металлическая оправа\nТреугольный логотип Prada\nUV400, с футляром"
+  },
+  "Tom Ford 0776": {
+    "brand": "Tom Ford",
+    "variants": ["Ko'k", "Yashil gradient", "Qora"],
+    "descUz": "Kvadrat shakl, qora gardish\nOltin T belgisi\nUV400, g'ilof bilan",
+    "descRu": "Квадратные, чёрная оправа\nЗолотой логотип T\nUV400, с футляром"
+  },
+  "Versace Rimless Medusa": {
+    "brand": "Versace",
+    "variants": ["Oltin / binafsha", "Kumush / ko'k"],
+    "descUz": "Gardishsiz to'rtburchak\nMedusa belgili dastalar\nGradient linza, UV400",
+    "descRu": "Прямоугольные без оправы\nДужки с Медузой\nГрадиентные линзы, UV400"
+  }
+}
