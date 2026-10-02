@@ -378,6 +378,10 @@ export default function App() {
           onClose={() => setStoryIndex(null)}
           onShop={(story) => {
             setStoryIndex(null);
+            // Mahsulotdan yaratilgan story — link "product:<id>" ko'rinishida
+            const pid = story?.link?.startsWith('product:') && Number(story.link.slice(8));
+            const prod = pid && (allProducts.length ? allProducts : products).find((p) => p.id === pid);
+            if (prod) return setSheet(prod);
             const cat = story?.link && categories.find((c) => c.slug === story.link);
             goCatalog(cat ? cat.slug : undefined);
           }}

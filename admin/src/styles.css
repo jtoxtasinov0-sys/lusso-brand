@@ -224,6 +224,85 @@ img {
   color: var(--red);
 }
 
+.btn.gold {
+  background: linear-gradient(135deg, #f1d58a 0%, #d6ae51 50%, #a8822e 100%);
+  color: #1a1610;
+}
+
+/* Mahsulotdan story tanlash */
+.story-pick {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--gold-soft);
+}
+
+.story-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.story-pick-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  text-align: left;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.story-pick-item:hover:not(:disabled) {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.story-pick-item img,
+.story-pick-item > span {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: #f1f2f4;
+}
+
+.story-pick-item b {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.story-pick-item.used {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.story-pick-item i {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--gold);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+}
+
 .btn.sm {
   height: 32px;
   padding: 0 12px;

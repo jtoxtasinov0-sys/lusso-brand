@@ -12,12 +12,45 @@ export default function ContentPage({ toast }) {
   const [storyTitleRu, setStoryTitleRu] = useState('');
   const [storyLink, setStoryLink] = useState('');
 
+  // Mavjud mahsulotdan story
+  const [products, setProducts] = useState([]);
+  const [pickOpen, setPickOpen] = useState(false);
+  const [pickQuery, setPickQuery] = useState('');
+
   const [cat, setCat] = useState({ slug: '', nameUz: '', nameRu: '', emoji: '' });
 
   const load = () => {
     api.stories().then(setStories).catch((e) => toast(e.message, true));
     api.categories().then(setCategories).catch(() => {});
   };
+
+  const openPicker = () => {
+    setPickOpen((v) => !v);
+    if (!products.length) api.products().then(setProducts).catch((e) => toast(e.message, true));
+  };
+
+  // Story rasmi — mahsulotning birinchi rasmi, "Xarid qilish" shu mahsulotni ochadi
+  const storyFromProduct = async (p) => {
+    const img = p.images?.[0]?.url;
+    if (!img) return toast("Bu mahsulotda rasm yo'q", true);
+    try {
+      await api.createStory({
+        imageUrl: img,
+        titleUz: p.nameUz,
+        titleRu: p.nameRu || p.nameUz,
+        link: `product:${p.id}`,
+      });
+      toast("Story qo'shildi ✅");
+      load();
+    } catch (e) {
+      toast(e.message, true);
+    }
+  };
+
+  const picked = products.filter((p) => {
+    const q = pickQuery.trim().toLowerCase();
+    return !q || [p.nameUz, p.nameRu, p.brand].some((v) => v?.toLowerCase().includes(q));
+  });
 
   useEffect(load, []);
 
@@ -128,6 +161,42 @@ export default function ContentPage({ toast }) {
           <button className="btn full" style={{ marginTop: 12 }} onClick={addStory}>
             + Story qo'shish
           </button>
+
+          <button className="btn full gold" style={{ marginTop: 8 }} onClick={openPicker}>
+            {pickOpen ? '✕ Yopish' : "🛍 Mahsulotdan story qo'shish"}
+          </button>
+
+          {pickOpen && (
+            <div className="story-pick">
+              <input
+                className="input"
+                placeholder="Mahsulot qidirish…"
+                value={pickQuery}
+                onChange={(e) => setPickQuery(e.target.value)}
+              />
+              <p className="muted" style={{ margin: '8px 0', fontSize: 12 }}>
+                Mahsulotni bosing — rasmi story bo'ladi, "Xarid qilish" tugmasi shu mahsulotni ochadi.
+              </p>
+              <div className="story-pick-grid">
+                {picked.map((p) => {
+                  const used = stories.some((s) => s.link === `product:${p.id}`);
+                  return (
+                    <button
+                      key={p.id}
+                      className={`story-pick-item ${used ? 'used' : ''}`}
+                      disabled={used}
+                      onClick={() => storyFromProduct(p)}
+                    >
+                      {p.images?.[0]?.url ? <img src={p.images[0].url} alt="" /> : <span>📷</span>}
+                      <b>{p.nameUz}</b>
+                      {used && <i>✓ story</i>}
+                    </button>
+                  );
+                })}
+                {!picked.length && <span className="muted">Topilmadi</span>}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ---------- KATEGORIYALAR ---------- */}
