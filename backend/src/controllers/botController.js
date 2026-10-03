@@ -361,6 +361,16 @@ function md(s) {
   return String(s ?? '').replace(/[_*`\[]/g, ' ');
 }
 
+// /id — Telegram ID ni ko'rsatadi (ADMIN_IDS ga yozish uchun). Guruhda guruh ID si ham chiqadi.
+export async function onIdCommand(ctx) {
+  const lines = [`🆔 Sizning Telegram ID: \`${ctx.from.id}\``];
+  if (ctx.chat && ctx.chat.id !== ctx.from.id) {
+    lines.push(`👥 Shu chat ID si: \`${ctx.chat.id}\``);
+  }
+  lines.push('', 'Raqamni bosib nusxa olishingiz mumkin.');
+  return ctx.reply(lines.join('\n'), { parse_mode: 'Markdown' });
+}
+
 // /admin <parol> — o'zini admin qilib ro'yxatdan o'tkazish
 export async function onAdminCommand(ctx) {
   const parts = (ctx.message.text || '').split(' ');
