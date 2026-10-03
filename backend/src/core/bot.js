@@ -1,7 +1,7 @@
 // Telegram bot instansiyasi (grammY)
 import path from 'path';
 import fs from 'fs';
-import { Bot, InputFile } from 'grammy';
+import { Bot, InputFile, InputMediaBuilder } from 'grammy';
 import config from '../config/default.js';
 
 if (!config.botToken) {
@@ -59,11 +59,42 @@ export async function safeSendPhoto(chatId, photo, caption, extra = {}) {
 }
 
 export function toPhoto(photo) {
+  // Admin paneldagi rasm ramkasi sozlamasi ("#z=1.3&x=50") faylga tegishli emas
+  if (typeof photo === 'string') photo = photo.split('#')[0];
   if (typeof photo === 'string' && photo.startsWith('/uploads/')) {
     const filePath = path.join(config.uploadsDir, photo.replace('/uploads/', ''));
     if (fs.existsSync(filePath)) return new InputFile(filePath);
   }
   return photo;
+}
+
+const CAPTION_MAX = 1024;
+
+/**
+ * Mahsulot rasmlari bilan xabar yuborish (buyurtma xabarlari uchun).
+ *  - 1 ta rasm va matn qisqa bo'lsa — rasm + izoh bitta xabarda
+ *  - bir nechta rasm — avval albom, keyin tugmali matn
+ * Rasm yuborilmasa ham matn baribir yetib boradi. Matn yetib borsa true.
+ */
+export async function safeSendWithPhotos(chatId, photos, text, extra = {}) {
+  if (!bot) return false;
+  const list = [...new Set((photos || []).filter(Boolean))].slice(0, 10);
+
+  if (list.length === 1 && text.length <= CAPTION_MAX) {
+    if (await safeSendPhoto(chatId, list[0], text, extra)) return true;
+  } else if (list.length === 1) {
+    await safeSendPhoto(chatId, list[0], undefined);
+  } else if (list.length > 1) {
+    try {
+      await bot.api.sendMediaGroup(
+        String(chatId),
+        list.map((p) => InputMediaBuilder.photo(toPhoto(p)))
+      );
+    } catch (err) {
+      console.error(`⚠️  ${chatId} ga albom yuborilmadi: ${err.message}`);
+    }
+  }
+  return safeSend(chatId, text, extra);
 }
 
 export default bot;

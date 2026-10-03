@@ -1,7 +1,7 @@
 // Bot logikalari: /start, til tanlash, telefon olish, menyu va xabarnomalar
 import { Keyboard, InlineKeyboard } from 'grammy';
 import config from '../config/default.js';
-import { safeSend, safeSendPhoto } from '../core/bot.js';
+import { safeSend, safeSendPhoto, safeSendWithPhotos } from '../core/bot.js';
 import UserModel, { isWebUser } from '../models/User.js';
 import OrderModel from '../models/Order.js';
 import SettingModel from '../models/Setting.js';
@@ -291,8 +291,9 @@ export async function notifyOrderCreated(order) {
     .url('💬 WhatsApp', `https://wa.me/${PHONE_INTL}`)
     .url('✈️ Telegram', `https://t.me/+${PHONE_INTL}`);
 
-  await safeSend(
+  await safeSendWithPhotos(
     user.telegramId,
+    orderPhotos(order),
     `${head}\n\n🛍 *Buyurtma tarkibi:*\n${itemsText}\n\n${L.askQuestionText}`,
     { reply_markup: keyboard }
   );
@@ -321,23 +322,43 @@ export async function notifyAdmins(order) {
 
   const keyboard = await adminPanelKeyboard();
   const items = (order.items || [])
-    .map((i) => `• ${i.name}${i.variant ? ` (${i.variant})` : ''} × ${i.qty}`)
-    .join('\n');
+    .map(
+      (i, n) =>
+        `${n + 1}. *${md(i.name)}*${i.variant ? `\n    📏 ${md(i.variant)}` : ''}\n` +
+        `    📦 ${i.qty} ta × ${money(i.price)} = *${money(i.price * i.qty)}*`
+    )
+    .join('\n\n');
+  const qty = (order.items || []).reduce((s, i) => s + (i.qty || 0), 0);
 
   const text =
-    `🔔 *Yangi buyurtma!*\n\n` +
-    `🧾 ${order.orderNumber}${isWebUser(order.user) ? ' · 🌐 saytdan' : ''}\n` +
-    `👤 ${order.customerName} · ${order.phone}\n` +
-    `📍 ${order.zipCode ? `(${order.zipCode}) ` : ''}${order.street}${order.detail ? ', ' + order.detail : ''}\n\n` +
+    `🔔 *Yangi buyurtma!*\n` +
+    `🧾 ${order.orderNumber}${isWebUser(order.user) ? ' · 🌐 saytdan' : ''}\n\n` +
     `${items}\n\n` +
-    `💰 *${money(order.total)}*`;
+    `📦 Jami: *${qty} ta mahsulot*\n` +
+    `🚚 Yetkazish: *bepul*\n` +
+    `💰 Summa: *${money(order.total)}*\n\n` +
+    `👤 ${md(order.customerName)} · ${order.phone}\n` +
+    `📍 ${order.zipCode ? `(${order.zipCode}) ` : ''}${md(order.street)}${order.detail ? ', ' + md(order.detail) : ''}` +
+    (order.comment ? `\n💬 ${md(order.comment)}` : '') +
+    `\n\n💳 To'lov: kartaga o'tkazma — mijoz chek yuborishi kutilmoqda`;
 
+  const photos = orderPhotos(order);
   for (const id of ids) {
-    const sent = await safeSend(id, text, { reply_markup: keyboard });
+    const sent = await safeSendWithPhotos(id, photos, text, { reply_markup: keyboard });
     // Guruh/kanalga web_app tugmasi yuborilmaydi — bunda xabar tugmasiz ketadi,
     // chunki yangi buyurtma haqidagi xabar har qanday holatda yetib borishi kerak
     if (!sent && keyboard) await safeSend(id, `${text}\n\n🖥 ${await adminPanelUrl()}`);
   }
+}
+
+// Buyurtmadagi mahsulotlar rasmlari (har mahsulotdan bittadan)
+function orderPhotos(order) {
+  return (order.items || []).map((i) => i.image).filter(Boolean);
+}
+
+// Markdown belgilarini zararsizlantirish (mijoz yozgan matn xabarni buzmasin)
+function md(s) {
+  return String(s ?? '').replace(/[_*`\[]/g, ' ');
 }
 
 // /admin <parol> — o'zini admin qilib ro'yxatdan o'tkazish
