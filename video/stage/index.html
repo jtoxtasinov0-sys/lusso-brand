@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>LUSSO — qo‘llanma</title>
+<link rel="stylesheet" href="../fonts/local.css">
+<link rel="stylesheet" href="stage.css">
+</head>
+<body>
+<div id="stage">
+  <div id="head" class="abs"></div>
+  <div id="view" class="abs"><div id="cam"></div></div>
+  <div id="cap" class="abs"></div>
+  <div id="dots" class="abs"></div>
+  <div id="outro" class="abs"></div>
+  <div id="fade" class="abs"></div>
+</div>
+<script src="core.js"></script>
+<script>
+  // ?scene=install&dev=ios|and  yoki  ?scene=admin
+  const scene = new URLSearchParams(location.search).get('scene') || 'install';
+  document.write(`<script src="${scene}.js"><\/script>`);
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+/* LUSSO qo'llanma videolari — umumiy sahna (1080×1920) */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+body{font-family:'Inter',sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.abs{position:absolute}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+
+/* ---------- headline ---------- */
+#head{left:0;right:0;top:92px;height:290px;text-align:center;z-index:5}
+.hblock{position:absolute;left:0;right:0;top:0}
+.tag{font-size:46px;color:var(--soft);height:72px;line-height:72px}
+.line{overflow:hidden;height:122px;margin-top:-16px;padding-top:0}
+.line > div{font-family:'Inter Tight';font-weight:700;font-size:94px;letter-spacing:-.045em;line-height:110px;height:122px;white-space:nowrap}
+.line .serif{font-size:108px;letter-spacing:-.01em;font-weight:400}
+
+#word{position:absolute;left:-200px;right:-200px;top:400px;text-align:center;font-family:'Inter Tight';font-weight:700;font-size:330px;letter-spacing:-.03em;line-height:330px;color:var(--word);filter:blur(4px);white-space:nowrap;pointer-events:none}
+/* beton postament va metall tayoqchalar (rasmdagidek) */
+.blk{position:absolute;background-color:#76787d;background-image:var(--noise);background-size:260px 260px}
+.blk .top{position:absolute;left:0;right:0;top:0;background-color:#8f9196;background-image:var(--noise);background-size:260px 260px;transform-origin:0 100%}
+.blk .side{position:absolute;top:0;bottom:0;background-color:#55575c;background-image:var(--noise);background-size:260px 260px}
+.blk:after{content:'';position:absolute;inset:0;background:rgba(0,0,0,var(--blkShade,.12))}
+.rod{position:absolute;height:5px;border-radius:3px;background:#c9ccd2;box-shadow:0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(0,0,0,.45) inset,0 6px 10px rgba(0,0,0,.35);transform-origin:0 50%}
+.pshadow{position:absolute;left:300px;top:1446px;width:520px;height:46px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(16px)}
+
+/* ---------- kamera oynasi: telefon faqat shu oraliqda ko'rinadi (matnlar ustiga chiqmaydi) ---------- */
+#view{left:0;right:0;top:384px;height:1158px;background:var(--bg);overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 40px),transparent 100%)}
+#cam{position:absolute;left:0;top:-384px;width:1080px;height:1920px;transform-origin:0 0;perspective:2600px;perspective-origin:540px 960px}
+
+/* ---------- telefon ---------- */
+.phone{position:absolute;left:290px;top:445px;width:500px;height:1030px;transform-origin:50% 55%;transform-style:preserve-3d}
+.shadow{position:absolute;left:44px;right:44px;bottom:-30px;height:60px;background:rgba(0,0,0,.5);filter:blur(24px);border-radius:50%}
+.frame{position:absolute;inset:0}
+.bezel{position:absolute;inset:4px;background:#0a0a0b}
+.screen{position:absolute;left:14px;top:14px;width:472px;height:1002px;overflow:hidden;background:#000}
+.ios .frame{border-radius:84px;background:linear-gradient(135deg,#f3f3f6,#9c9ca4 30%,#e6e6ea 55%,#7f7f88 80%,#d9d9de)}
+.ios .bezel{border-radius:80px}
+.ios .screen{border-radius:70px}
+.island{position:absolute;left:50%;top:24px;width:122px;height:36px;margin-left:-61px;background:#000;border-radius:20px;z-index:80}
+.and .frame{border-radius:58px;background:linear-gradient(135deg,#55585f,#24262b 35%,#5d6068 60%,#1d1e23)}
+.and .bezel{border-radius:54px}
+.and .screen{border-radius:44px}
+.hole{position:absolute;left:50%;top:22px;width:22px;height:22px;margin-left:-11px;background:#000;border-radius:50%;z-index:80;box-shadow:0 0 0 2px #151515}
+.pbtn{position:absolute;width:6px;border-radius:3px}
+.ios .pbtn{background:#a6a6ad}
+.and .pbtn{background:#34363c}
+
+.layer{position:absolute;inset:0;overflow:hidden}
+.status{position:absolute;left:0;right:0;top:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:8px 40px 0 50px;font-weight:600;font-size:18px;z-index:40}
+.and .status{height:44px;padding:4px 28px 0 30px;font-size:15px;font-weight:500}
+.status .ic{display:flex;gap:6px;align-items:center}
+.shot{position:absolute;left:0;width:472px;display:block}
+
+/* ---------- barmoq (halqa effekti) ---------- */
+.finger{position:absolute;left:0;top:0;width:0;height:0;z-index:90;pointer-events:none}
+.finger .dot{position:absolute;left:-31px;top:-31px;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.62);border:3px solid #fff;box-shadow:0 8px 22px rgba(20,10,60,.38),inset 0 0 0 2px rgba(90,70,220,.25)}
+.finger .rip{position:absolute;left:-31px;top:-31px;width:62px;height:62px;border-radius:50%;border:4px solid var(--accent);box-shadow:0 0 0 2px rgba(255,255,255,.8),inset 0 0 0 2px rgba(255,255,255,.8)}
+
+/* qizil ramka — kerakli tugma */
+.hl{position:absolute;border:3.5px solid #ff2d3d;border-radius:16px;z-index:85;pointer-events:none;box-shadow:0 0 0 4px rgba(255,45,61,.18),0 0 18px rgba(255,45,61,.35)}
+
+/* ---------- izohlar ---------- */
+#cap{left:0;right:0;top:1556px;height:280px;z-index:5}
+.cblock{position:absolute;left:56px;right:56px;top:0;text-align:center}
+.cblock .meta{display:inline-flex;align-items:center;gap:14px;font-size:24px;font-weight:600;color:var(--soft);letter-spacing:.05em;text-transform:uppercase}
+.cblock .meta .n{width:48px;height:48px;border-radius:50%;background:#fff;color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Inter Tight';font-size:25px;font-weight:700;letter-spacing:0}
+.cblock .main{font-family:'Inter Tight';font-weight:600;font-size:46px;letter-spacing:-.025em;line-height:1.14;margin-top:18px;color:#fff}
+.cblock .sub{font-size:28px;color:var(--soft);margin-top:12px;line-height:1.3}
+.cblock .main q{quotes:none;background:#fff;color:var(--bg);padding:0 12px;border-radius:12px;white-space:nowrap;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+#dots{left:0;right:0;top:1848px;display:flex;justify-content:center;gap:12px;z-index:5}
+#dots i{width:12px;height:12px;border-radius:6px;background:rgba(255,255,255,.25);display:block}
+
+#outro{left:0;right:0;top:1560px;text-align:center;z-index:5}
+#outro img{height:96px;border-radius:50%;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#outro .u{margin-top:24px;display:inline-flex;align-items:center;gap:12px;font-size:30px;font-weight:600;border:2px solid #fff;border-radius:40px;padding:14px 30px;color:#fff}
+#fade{inset:0;background:var(--bg);z-index:200}
+
+/* ---------- klaviatura (iOS / Samsung) ---------- */
+.kb{position:absolute;left:0;right:0;bottom:0;z-index:60}
+.kb.ios{height:330px;background:#d3d5dc;padding-top:6px}
+.kb .sug{height:40px;display:flex;justify-content:space-around;align-items:center;color:#2b2b2e;font-size:16px;margin:0 4px 6px}
+.kb .sug span{flex:1;text-align:center;border-right:1px solid #b9bbc2;white-space:nowrap;overflow:hidden}
+.kb .sug span:last-child{border:none}
+.kb .r{display:flex;justify-content:center;gap:6px;margin-bottom:11px;position:relative}
+.kb .k{width:41px;height:49px;border-radius:7px;background:#fff;box-shadow:0 1px 0 #8e9096;display:flex;align-items:center;justify-content:center;font-size:23px;color:#111;position:relative;flex:none}
+.kb .k.g{background:#abb0bb;font-size:15px}
+.kb .k.go{background:#0a84ff;color:#fff;font-size:15px;font-weight:500}
+.kb .k.on{background:#abb0bb}
+.kb .k.g.on{background:#fff}
+.kb .bub{position:absolute;left:50%;bottom:0;width:58px;height:104px;margin-left:-29px;border-radius:12px 12px 10px 10px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);display:flex;justify-content:center;padding-top:10px;font-size:36px;color:#111;z-index:3}
+.kb .bot{height:40px;display:flex;justify-content:space-between;align-items:flex-start;padding:2px 44px 0}
+.kb.and{height:356px;background:#eef0f3;padding:10px 4px 0}
+.kb.and .r{gap:5px;margin-bottom:9px}
+.kb.and .k{background:#fff;box-shadow:none;border-radius:10px;width:41px;height:52px;font-size:22px}
+.kb.and .k.g{background:#dfe2e7;color:#333}
+.kb.and .k.go{background:#3e6ae1;color:#fff}
+.kb.and .k.on{background:#c9cdd4}
+.kb.and .num .k{height:40px;font-size:18px;background:transparent;color:#333}
+.kb.and .sug{height:38px;border-bottom:none}
+.kb.and .sug span{border:none;color:#555}
