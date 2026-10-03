@@ -188,7 +188,13 @@ export default function OrdersPage({ toast, onCountChange }) {
               </div>
               <div className="info-row">
                 <span>Telegram</span>
-                <b>{open.user?.username ? '@' + open.user.username : open.user?.telegramId}</b>
+                <b>
+                  {open.user?.username
+                    ? '@' + open.user.username
+                    : String(open.user?.telegramId || '').startsWith('web_')
+                      ? "Sayt orqali (Telegram yo'q)"
+                      : open.user?.telegramId || '—'}
+                </b>
               </div>
 
               <h4 style={{ margin: '18px 0 8px', fontSize: 14 }}>📍 Manzil</h4>
@@ -266,7 +272,7 @@ export default function OrdersPage({ toast, onCountChange }) {
 
           <div className="form-row">
             <label className="label">📮 Kuzatuv raqami (운송장번호)</label>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div className="tracking-row">
               <input
                 className="input"
                 value={tracking}

@@ -1467,3 +1467,72 @@ textarea.input {
     bottom: calc(86px + env(safe-area-inset-bottom));
   }
 }
+
+/* ============ BUYURTMA OYNASI — TOR EKRAN ============ */
+/* Uzun matn (manzil, ID) oynani ekrandan kengaytirib yubormasin */
+.modal {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.grid-2 > *,
+.grid-3 > * {
+  min-width: 0;
+}
+
+.info-row {
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.info-row span {
+  flex: 0 0 auto;
+}
+
+.info-row b {
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.order-item-row .oi-info {
+  min-width: 0;
+}
+
+.order-item-row .oi-info b {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.tracking-row {
+  display: flex;
+  gap: 8px;
+}
+
+.tracking-row .input {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .modal-backdrop {
+    padding: calc(12px + env(safe-area-inset-top)) 10px calc(90px + env(safe-area-inset-bottom));
+  }
+
+  .modal {
+    padding: 18px 16px;
+  }
+
+  .modal-head h2 {
+    font-size: 17px;
+  }
+
+  .tracking-row {
+    flex-direction: column;
+  }
+
+  .order-item-row .order-thumb.sm {
+    width: 56px;
+    height: 56px;
+  }
+}
