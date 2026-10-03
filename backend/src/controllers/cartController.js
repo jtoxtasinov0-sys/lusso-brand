@@ -114,7 +114,8 @@ export async function createOrder(req, res) {
 
     if (!built.length) return res.status(400).json({ error: 'Mahsulotlar topilmadi' });
 
-    const deliveryFee = subtotal >= settings.freeDeliveryFrom ? 0 : settings.deliveryFee;
+    // Yetkazib berish doim bepul — pochta puli mahsulot narxiga kiritilgan
+    const deliveryFee = 0;
     const total = subtotal + deliveryFee;
 
     const order = await OrderModel.create(user.id, {

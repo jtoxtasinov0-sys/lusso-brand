@@ -77,7 +77,7 @@ export default function Profile({ t, lang, setLang, user, settings, onOrders, on
           icon="truck"
           label={t.deliveryInfo}
           onClick={() => {}}
-          right={<span className="val">₩{Number(settings?.freeDeliveryFrom ?? 100000).toLocaleString('ko-KR')}+ {t.free}</span>}
+          right={<span className="val">{t.free}</span>}
         />
         <Row icon="shield" label={t.securePay} onClick={() => {}} right={<span className="val">{settings?.bankName || '계좌이체'}</span>} />
       </div>

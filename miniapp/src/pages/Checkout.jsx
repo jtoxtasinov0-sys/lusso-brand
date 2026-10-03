@@ -66,8 +66,7 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
   }, []);
 
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const freeFrom = settings?.freeDeliveryFrom ?? 100000;
-  const fee = subtotal >= freeFrom ? 0 : settings?.deliveryFee ?? 3000;
+  const fee = 0; // yetkazib berish doim bepul
   const total = subtotal + fee;
 
   const set = (k, transform) => (e) => {

@@ -119,20 +119,9 @@ export default function SettingsPage({ toast }) {
         <div className="card">
           <h3 style={{ margin: '0 0 14px', fontSize: 16 }}>🚚 Yetkazib berish</h3>
 
-          <div className="form-row">
-            <label className="label">Yetkazib berish narxi (₩)</label>
-            <input className="input" type="number" value={s.deliveryFee} onChange={set('deliveryFee')} />
-          </div>
-
-          <div className="form-row">
-            <label className="label">Bepul yetkazish chegarasi (₩)</label>
-            <input
-              className="input"
-              type="number"
-              value={s.freeDeliveryFrom}
-              onChange={set('freeDeliveryFrom')}
-            />
-          </div>
+          <p style={{ margin: 0, color: 'var(--muted)', fontSize: 13.5 }}>
+            Yetkazib berish mijozlar uchun doim <b>bepul</b> — pochta puli mahsulot narxiga kiritilgan.
+          </p>
 
           <h3 style={{ margin: '20px 0 14px', fontSize: 16 }}>💳 Bank rekvizitlari</h3>
 

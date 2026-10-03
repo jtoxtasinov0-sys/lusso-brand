@@ -97,11 +97,9 @@ export default function Cart({
 
   const count = items.reduce((s, i) => s + i.qty, 0);
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const freeFrom = settings?.freeDeliveryFrom ?? 100000;
-  const fee = subtotal >= freeFrom ? 0 : settings?.deliveryFee ?? 3000;
+  // Yetkazib berish doim bepul — pochta puli mahsulot narxiga kiritilgan
+  const fee = 0;
   const total = subtotal + fee;
-  const left = freeFrom - subtotal;
-  const pct = Math.min(100, Math.round((subtotal / freeFrom) * 100));
 
   return (
     <div className="page">
@@ -112,19 +110,8 @@ export default function Cart({
 
       <div className="free-meter rise" style={{ '--i': 1 }}>
         <p>
-          {left > 0 ? (
-            <>
-              🚚 {t.freeHint.split('{x}')[0]}
-              <b>{money(left)}</b>
-              {t.freeHint.split('{x}')[1]}
-            </>
-          ) : (
-            <b>🎉 {t.freeReached}</b>
-          )}
+          <b>🚚 {t.freeReached}</b>
         </p>
-        <div className="meter">
-          <i style={{ width: pct + '%' }} />
-        </div>
       </div>
 
       {items.map((i, idx) => (
