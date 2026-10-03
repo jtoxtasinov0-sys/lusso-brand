@@ -7,6 +7,7 @@ import bot, { hasBot } from './core/bot.js';
 import registerBotHandlers from './routes/bot.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import { ensureDecants } from './core/decants.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use((err, req, res, next) => {
 
 async function start() {
   await connectDatabase();
+  await ensureDecants();
 
   app.listen(config.port, () => {
     console.log('');

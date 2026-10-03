@@ -6,6 +6,7 @@ MAHSULOTLARNI PAPKADAN YUKLASH
      oyoq-kiyim\   - krossovka, tufli
      kozoynak\     - ko'zoynaklar
      atir\         - atirlar
+     quyma-atir\   - quyma atirlar (10 ml / 20 ml idishda)
 
 2) Bitta mahsulotning 3 ta rasmini birdaniga nomlash (eng oson yo'l):
 
@@ -34,6 +35,8 @@ QO'SHIMCHA
 - Shu nomli mahsulot do'konda bo'lsa — yangisi qo'shilmaydi, eskisining
   rasmi va narxi almashtiriladi.
 - Yuklangan rasmlar _yuklangan\ papkasiga olib qo'yiladi.
+- Quyma atir:  Dior Sauvage Elixir - 12000
+  (10 ml shu narxda, 20 ml avtomatik +10 000 qo'shiladi)
 - Oyoq kiyimga 240-285 o'lchamlar (har biridan 3 ta) avtomatik qo'shiladi,
   boshqalarga "Standart" (10 ta). Tavsif, ruscha nom, o'lchamlarni keyin
   admin paneldan o'zgartirish mumkin.

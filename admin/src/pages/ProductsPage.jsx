@@ -361,6 +361,25 @@ export default function ProductsPage({ toast }) {
               </button>{' '}
               <button className="btn sm light" onClick={() => applyPreset(ML_PRESET)}>
                 🧴 30/50/100ml
+              </button>{' '}
+              <button
+                className="btn sm light"
+                onClick={() => {
+                  // Quyma atir: 10 ml — asosiy narx, 20 ml — +10 000
+                  const decant = categories.find((c) => c.slug === 'quyma');
+                  setForm((f) => ({
+                    ...f,
+                    price: 12000,
+                    oldPrice: '',
+                    ...(decant ? { categoryId: decant.id } : {}),
+                    variants: [
+                      { label: '10 ml', stock: 50, extraPrice: 0 },
+                      { label: '20 ml', stock: 50, extraPrice: 10000 },
+                    ],
+                  }));
+                }}
+              >
+                💧 Quyma 10/20ml
               </button>
             </label>
 

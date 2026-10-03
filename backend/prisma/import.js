@@ -52,6 +52,7 @@ function categoryOf(folder) {
   const f = folder.toLowerCase().replace(/['`ʻʼ‘’]/g, '');
   if (/oyoq|shoe|krossov|tufli|poyabzal|обув|кросс/.test(f)) return 'shoes';
   if (/koz|glass|очк/.test(f)) return 'glasses';
+  if (/quyma|decant|razliv|разлив/.test(f)) return 'quyma'; // "atir" so'zidan oldin tekshiriladi
   if (/atir|parf|perf|духи|парф/.test(f)) return 'perfume';
   return null;
 }
@@ -138,7 +139,7 @@ function scan() {
     if (catDir.name.startsWith('_')) continue;
     const cat = categoryOf(catDir.name);
     if (!cat) {
-      problems.push(`"${catDir.name}" papkasi qaysi kategoriyaligi tushunilmadi (oyoq-kiyim / kozoynak / atir)`);
+      problems.push(`"${catDir.name}" papkasi qaysi kategoriyaligi tushunilmadi (oyoq-kiyim / kozoynak / atir / quyma-atir)`);
       continue;
     }
 
@@ -246,6 +247,18 @@ async function saveToDb(products, deleteOld) {
       updated++;
     } else {
       const sizes = p.cat === 'shoes' ? SHOE_SIZES : extra.variants?.length ? extra.variants : ['Standart'];
+      // Quyma atir: 10 ml (nomidagi narx) va 20 ml (+10 000)
+      const variants =
+        p.cat === 'quyma'
+          ? [
+              { label: '10 ml', stock: 50, extraPrice: 0, sortOrder: 0 },
+              { label: '20 ml', stock: 50, extraPrice: 10000, sortOrder: 1 },
+            ]
+          : sizes.map((label, i) => ({
+              label,
+              stock: p.cat === 'shoes' ? SHOE_STOCK : OTHER_STOCK,
+              sortOrder: i,
+            }));
       const saved = await prisma.product.create({
         data: {
           nameUz: p.name,
@@ -254,16 +267,10 @@ async function saveToDb(products, deleteOld) {
           ...texts,
           price: p.price,
           oldPrice: p.oldPrice,
-          isNew: true,
+          isNew: p.cat !== 'quyma',
           categoryId,
           images: { create: p.urls.map((url, i) => ({ url, sortOrder: i })) },
-          variants: {
-            create: sizes.map((label, i) => ({
-              label,
-              stock: p.cat === 'shoes' ? SHOE_STOCK : OTHER_STOCK,
-              sortOrder: i,
-            })),
-          },
+          variants: { create: variants },
         },
       });
       keepIds.push(saved.id);
@@ -321,7 +328,7 @@ async function main() {
 
   const { products, problems } = scan();
 
-  const labels = { shoes: '👟', glasses: '🕶', perfume: '🧴' };
+  const labels = { shoes: '👟', glasses: '🕶', perfume: '🧴', quyma: '💧' };
   for (const p of products) {
     const old = p.oldPrice ? `  (eski: ${money(p.oldPrice)})` : '';
     console.log(`   ${labels[p.cat]} ${p.name.padEnd(36)} ${money(p.price).padStart(10)}  ${p.files.length} ta rasm${old}`);

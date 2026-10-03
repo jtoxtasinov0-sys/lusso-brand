@@ -973,6 +973,8 @@ svg.ic {
 .seg {
   position: relative;
   display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
   margin: 14px 0 0;
   padding: 4px;
   border-radius: 16px;
@@ -983,7 +985,8 @@ svg.ic {
 .seg button {
   position: relative;
   z-index: 1;
-  flex: 1;
+  flex: 1 0 auto;
+  padding: 0 12px;
   height: 38px;
   font-size: 12.5px;
   font-weight: 700;
@@ -1003,6 +1006,58 @@ svg.ic {
   border-radius: 12px;
   background: var(--grad);
   transition: left 0.45s var(--spring), width 0.45s var(--spring);
+}
+
+.seg::-webkit-scrollbar {
+  display: none;
+}
+
+/* Kategoriya ichidagi namunaviy rasmlar (quyma atir idishlari) */
+.cat-intro {
+  margin: 14px 0 0;
+}
+
+.cat-gallery {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding: 2px 16px 4px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.cat-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-gallery button {
+  flex: 0 0 auto;
+  width: 132px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  scroll-snap-align: start;
+}
+
+.cat-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cat-note {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--gold-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
 .chips {

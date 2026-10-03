@@ -4,6 +4,7 @@ import { frameStyle } from '../framing';
 import Icon from '../components/Icon';
 import { money } from '../i18n';
 import { haptic } from '../telegram';
+import { isDecant } from '../constants';
 
 const SLIDE_MS = 4500;
 
@@ -157,15 +158,17 @@ export default function Home({
   const h = seoulHour();
   const greet = h < 5 ? t.goodNight : h < 12 ? t.goodMorning : h < 18 ? t.goodDay : t.goodEvening;
 
+  // Quyma atirlar faqat o'z bo'limida — tavsiyalarga aralashmaydi
+  const featured = useMemo(() => products.filter((p) => !isDecant(p)), [products]);
   const sale = useMemo(
-    () => products.filter((p) => discountOf(p) > 0).sort((a, b) => discountOf(b) - discountOf(a)),
-    [products]
+    () => featured.filter((p) => discountOf(p) > 0).sort((a, b) => discountOf(b) - discountOf(a)),
+    [featured]
   );
-  const newOnes = useMemo(() => products.filter((p) => p.isNew).slice(0, 10), [products]);
+  const newOnes = useMemo(() => featured.filter((p) => p.isNew).slice(0, 10), [featured]);
 
   // Karuselga: eng katta chegirmalar, bo'lmasa — eng yangilar (har kategoriyadan aralash)
   const showcase = useMemo(() => {
-    const pool = sale.length >= 3 ? sale : products;
+    const pool = sale.length >= 3 ? sale : featured;
     const seen = new Set();
     const out = [];
     for (const p of pool) {
@@ -177,10 +180,10 @@ export default function Home({
     }
     for (const p of pool) if (out.length < 5 && !out.includes(p)) out.push(p);
     return out.slice(0, 5);
-  }, [sale, products]);
+  }, [sale, featured]);
 
   // Kategoriya plitkalari uchun — har kategoriyaning birinchi rasmi
-  const catCover = (slug) => products.find((p) => p.category?.slug === slug)?.images?.[0]?.url;
+  const catCover = (c) => c.imageUrl || products.find((p) => p.category?.slug === c.slug)?.images?.[0]?.url;
   const catCount = (slug) => products.filter((p) => p.category?.slug === slug).length;
 
   return (
@@ -232,8 +235,8 @@ export default function Home({
                 }}
               >
                 <div className="cat-img">
-                  {catCover(c.slug) ? (
-                    <img src={catCover(c.slug)} alt="" style={frameStyle(catCover(c.slug))} onError={onImgError} />
+                  {catCover(c) ? (
+                    <img src={catCover(c)} alt="" style={frameStyle(catCover(c))} onError={onImgError} />
                   ) : (
                     <span className="emo">{c.emoji}</span>
                   )}

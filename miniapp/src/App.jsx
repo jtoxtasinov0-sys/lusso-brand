@@ -5,6 +5,7 @@ import { useApp, useCart, useFav, cartLink, importCartFromUrl } from './store';
 import { haptic, showBackButton, isTelegram, openLink } from './telegram';
 import { hideSplash } from './splash';
 import { flyToCart } from './fx';
+import { isDecant } from './constants';
 
 import Onboarding from './components/Onboarding';
 import BottomNav from './components/BottomNav';
@@ -141,7 +142,7 @@ export default function App() {
 
   // Joriy kategoriyadagi brendlar (filtr chiplari uchun)
   const brands = useMemo(() => {
-    const list = allProducts.filter((p) => category === 'all' || p.category?.slug === category);
+    const list = allProducts.filter((p) => (category === 'all' ? !isDecant(p) : p.category?.slug === category));
     return [...new Set(list.map((p) => p.brand).filter(Boolean))].sort();
   }, [allProducts, category]);
 
@@ -272,6 +273,8 @@ export default function App() {
   }
 
   const catalogSource = allProducts.length ? allProducts : products;
+  // "Hammasi" ro'yxatida quyma atirlar ko'rinmaydi (qidiruvda topiladi)
+  const catalogList = category === 'all' && !search.trim() ? products.filter((p) => !isDecant(p)) : products;
 
   return (
     <>
@@ -300,7 +303,7 @@ export default function App() {
             lang={lang}
             categories={categories}
             brands={brands}
-            products={products}
+            products={catalogList}
             loading={loading}
             category={category}
             setCategory={setCategory}

@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import Icon from '../components/Icon';
+import ImageViewer from '../components/ImageViewer';
+import { onImgError } from '../components/ProductCard';
 import { haptic } from '../telegram';
 
 export default function Catalog({
@@ -24,6 +26,12 @@ export default function Catalog({
 }) {
   const segRef = useRef(null);
   const [glider, setGlider] = useState({ left: 4, width: 0 });
+  const [viewer, setViewer] = useState(null);
+
+  // Tanlangan kategoriyaning namunaviy rasmlari (masalan, quyma atir idishlari)
+  const current = categories.find((c) => c.slug === category);
+  const gallery = current?.gallery || [];
+  const note = current && (lang === 'ru' ? current.noteRu : current.noteUz);
 
   const sorts = [
     { key: '', label: t.sortDefault },
@@ -38,7 +46,14 @@ export default function Catalog({
   // Oltin "glider" tanlangan kategoriya ostiga suriladi
   useLayoutEffect(() => {
     const el = segRef.current?.querySelector('button.on');
-    if (el) setGlider({ left: el.offsetLeft, width: el.offsetWidth });
+    if (el) {
+      setGlider({ left: el.offsetLeft, width: el.offsetWidth });
+      // Tanlangan tugma ko'rinmay qolsa — tasmani o'sha tomonga suramiz
+      const box = segRef.current;
+      if (el.offsetLeft < box.scrollLeft) box.scrollTo({ left: el.offsetLeft - 8, behavior: 'smooth' });
+      else if (el.offsetLeft + el.offsetWidth > box.scrollLeft + box.clientWidth)
+        box.scrollTo({ left: el.offsetLeft + el.offsetWidth - box.clientWidth + 8, behavior: 'smooth' });
+    }
   }, [category, categories, lang]);
 
   return (
@@ -79,6 +94,29 @@ export default function Catalog({
           </button>
         ))}
       </div>
+
+      {(gallery.length > 0 || note) && (
+        <div className="cat-intro rise">
+          {gallery.length > 0 && (
+            <div className="cat-gallery">
+              {gallery.map((src, i) => (
+                <button
+                  key={src}
+                  onClick={() => {
+                    haptic('light');
+                    setViewer(i);
+                  }}
+                >
+                  <img src={src} alt="" loading="lazy" onError={onImgError} />
+                </button>
+              ))}
+            </div>
+          )}
+          {note && <p className="cat-note">{note}</p>}
+        </div>
+      )}
+
+      {viewer !== null && <ImageViewer images={gallery} start={viewer} onClose={() => setViewer(null)} />}
 
       {brands.length > 1 && (
         <div className="chips">

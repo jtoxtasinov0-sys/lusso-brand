@@ -48,6 +48,10 @@ model Category {
   emoji     String  @default("")
   sortOrder Int     @default(0)
   isActive  Boolean @default(true)
+  imageUrl  String? // kategoriya plitkasi rasmi (bo'sh bo'lsa — birinchi mahsulot rasmi)
+  gallery   String[] @default([]) // kategoriya ichida tepada ko'rsatiladigan namunaviy rasmlar
+  noteUz    String  @default("") // gallery ostidagi qisqa izoh
+  noteRu    String  @default("")
 
   products Product[]
 }
