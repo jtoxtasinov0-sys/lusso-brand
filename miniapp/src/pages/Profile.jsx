@@ -1,5 +1,6 @@
-import { haptic, openLink } from '../telegram';
-import { SUPPORT_URL } from '../constants';
+import { haptic } from '../telegram';
+import { CONTACT_PHONE } from '../constants';
+import { openContact } from '../components/ContactSheet';
 import { useFav } from '../store';
 import Icon from '../components/Icon';
 
@@ -71,7 +72,7 @@ export default function Profile({ t, lang, setLang, user, settings, onOrders, on
       </div>
 
       <div className="menu rise" style={{ '--i': 3 }}>
-        <Row icon="chat" label={t.support} onClick={() => openLink(SUPPORT_URL)} />
+        <Row icon="chat" label={t.support} onClick={openContact} right={<span className="val">{CONTACT_PHONE}</span>} />
         <Row
           icon="truck"
           label={t.deliveryInfo}

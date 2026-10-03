@@ -190,8 +190,7 @@ export async function onText(ctx) {
   if (text === L.menuOrders) return sendMyOrders(ctx, user);
 
   if (text === L.menuContact) {
-    const s = await SettingModel.get();
-    return ctx.reply(L.contact(s.supportUsername), { parse_mode: 'Markdown' });
+    return sendContact(ctx, L);
   }
 
   if (text === L.menuAbout) {
@@ -204,6 +203,23 @@ export async function onText(ctx) {
   }
 
   return sendMainMenu(ctx, lang);
+}
+
+// Aloqa: raqam + WhatsApp / Telegram tugmalari
+const CONTACT_PHONE = '010-5790-4777';
+const PHONE_INTL = '821057904777';
+function sendContact(ctx, L) {
+  return ctx.reply(L.contact(CONTACT_PHONE), {
+    parse_mode: 'Markdown',
+    reply_markup: {
+      inline_keyboard: [
+        [
+          { text: '💬 WhatsApp', url: `https://wa.me/${PHONE_INTL}` },
+          { text: '✈️ Telegram', url: `https://t.me/+${PHONE_INTL}` },
+        ],
+      ],
+    },
+  });
 }
 
 // Asosiy menyudagi inline tugmalar bosilganda (Buyurtmalarim / Aloqa / Biz haqimizda / Til)
@@ -223,8 +239,7 @@ export async function onMenuAction(ctx) {
   if (action === 'orders') return sendMyOrders(ctx, user);
 
   if (action === 'contact') {
-    const s = await SettingModel.get();
-    return ctx.reply(L.contact(s.supportUsername), { parse_mode: 'Markdown' });
+    return sendContact(ctx, L);
   }
 
   if (action === 'about') {
@@ -272,7 +287,9 @@ export async function notifyOrderCreated(order) {
     bankHolder: s.bankHolder,
   });
 
-  const keyboard = new InlineKeyboard().url(L.askQuestionBtn, config.ownerContactUrl);
+  const keyboard = new InlineKeyboard()
+    .url('💬 WhatsApp', `https://wa.me/${PHONE_INTL}`)
+    .url('✈️ Telegram', `https://t.me/+${PHONE_INTL}`);
 
   await safeSend(
     user.telegramId,

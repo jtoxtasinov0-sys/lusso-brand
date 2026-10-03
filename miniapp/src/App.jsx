@@ -11,6 +11,7 @@ import Onboarding from './components/Onboarding';
 import BottomNav from './components/BottomNav';
 import ProductSheet from './components/ProductSheet';
 import StoryViewer from './components/StoryViewer';
+import ContactSheet from './components/ContactSheet';
 import { inStock } from './components/ProductCard';
 
 import Home from './pages/Home';
@@ -431,6 +432,8 @@ export default function App() {
       )}
 
       {screen === 'orders' && <Orders t={t} lang={lang} onBack={() => setScreen(null)} onReorder={reorder} />}
+
+      <ContactSheet t={t} />
 
       {toast && (
         <div className="toast" key={toast.id}>

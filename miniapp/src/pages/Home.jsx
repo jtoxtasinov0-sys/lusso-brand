@@ -5,6 +5,7 @@ import Icon from '../components/Icon';
 import { money } from '../i18n';
 import { haptic } from '../telegram';
 import { isDecant } from '../constants';
+import { ContactCard } from '../components/ContactSheet';
 
 const SLIDE_MS = 4500;
 
@@ -299,6 +300,8 @@ export default function Home({
           </div>
         </>
       )}
+
+      <ContactCard t={t} />
     </div>
   );
 }

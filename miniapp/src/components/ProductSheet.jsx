@@ -5,6 +5,7 @@ import { useFav } from '../store';
 import { PLACEHOLDER, onImgError, discountOf } from './ProductCard';
 import Icon from './Icon';
 import ImageViewer from './ImageViewer';
+import { ContactCard } from './ContactSheet';
 import { frameStyle } from '../framing';
 import { colorOf } from '../colors';
 
@@ -241,6 +242,8 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
                   ))}
               </ul>
             )}
+
+            <ContactCard t={t} compact />
           </div>
         </div>
 

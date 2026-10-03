@@ -14,8 +14,8 @@ export const texts = {
     mainMenu: 'Asosiy menyu 👇',
     noOrders: 'Sizda hali buyurtma yo\'q.\n\nDo\'konni ochib, birinchi buyurtmangizni bering 🛍',
     yourOrders: '📦 *Sizning buyurtmalaringiz:*',
-    contact: (username) =>
-      `📞 *Aloqa*\n\nSavollaringiz bo'lsa yozing: @${username}\n\nIsh vaqti: har kuni 10:00 — 22:00 (KST)`,
+    contact: (phone) =>
+      `📞 *Biz bilan bog'laning*\n\nMahsulot, o'lcham, to'lov yoki yetkazib berish bo'yicha savollaringiz bo'lsa — bizga yozing, mutaxassisimiz tez orada javob beradi.\n\n📱 WhatsApp / Telegram: *${phone}*\n🕙 Har kuni 10:00 — 22:00 (Koreya vaqti)`,
     openShopHint: 'Do\'konni ochish uchun pastdagi tugmani bosing 👇',
     orderCreated: (o) =>
       `✅ *Buyurtmangiz qabul qilindi!*\n\n🧾 Buyurtma: *${o.orderNumber}*\n💰 Jami: *${money(o.total)}*\n\n💳 To'lov uchun:\n\`${o.bankAccount}\`\n${o.bankName} — ${o.bankHolder}\n\n⚠️ To'lovni amalga oshirib, chek rasmini yuboring. Tasdiqlangach, buyurtmangiz jo'natiladi 📦`,
@@ -28,9 +28,9 @@ export const texts = {
       }\n\n1-2 kun ichida yetib boradi.`,
     statusDELIVERED: (o) =>
       `🎉 *Buyurtmangiz yetkazildi!*\n\n🧾 ${o.orderNumber}\n\nXaridingiz muborak bo'lsin! Yana kutamiz 🖤`,
-    statusCANCELLED: (o) => `❌ Buyurtma ${o.orderNumber} bekor qilindi.\n\nSavollar uchun admin bilan bog'laning.`,
+    statusCANCELLED: (o) => `❌ Buyurtma ${o.orderNumber} bekor qilindi.\n\nSavollar bo'lsa: 010-5790-4777 (WhatsApp / Telegram).`,
     askQuestionBtn: '❓ Savol berish',
-    askQuestionText: "Savollaringiz bo'lsa — pastdagi tugma orqali administratorga yozing 👇",
+    askQuestionText: "Savollaringiz bo'lsa — WhatsApp yoki Telegram orqali yozing: *010-5790-4777* 👇",
   },
 
   ru: {
@@ -47,8 +47,8 @@ export const texts = {
     mainMenu: 'Главное меню 👇',
     noOrders: 'У вас пока нет заказов.\n\nОткройте магазин и сделайте первый заказ 🛍',
     yourOrders: '📦 *Ваши заказы:*',
-    contact: (username) =>
-      `📞 *Связь*\n\nПишите нам: @${username}\n\nРаботаем ежедневно 10:00 — 22:00 (KST)`,
+    contact: (phone) =>
+      `📞 *Связаться с нами*\n\nЕсть вопросы о товаре, размере, оплате или доставке? Напишите нам — специалист ответит в ближайшее время.\n\n📱 WhatsApp / Telegram: *${phone}*\n🕙 Ежедневно 10:00 — 22:00 (по Корее)`,
     openShopHint: 'Нажмите кнопку ниже, чтобы открыть магазин 👇',
     orderCreated: (o) =>
       `✅ *Заказ принят!*\n\n🧾 Заказ: *${o.orderNumber}*\n💰 Итого: *${money(o.total)}*\n\n💳 Для оплаты:\n\`${o.bankAccount}\`\n${o.bankName} — ${o.bankHolder}\n\n⚠️ Оплатите и отправьте скриншот чека. После подтверждения заказ будет отправлен 📦`,
@@ -59,9 +59,9 @@ export const texts = {
         o.trackingNumber ? `\n📮 Трек-номер: \`${o.trackingNumber}\`` : ''
       }\n\nДоставка 1-2 дня.`,
     statusDELIVERED: (o) => `🎉 *Заказ доставлен!*\n\n🧾 ${o.orderNumber}\n\nСпасибо за покупку! Ждём снова 🖤`,
-    statusCANCELLED: (o) => `❌ Заказ ${o.orderNumber} отменён.\n\nПо вопросам напишите администратору.`,
+    statusCANCELLED: (o) => `❌ Заказ ${o.orderNumber} отменён.\n\nПо вопросам: 010-5790-4777 (WhatsApp / Telegram).`,
     askQuestionBtn: '❓ Задать вопрос',
-    askQuestionText: 'Если есть вопросы — напишите администратору по кнопке ниже 👇',
+    askQuestionText: 'Есть вопросы — напишите в WhatsApp или Telegram: *010-5790-4777* 👇',
   },
 };
 

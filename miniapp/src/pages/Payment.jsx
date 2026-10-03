@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { money } from '../i18n';
 import api from '../api';
-import { haptic, closeApp, openLink, isTelegram } from '../telegram';
-import { SUPPORT_URL } from '../constants';
+import { haptic, closeApp, isTelegram } from '../telegram';
+import { openContact } from '../components/ContactSheet';
 import Icon from '../components/Icon';
 
 function SuccessMark() {
@@ -149,10 +149,7 @@ export default function Payment({ t, order, bank, onDone }) {
           type="button"
           className="link-btn"
           style={{ marginTop: 12 }}
-          onClick={() => {
-            haptic('light');
-            openLink(SUPPORT_URL);
-          }}
+          onClick={openContact}
         >
           <Icon name="chat" /> {t.supportAfterOrder}
         </button>

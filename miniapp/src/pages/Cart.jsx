@@ -6,6 +6,7 @@ import { PLACEHOLDER, onImgError } from '../components/ProductCard';
 import { frameStyle } from '../framing';
 import { colorOf } from '../colors';
 import Icon from '../components/Icon';
+import { ContactCard } from '../components/ContactSheet';
 
 function CartItem({ item, index, inc, dec, remove }) {
   const [leaving, setLeaving] = useState(false);
@@ -169,6 +170,8 @@ export default function Cart({
           <span>{money(total)}</span>
         </div>
       </div>
+
+      <ContactCard t={t} compact />
 
       {orderInBrowser && <div className="note">🌐 {t.orderInBrowserHint}</div>}
 

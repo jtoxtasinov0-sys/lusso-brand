@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import Icon from '../components/Icon';
 import ImageViewer from '../components/ImageViewer';
+import { ContactCard } from '../components/ContactSheet';
 import { onImgError } from '../components/ProductCard';
 import { haptic } from '../telegram';
 
@@ -171,6 +172,8 @@ export default function Catalog({
           ))}
         </div>
       )}
+
+      {!loading && <ContactCard t={t} />}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { money } from '../i18n';
 import api from '../api';
-import { haptic, openLink } from '../telegram';
-import { SUPPORT_URL } from '../constants';
+import { haptic } from '../telegram';
+import { openContact } from '../components/ContactSheet';
 import Icon from '../components/Icon';
 
 // 01012345678 → 010-1234-5678
@@ -216,10 +216,7 @@ export default function Checkout({ t, user, items, settings, onBack, onCreated }
           type="button"
           className="link-btn"
           style={{ marginTop: 12 }}
-          onClick={() => {
-            haptic('light');
-            openLink(SUPPORT_URL);
-          }}
+          onClick={openContact}
         >
           <Icon name="chat" /> {t.askQuestion}
         </button>

@@ -106,7 +106,7 @@ export const dict = {
     required: "To'ldiring",
     phoneBad: "Telefonni to'liq kiriting (010-XXXX-XXXX)",
     confirm: 'Tasdiqlash',
-    askQuestion: 'Savolingiz bormi? Administratorga yozing',
+    askQuestion: 'Savolingiz bormi? Biz bilan bog‘laning',
 
     // To'lov
     paySuccess: 'Buyurtma qabul qilindi',
@@ -123,7 +123,7 @@ export const dict = {
     laterPay: "Keyinroq to'layman",
     afterPayTg: "Chek tekshirilgach botga xabar keladi. Jo'natilganda kuzatuv raqami ham yuboriladi.",
     afterPayWeb: '«Profil → Buyurtmalarim» bo‘limida holatni va kuzatuv raqamini ko‘rasiz.',
-    supportAfterOrder: 'Savol bo‘lsa — administratorga yozing',
+    supportAfterOrder: 'Savol bo‘lsa — biz bilan bog‘laning',
 
     // Buyurtmalar
     myOrdersTitle: 'Buyurtmalarim',
@@ -142,7 +142,14 @@ export const dict = {
     welcomeMember: 'Xush kelibsiz!',
     myOrders: 'Buyurtmalarim',
     language: 'Til',
-    support: 'Administrator bilan aloqa',
+    support: 'Biz bilan bog‘laning',
+    contactTitle: 'Biz bilan bog‘laning',
+    contactText: 'Mahsulot, o‘lcham, to‘lov yoki yetkazib berish bo‘yicha savollaringiz bormi? Bizga yozing — mutaxassisimiz tez orada javob beradi.',
+    contactWrite: 'Xabar yozish',
+    contactCall: 'Qo‘ng‘iroq qilish',
+    contactHours: 'Har kuni 10:00 — 22:00 (Koreya vaqti)',
+    contactCardTitle: 'Savolingiz bormi?',
+    contactCardText: 'WhatsApp yoki Telegram orqali yozing — tez javob beramiz',
     deliveryInfo: 'Yetkazish · 택배',
     securePay: "To'lov",
 
@@ -253,7 +260,7 @@ export const dict = {
     required: 'Заполните это поле',
     phoneBad: 'Введите номер полностью (010-XXXX-XXXX)',
     confirm: 'Подтвердить',
-    askQuestion: 'Есть вопросы? Напишите администратору',
+    askQuestion: 'Есть вопросы? Свяжитесь с нами',
 
     paySuccess: 'Заказ принят',
     payText: 'Переведите на счёт ниже и загрузите скриншот чека',
@@ -269,7 +276,7 @@ export const dict = {
     laterPay: 'Оплачу позже',
     afterPayTg: 'После проверки чека придёт сообщение в бот. При отправке — трек-номер.',
     afterPayWeb: 'Статус и трек-номер смотрите в «Профиль → Мои заказы».',
-    supportAfterOrder: 'Есть вопросы — напишите администратору',
+    supportAfterOrder: 'Есть вопросы — свяжитесь с нами',
 
     myOrdersTitle: 'Мои заказы',
     noOrders: 'Заказов пока нет',
@@ -286,7 +293,14 @@ export const dict = {
     welcomeMember: 'Добро пожаловать!',
     myOrders: 'Мои заказы',
     language: 'Язык',
-    support: 'Связь с администратором',
+    support: 'Связаться с нами',
+    contactTitle: 'Связаться с нами',
+    contactText: 'Есть вопросы о товаре, размере, оплате или доставке? Напишите нам — специалист ответит в ближайшее время.',
+    contactWrite: 'Написать сообщение',
+    contactCall: 'Позвонить',
+    contactHours: 'Ежедневно 10:00 — 22:00 (по Корее)',
+    contactCardTitle: 'Остались вопросы?',
+    contactCardText: 'Напишите в WhatsApp или Telegram — быстро ответим',
     deliveryInfo: 'Доставка · 택배',
     securePay: 'Оплата',
 
