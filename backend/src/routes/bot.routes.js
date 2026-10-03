@@ -23,6 +23,8 @@ export function registerBotHandlers(bot) {
   bot.command('narxlar', onPricesCommand);
 
   bot.command('id', onIdCommand);
+  // Oddiy "id" deb yozilsa ham (slashsiz)
+  bot.hears(/^\s*(id|айди|ид)\s*[.!?]*\s*$/i, onIdCommand);
 
   bot.callbackQuery(/^lang:(uz|ru)$/, onLanguageChosen);
 
