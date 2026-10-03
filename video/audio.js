@@ -103,23 +103,49 @@ function swoosh(t0, dur, f0, f1, vel, p0 = 0.3, p1 = 0.7) {
     add(sfx, sfxVerb, i0 + k, s * (1 - pn) * 2, s * pn * 2, 0.5);
   }
 }
+// bosish: shisha "tik" + yumshoq past zarba + juda qisqa havo — premium UI ovozi
 function tap(t0, vel = 1) {
   const i0 = Math.round(t0 * SR);
-  for (let k = 0; k < 0.12 * SR; k++) {
+  for (let k = 0; k < 0.35 * SR; k++) {
     const t = k / SR;
-    const tick = Math.sin(TAU * 2600 * t) * Math.exp(-t * 170) * 0.3;
-    const body = Math.sin(TAU * (240 + 220 * Math.exp(-t * 60)) * t) * Math.exp(-t * 42) * 0.6;
-    const nz = rnd() * Math.exp(-t * 650) * 0.22;
-    const s = (tick + body + nz) * vel;
-    add(sfx, sfxVerb, i0 + k, s, s, 0.15);
+    const glass = (Math.sin(TAU * 3350 * t) * 0.5 + Math.sin(TAU * 5020 * t) * 0.28 + Math.sin(TAU * 7480 * t) * 0.12) * Math.exp(-t * 95);
+    const thump = Math.sin(TAU * (95 + 90 * Math.exp(-t * 45)) * t) * Math.exp(-t * 26) * 0.75;
+    const air = rnd() * Math.exp(-t * 380) * 0.12;
+    const s = (glass * 0.42 + thump + air) * vel * 0.8;
+    add(sfx, sfxVerb, i0 + k, s * 0.96, s * 1.04, 0.22);
   }
 }
-function key(t0, vel = 0.3) { // klaviatura "chiq"i
+// klaviatura: iOS'ga o'xshash yumshoq "chiq" (har harf ozgina farq qiladi)
+function key(t0, vel = 0.3) {
+  const i0 = Math.round(t0 * SR), f = 1700 + rnd() * 250;
+  let low = 0, band = 0; const fq = 2 * Math.sin(Math.PI * 4200 / SR);
+  for (let k = 0; k < 0.06 * SR; k++) {
+    const t = k / SR, x = rnd();
+    low += fq * band; const hp = x - low - 0.6 * band; band += fq * hp;
+    const s = (band * Math.exp(-t * 520) * 0.9 + Math.sin(TAU * f * t) * Math.exp(-t * 260) * 0.35) * vel;
+    add(sfx, sfxVerb, i0 + k, s, s, 0.06);
+  }
+}
+// kamera yaqinlashuvi: havo "whoosh" + yengil past to'lqin
+function zoomIn(t0, vel = 1) {
+  swoosh(t0, 0.85, 220, 2400, 0.085 * vel, 0.35, 0.65);
   const i0 = Math.round(t0 * SR);
-  for (let k = 0; k < 0.05 * SR; k++) {
-    const t = k / SR;
-    const s = (rnd() * Math.exp(-t * 900) * 0.6 + Math.sin(TAU * 1900 * t) * Math.exp(-t * 220) * 0.4) * vel;
+  for (let k = 0; k < 0.9 * SR; k++) {
+    const t = k / SR, u = t / 0.9;
+    const s = Math.sin(TAU * (55 + 25 * u) * t) * Math.sin(Math.PI * u) * 0.05 * vel;
     add(sfx, null, i0 + k, s, s, 0);
+  }
+}
+function zoomOut(t0) { swoosh(t0, 0.9, 2000, 260, 0.06, 0.65, 0.35); }
+// qizil ramka chiqqanda — nozik yaltirash
+function ting(t0) { pluck(sfx, sfxVerb, t0, 100, 0.016, 0.6, 0.4, 5, 1.0); pluck(sfx, sfxVerb, t0 + 0.05, 107, 0.009, 0.4, 0.3, 6, 1.0); }
+// intro: telefon joyiga tushganda chuqur, yumshoq zarba
+function boom(t0, vel = 1) {
+  let ph = 0; const i0 = Math.round(t0 * SR);
+  for (let k = 0; k < 1.6 * SR; k++) {
+    const t = k / SR; ph += TAU * (38 + 30 * Math.exp(-t * 6)) / SR;
+    const s = Math.sin(ph) * Math.exp(-t * 2.6) * 0.38 * vel;
+    add(sfx, sfxVerb, i0 + k, s, s, 0.25);
   }
 }
 function pop(t0, vel = 1) {
@@ -183,19 +209,25 @@ CH.forEach(([b, notes], bar) => {
 });
 
 /* ---------------- voqealarga effektlar ---------------- */
-swoosh(0.45, 1.3, 180, 2200, 0.3); // telefon pastdan chiqadi
-(EV.heads || []).forEach((t) => swoosh(t - 0.1, 0.8, 600, 3500, 0.14, 0.6, 0.4));
-(EV.steps || []).forEach((t, j) => pluck(sfx, sfxVerb, t + 0.05, [84, 86, 89, 91, 93, 96, 98, 101][j % 8], 0.04, 0.5, 0.3, 4, 0.8));
+swoosh(0.35, 1.5, 160, 2000, 0.22);  // telefon ko'tariladi
+boom(1.75, 0.9);                       // postamentga "o'rnashadi"
+(EV.heads || []).forEach((t) => swoosh(t - 0.1, 0.9, 500, 3200, 0.1, 0.6, 0.4));
+(EV.steps || []).forEach((t, j) => pluck(sfx, sfxVerb, t + 0.05, [84, 86, 89, 91, 93, 96, 98, 101][j % 8], 0.03, 0.5, 0.25, 4, 0.9));
+(EV.zin || []).forEach((t) => zoomIn(t));
+(EV.zout || []).forEach((t) => zoomOut(t));
+(EV.hls || []).forEach((t) => ting(t + 0.05));
 (EV.taps || []).forEach((t) => tap(t));
 (EV.keys || []).forEach((t) => key(t));
-(EV.up || []).forEach((t) => swoosh(t - 0.05, 0.55, 260, 2600, 0.22));
-(EV.down || []).forEach((t) => swoosh(t - 0.05, 0.6, 2600, 300, 0.2));
-(EV.load || []).forEach((t) => swoosh(t, 1.0, 400, 1800, 0.08));
-(EV.opens || []).forEach((t) => { swoosh(t - 0.05, 0.8, 300, 5000, 0.26); chime(t + 0.5, [80, 87], 0.09, 0.05); });
-(EV.pops || []).forEach((t) => { pop(t); chime(t + 0.02, [81, 88], 0.08, 0.07); });
-(EV.saves || []).forEach((t) => chime(t, [77, 81, 84, 89], 0.07, 0.07));
-chime(EV.done, [73, 77, 80, 84, 85, 89], 0.085, 0.065); // "tayyor" yaltirashi
-swoosh(EV.done - 0.1, 0.9, 500, 3000, 0.12, 0.4, 0.6);
+(EV.up || []).forEach((t) => { swoosh(t - 0.05, 0.55, 260, 2600, 0.15); tap(t + 0.42, 0.25); });
+(EV.down || []).forEach((t) => swoosh(t - 0.05, 0.7, 2600, 260, 0.15));
+(EV.opens || []).forEach((t) => { swoosh(t - 0.05, 0.9, 260, 4800, 0.2); chime(t + 0.45, [80, 84, 87, 92], 0.07, 0.04); });
+(EV.pops || []).forEach((t) => { pop(t, 0.8); chime(t + 0.02, [81, 88, 93], 0.07, 0.055); });
+(EV.saves || []).forEach((t) => chime(t, [77, 81, 84, 89, 93], 0.065, 0.06));
+// yakun: yumshoq akkord "gullashi" + yaltirash
+[61, 65, 68, 72, 77].forEach((m) => pad(EV.done - 0.2, 3.2, m, 0.45));
+chime(EV.done, [73, 77, 80, 84, 85, 89, 92], 0.08, 0.055);
+swoosh(EV.done - 0.1, 1.0, 500, 3000, 0.1, 0.4, 0.6);
+boom(EV.done - 0.05, 0.55);
 
 /* ---------------- reverb (Freeverb-lite) ---------------- */
 function reverb(src, room, damp) {

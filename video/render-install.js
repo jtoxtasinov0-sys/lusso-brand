@@ -22,7 +22,7 @@ fs.mkdirSync(BUILD, { recursive: true });
   const N = Math.round(D * FPS);
   const silent = path.join(BUILD, `silent-${DEV}.mp4`);
   const ff = spawn('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS), silent], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', '30', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = 0; f < N; f++) {
     await p.evaluate((t) => render(t), f / FPS);
     const buf = await p.screenshot({ type: 'jpeg', quality: 94 });

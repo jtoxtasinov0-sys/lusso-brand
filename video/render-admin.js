@@ -226,7 +226,7 @@ async function dryRun(browser) {
   const frames = SNAP ? [...Array(Math.round(Math.max(...SNAP) * FPS) + 1).keys()] : [...Array(N).keys()];
   const silent = path.join(BUILD, 'silent-admin.mp4');
   const ff = SNAP ? null : spawn('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS), silent], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', '30', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
   const SC = SCROLL.map((s) => ({ t0: s[0], t1: s[1], f: s[2], y: s[3], from: null, to: null }));
   let cur = null;
 

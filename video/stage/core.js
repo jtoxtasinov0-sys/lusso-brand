@@ -9,6 +9,7 @@ const E = {
   in: (x) => x * x * x,
   io: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
   sine: (x) => -(Math.cos(Math.PI * x) - 1) / 2,
+  smooth: (x) => x * x * x * (x * (x * 6 - 15) + 10), // kvintik — boshi va oxiri juda yumshoq
   back: (x) => { const c1 = 1.6, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
 };
 const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -186,32 +187,34 @@ function measureTaps(sceneRender) {
 }
 
 /* kamera: har bir bosishda tugmaga yaqinlashadi, keyin uzoqlashadi */
-let CAMKF = null;
+let CAMKF = null, CAMEV = { zin: [], zout: [] };
 function buildCamera() {
   const wins = CFG.taps.filter((tp) => tp.zoom !== 0).map((tp) => ({
     t0: tp.press - (tp.lead ?? 0.45), t1: tp.press + (tp.hold ?? 0.55), x: tp.zx ?? tp.cx, y: tp.zy ?? tp.cy, s: tp.zoom || 1.55,
   })).concat(CFG.cam || []).sort((a, b) => a.t0 - b.t0);
   const kf = [[0, { x: 236, y: 500, s: 1 }]];
-  const IN = 0.6, OUT = 0.75;
+  const IN = 0.85, OUT = 0.95, CREEP = 1.035; // ushlab turganda kamera sekin ichkariga suriladi
+  CAMEV = { zin: [], zout: [] };
   wins.forEach((w, i) => {
     const prev = wins[i - 1];
+    const prevEnd = prev && { x: prev.x, y: prev.y, s: prev.s * CREEP };
     if (prev && w.t0 - IN - prev.t1 < OUT * 0.9) {
       // keyingi nishon yaqin — uzoqlashmasdan to'g'ridan-to'g'ri suriladi
-      const mid = Math.max(prev.t1 + 0.05, Math.min(w.t0 - 0.35, prev.t1 + 0.25));
-      kf.push([mid, { ...prev }]);
+      CAMEV.zin.push(prev.t1);
     } else {
-      if (prev) kf.push([prev.t1 + OUT, { x: prev.x, y: prev.y, s: 1 }]);
+      if (prev) { kf.push([prev.t1 + OUT, { x: prev.x, y: prev.y, s: 1 }]); CAMEV.zout.push(prev.t1); }
       kf.push([w.t0 - IN, { x: w.x, y: w.y, s: 1 }]);
+      CAMEV.zin.push(w.t0 - IN);
     }
-    kf.push([w.t0, w]); kf.push([w.t1, w]);
+    kf.push([w.t0, w]); kf.push([w.t1, { x: w.x, y: w.y, s: w.s * CREEP }]);
   });
   const last = wins[wins.length - 1];
-  if (last) kf.push([last.t1 + OUT, { x: last.x, y: last.y, s: 1 }]);
+  if (last) { kf.push([last.t1 + OUT, { x: last.x, y: last.y, s: 1 }]); CAMEV.zout.push(last.t1); }
   // vaqt bo'yicha tartiblangan, takrorlanmagan
   CAMKF = kf.filter((k, i) => i === 0 || k[0] > kf[i - 1][0]);
 }
 function camAt(t) {
-  const f = (key) => K(t, CAMKF.map((k) => [k[0], k[1][key]]), E.sine);
+  const f = (key) => K(t, CAMKF.map((k) => [k[0], k[1][key]]), E.smooth);
   return { x: f('x'), y: f('y'), s: f('s') };
 }
 
@@ -262,14 +265,16 @@ function renderCore(t, extra = {}) {
   const fg = { op: 0, x: 0, y: 0, sc: 1, r: [[0, 0], [0, 0]] };
   C.taps.forEach((tp) => {
     if (!tp.r || tp.finger === false) return;
-    const show = tp.show || [tp.press - 1.1, tp.press + 0.6];
+    const show = tp.show || [tp.press - 1.25, tp.press + 0.7];
     if (t < show[0] - 0.01 || t > show[1] + 0.01) return;
     const fx = tp.cx + (tp.fx ?? 70), fy = tp.cy + (tp.fy ?? 180);
-    const m = P(t, show[0], tp.press - 0.2, E.io);
-    fg.op = W(t, show[0], show[1], 0.25); fg.x = L(fx, tp.cx, m); fg.y = L(fy, tp.cy, m);
+    const m = P(t, show[0], tp.press - 0.18, E.smooth);
+    // barmoq to'g'ri chiziqda emas, yengil yoy bo'ylab keladi (tabiiyroq)
+    const arc = Math.sin(m * Math.PI) * 34;
+    fg.op = W(t, show[0], show[1], 0.32); fg.x = L(fx, tp.cx, m) - arc; fg.y = L(fy, tp.cy, m) + arc * 0.3;
     const d = t - tp.press;
-    if (d > -0.15 && d < 0.25) fg.sc = 1 - 0.24 * Math.sin(cl((d + 0.15) / 0.4) * Math.PI);
-    [0, 0.14].forEach((o, j) => { const e = d - o; if (e >= 0 && e < 0.75) fg.r[j] = [L(0.5, 2.7, E.out(e / 0.75)), (1 - e / 0.75) * 0.95]; });
+    if (d > -0.16 && d < 0.3) fg.sc = 1 - 0.2 * Math.sin(E.sine(cl((d + 0.16) / 0.46)) * Math.PI);
+    [0, 0.13].forEach((o, j) => { const e = d - o; if (e >= 0 && e < 0.9) fg.r[j] = [L(0.55, 2.8, E.out(e / 0.9)), Math.pow(1 - e / 0.9, 1.6) * 0.95]; });
   });
   if (extra.finger) Object.assign(fg, extra.finger);
   const F = $('#finger');
@@ -295,7 +300,7 @@ function renderCore(t, extra = {}) {
   const caps = $$('.cblock');
   caps.forEach((el, k) => {
     const s = steps[k] + 0.05, e = (k + 1 < caps.length ? steps[k + 1] : OUTRO) - 0.05;
-    const w = W(t, s, e, 0.35), inP = P(t, s, s + 0.5, E.out);
+    const w = W(t, s, e, 0.45), inP = P(t, s, s + 0.7, E.smooth);
     st(el, { opacity: w, transform: `translateY(${(1 - inP) * 26}px)`, visibility: w > 0 ? 'visible' : 'hidden' });
   });
   let cur = -1;
@@ -319,6 +324,8 @@ function baseEvents() {
     heads: [C.steps[0] - 0.1, C.outro + 0.3],
     done: C.outro + 0.15,
     keys: [], up: [], down: [], pops: [], opens: [],
+    zin: CAMEV.zin.filter((x) => x > 0.5), zout: CAMEV.zout,
+    hls: C.taps.filter((tp) => tp.hl).map((tp) => tp.hl[0]),
   };
 }
 

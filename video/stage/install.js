@@ -7,27 +7,29 @@ const URL_TEXT = 'lusso-miniapp.vercel.app';
 const APP_BG = '#f9f5ec'; // do'kon yuqori qismining rangi (status bar ostida)
 
 /* ---------------- vaqt jadvali ---------------- */
-const T = { s: [4.4, 11.2, 13.9, 16.9, 20.6], outro: 25.2, dur: 30.2 };
+const T = { s: [4.4, 8.2, 11.0, 14.0, 17.7], outro: 22.4, dur: 27.4 };
 const S = T.s;
+const OFF = -50; // manzil yozish bosqichi yo'q: sayt brauzerda allaqachon ochiq turadi
 const TL = {
-  toBrowser: [S[0] + 0.1, S[0] + 0.55],
-  urlTap: S[0] + 1.5,
-  kbUp: [S[0] + 1.65, S[0] + 1.95],
-  type: { t0: S[0] + 2.1, t1: S[0] + 4.2, text: URL_TEXT },
-  goTap: S[0] + 4.7,
-  load: [S[0] + 4.8, S[0] + 6.0],
-  splash: [S[0] + 4.95, S[0] + 5.85],
+  toBrowser: [S[0] + 0.1, S[0] + 0.7],
+  urlShow: S[0] + 1.6,
+  urlTap: OFF,
+  kbUp: [OFF, OFF + 0.1],
+  type: { t0: OFF + 0.2, t1: OFF + 0.4, text: URL_TEXT },
+  goTap: OFF + 0.5,
+  load: [OFF + 0.5, OFF + 0.6],
+  splash: [OFF + 0.5, OFF + 0.6],
   menuTap: S[1] + 1.4,
-  menuUp: [S[1] + 1.55, S[1] + 2.05],
+  menuUp: [S[1] + 1.55, S[1] + 2.1],
   rowTap: S[2] + 1.5,
-  dlgUp: [S[2] + 1.9, S[2] + 2.4],
-  addTap: S[3] + 1.3,
-  dlgDown: [S[3] + 1.6, S[3] + 2.0],
-  toHome: [S[3] + 1.8, S[3] + 2.4],
-  pop: [S[3] + 2.6, S[3] + 3.2],
+  dlgUp: [S[2] + 1.9, S[2] + 2.45],
+  addTap: S[3] + 1.4,
+  dlgDown: [S[3] + 1.7, S[3] + 2.15],
+  toHome: [S[3] + 1.9, S[3] + 2.6],
+  pop: [S[3] + 2.75, S[3] + 3.35],
   iconTap: S[4] + 1.4,
-  open: [S[4] + 1.55, S[4] + 2.15],
-  appIn: [S[4] + 2.9, S[4] + 3.3],
+  open: [S[4] + 1.55, S[4] + 2.25],
+  appIn: [S[4] + 2.9, S[4] + 3.35],
 };
 
 /* ---------------- uy ekrani ikonalari (brendsiz, ruscha nomlar) ---------------- */
@@ -233,13 +235,13 @@ const HEADS = [
   { t: 'Hammasi tayyor!', a: 'LUSSO endi', b: '<span class="serif">ekraningizda</span>' },
 ];
 const CAPS = DEV === 'ios' ? [
-  { m: 'Safari’da saytni oching', s: URL_TEXT },
+  { m: 'Safari’da saytni oching', s: `${URL_TEXT} — sayt ochiq turibdi` },
   { m: 'Pastdagi <q>Ulashish</q> tugmasini bosing', s: 'kvadrat ichida yuqoriga strelka' },
   { m: '<q>Добавить на экран «Домой»</q>', s: 'ya’ni «Bosh ekranga qo‘shish»' },
   { m: 'Yuqoridagi <q>Добавить</q> ni bosing', s: 'ya’ni «Qo‘shish»' },
   { m: 'Bosh ekrandagi <q>LUSSO</q> belgisini bosing', s: 'do‘kon ilova kabi to‘liq ekranda ochiladi' },
 ] : [
-  { m: 'Chrome’da saytni oching', s: URL_TEXT },
+  { m: 'Chrome’da saytni oching', s: `${URL_TEXT} — sayt ochiq turibdi` },
   { m: 'Yuqori o‘ngdagi <q>⋮</q> ni bosing', s: 'uchta nuqta — Chrome menyusi' },
   { m: '<q>Добавить на главный экран</q>', s: 'ya’ni «Bosh ekranga qo‘shish»' },
   { m: '<q>Установить</q> ni bosing', s: 'ya’ni «O‘rnatish»' },
@@ -248,15 +250,14 @@ const CAPS = DEV === 'ios' ? [
 
 /* ---------------- bosishlar (barmoq + qizil ramka + kamera) ---------------- */
 const TAPS = [
-  { el: '#url', press: TL.urlTap, hl: [S[0] + 0.7, TL.urlTap + 0.15], zoom: 1.6, pad: 5 },
-  { el: '#kb .k[data-c="enter"]', press: TL.goTap, show: [TL.goTap - 0.9, TL.goTap + 0.3], hl: [TL.type.t1 + 0.05, TL.goTap + 0.12], zoom: 1.55, pad: 4, rad: 10, lead: 0.4 },
-  { el: DEV === 'ios' ? '#share' : '#dots3', press: TL.menuTap, hl: [S[1] + 0.4, TL.menuTap + 0.15], zoom: 1.75, pad: 10, rad: 14 },
-  { el: '#row', press: TL.rowTap, hl: [S[2] + 0.4, TL.rowTap + 0.2], zoom: 1.55, pad: 3, rad: DEV === 'ios' ? 14 : 10 },
-  { el: '#addBtn', press: TL.addTap, hl: [S[3] + 0.3, TL.addTap + 0.15], zoom: 1.7, pad: 5, rad: DEV === 'ios' ? 12 : 26 },
-  { el: '#hIcon i', press: TL.iconTap, hl: [S[4] + 0.4, TL.iconTap + 0.15], zoom: 1.6, pad: 6, rad: DEV === 'ios' ? 22 : 44 },
+  // 1-qadam: bosish yo'q — kamera manzil qatoriga yaqinlashib, sayt ochiq ekanini ko'rsatadi
+  { el: '#url', press: TL.urlShow, hl: [S[0] + 0.9, S[1] - 0.4], zoom: 1.55, pad: 5, finger: false, sound: false, lead: 0.5, hold: 1.4 },
+  { el: DEV === 'ios' ? '#share' : '#dots3', press: TL.menuTap, hl: [S[1] + 0.4, TL.menuTap + 0.15], zoom: 1.7, pad: 10, rad: 14 },
+  { el: '#row', press: TL.rowTap, hl: [S[2] + 0.4, TL.rowTap + 0.2], zoom: 1.5, pad: 3, rad: DEV === 'ios' ? 14 : 10 },
+  { el: '#addBtn', press: TL.addTap, hl: [S[3] + 0.3, TL.addTap + 0.15], zoom: 1.6, pad: 5, rad: DEV === 'ios' ? 12 : 26 },
+  { el: '#hIcon i', press: TL.iconTap, hl: [S[4] + 0.4, TL.iconTap + 0.15], zoom: 1.55, pad: 6, rad: DEV === 'ios' ? 22 : 44 },
 ];
-// yozish paytida kamera manzil qatori + klaviaturaga biroz yaqin turadi
-const CAM = [{ t0: TL.type.t0 - 0.2, t1: TL.type.t1 - 0.25, x: 236, y: DEV === 'ios' ? 700 : 501, s: DEV === 'ios' ? 1.22 : 1.06 }];
+const CAM = [];
 
 /* ---------------- kadr ---------------- */
 function render(t) {
@@ -352,12 +353,10 @@ function render(t) {
   measureTaps(render);
   // ovoz voqealari
   const ev = baseEvents();
-  ev.keys = keyTimes(TL.type);
-  ev.up = [TL.menuUp[0], TL.dlgUp[0], TL.kbUp[0]];
+  ev.up = [TL.menuUp[0], TL.dlgUp[0]];
   ev.down = [TL.toHome[0]];
   ev.pops = [TL.pop[0] + 0.15];
   ev.opens = [TL.open[0]];
-  ev.load = [TL.load[0]];
   window.EVENTS = ev;
   window.DURATION = T.dur;
   window.render = render;
