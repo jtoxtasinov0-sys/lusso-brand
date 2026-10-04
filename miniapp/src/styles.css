@@ -3788,3 +3788,20 @@ body::before {
   height: 18px;
   color: var(--gold);
 }
+
+/* --- To'lov kartasi: belgilangan yozuvlar oq rangda (yaxshi o'qilishi uchun) --- */
+.bank-card .bank-top b.gold-text {
+  background: none;
+  -webkit-text-fill-color: #fff;
+  color: #fff;
+}
+
+.bank-card .bank-meta {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.bank-card .copy:not(.ok) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+}
