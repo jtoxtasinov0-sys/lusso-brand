@@ -8,6 +8,7 @@ import registerBotHandlers from './routes/bot.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import { ensureDecants } from './core/decants.js';
+import { renameCategories } from './core/categoryNames.js';
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use((err, req, res, next) => {
 async function start() {
   await connectDatabase();
   await ensureDecants();
+  await renameCategories();
 
   app.listen(config.port, () => {
     console.log('');

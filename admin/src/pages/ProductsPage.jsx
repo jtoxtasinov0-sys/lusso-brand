@@ -357,7 +357,7 @@ export default function ProductsPage({ toast }) {
             <label className="label">
               O'lcham / variantlar va zaxira
               <button className="btn sm light" style={{ marginLeft: 8 }} onClick={() => applyPreset(SHOE_PRESET)}>
-                👟 Oyoq kiyim o'lchamlari
+                👟 Krasofka o'lchamlari
               </button>{' '}
               <button className="btn sm light" onClick={() => applyPreset(ML_PRESET)}>
                 🧴 30/50/100ml
@@ -379,7 +379,7 @@ export default function ProductsPage({ toast }) {
                   }));
                 }}
               >
-                💧 Quyma 10/20ml
+                🧪 Gramli 10/20ml
               </button>
             </label>
 

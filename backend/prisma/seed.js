@@ -11,8 +11,8 @@ const st = (id) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&
 const SHOE_SIZES = ['240', '245', '250', '255', '260', '265', '270', '275', '280', '285'];
 
 const categories = [
-  { slug: 'shoes', nameUz: 'Oyoq kiyim', nameRu: 'Обувь', emoji: '👟', sortOrder: 1 },
-  { slug: 'glasses', nameUz: "Ko'zoynak", nameRu: 'Очки', emoji: '🕶', sortOrder: 2 },
+  { slug: 'shoes', nameUz: 'Krasofkalar', nameRu: 'Кроссовки', emoji: '👟', sortOrder: 1 },
+  { slug: 'glasses', nameUz: 'Ochkilar', nameRu: 'Очки', emoji: '😎', sortOrder: 2 },
   { slug: 'perfume', nameUz: 'Atirlar', nameRu: 'Парфюм', emoji: '🧴', sortOrder: 3 },
 ];
 

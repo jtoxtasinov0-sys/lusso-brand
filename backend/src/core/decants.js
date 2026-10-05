@@ -18,9 +18,9 @@ const STOCK = 50;
 
 const CATEGORY = {
   slug: DECANT_SLUG,
-  nameUz: 'Quyma atirlar',
+  nameUz: 'Gramli Atirlar',
   nameRu: 'Разливные духи',
-  emoji: '💧',
+  emoji: '🧪',
   sortOrder: 4,
   imageUrl: img('idish-10ml'),
   gallery: [

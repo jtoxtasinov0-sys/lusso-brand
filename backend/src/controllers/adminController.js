@@ -176,7 +176,16 @@ export async function createCategory(req, res) {
 }
 
 export async function updateCategory(req, res) {
-  res.json(await SettingModel.updateCategory(req.params.id, req.body));
+  // Faqat tahrirlanadigan maydonlar — id, _count va h.k. bazaga yuborilmaydi
+  const data = {};
+  for (const key of ['slug', 'nameUz', 'nameRu', 'emoji', 'sortOrder']) {
+    if (req.body[key] !== undefined) data[key] = req.body[key];
+  }
+  try {
+    res.json(await SettingModel.updateCategory(req.params.id, data));
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 }
 
 export async function deleteCategory(req, res) {

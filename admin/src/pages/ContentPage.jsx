@@ -18,6 +18,9 @@ export default function ContentPage({ toast }) {
   const [pickQuery, setPickQuery] = useState('');
 
   const [cat, setCat] = useState({ slug: '', nameUz: '', nameRu: '', emoji: '' });
+  // Tahrirlanayotgan kategoriya
+  const [editId, setEditId] = useState(null);
+  const [editCat, setEditCat] = useState({ emoji: '', nameUz: '', nameRu: '' });
 
   const load = () => {
     api.stories().then(setStories).catch((e) => toast(e.message, true));
@@ -86,6 +89,27 @@ export default function ContentPage({ toast }) {
       await api.createCategory({ ...cat, nameRu: cat.nameRu || cat.nameUz });
       toast("Kategoriya qo'shildi ✅");
       setCat({ slug: '', nameUz: '', nameRu: '', emoji: '' });
+      load();
+    } catch (e) {
+      toast(e.message, true);
+    }
+  };
+
+  const startEdit = (c) => {
+    setEditId(c.id);
+    setEditCat({ emoji: c.emoji || '', nameUz: c.nameUz || '', nameRu: c.nameRu || '' });
+  };
+
+  const saveCategory = async () => {
+    if (!editCat.nameUz.trim()) return toast('Nomini kiriting', true);
+    try {
+      await api.updateCategory(editId, {
+        emoji: editCat.emoji.trim(),
+        nameUz: editCat.nameUz.trim(),
+        nameRu: editCat.nameRu.trim() || editCat.nameUz.trim(),
+      });
+      toast('Kategoriya saqlandi ✅');
+      setEditId(null);
       load();
     } catch (e) {
       toast(e.message, true);
@@ -203,17 +227,56 @@ export default function ContentPage({ toast }) {
         <div className="card">
           <h3 style={{ margin: '0 0 14px', fontSize: 16 }}>🗂 Kategoriyalar</h3>
 
-          {categories.map((c) => (
-            <div className="info-row" key={c.id}>
-              <span style={{ color: 'var(--text)' }}>
-                {c.emoji} {c.nameUz}{' '}
-                <span className="muted">({c._count?.products ?? 0} ta mahsulot)</span>
-              </span>
-              <button className="btn sm danger" onClick={() => delCategory(c.id)}>
-                🗑
-              </button>
-            </div>
-          ))}
+          {categories.map((c) =>
+            editId === c.id ? (
+              <div key={c.id} style={{ padding: '10px 0', borderBottom: '1px solid var(--line)' }}>
+                <div className="grid-2">
+                  <input
+                    className="input"
+                    placeholder="Emoji"
+                    value={editCat.emoji}
+                    onChange={(e) => setEditCat({ ...editCat, emoji: e.target.value })}
+                  />
+                  <input
+                    className="input"
+                    placeholder="Nomi (uz)"
+                    value={editCat.nameUz}
+                    onChange={(e) => setEditCat({ ...editCat, nameUz: e.target.value })}
+                  />
+                </div>
+                <input
+                  className="input"
+                  style={{ marginTop: 10 }}
+                  placeholder="Название (ru)"
+                  value={editCat.nameRu}
+                  onChange={(e) => setEditCat({ ...editCat, nameRu: e.target.value })}
+                />
+                <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                  <button className="btn sm" style={{ flex: 1 }} onClick={saveCategory}>
+                    💾 Saqlash
+                  </button>
+                  <button className="btn sm light" style={{ flex: 1 }} onClick={() => setEditId(null)}>
+                    Bekor qilish
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="info-row" key={c.id}>
+                <span style={{ color: 'var(--text)' }}>
+                  {c.emoji} {c.nameUz}{' '}
+                  <span className="muted">({c._count?.products ?? 0} ta mahsulot)</span>
+                </span>
+                <span style={{ display: 'flex', gap: 6 }}>
+                  <button className="btn sm light" onClick={() => startEdit(c)}>
+                    ✏️
+                  </button>
+                  <button className="btn sm danger" onClick={() => delCategory(c.id)}>
+                    🗑
+                  </button>
+                </span>
+              </div>
+            )
+          )}
 
           <div className="grid-2" style={{ marginTop: 16 }}>
             <input

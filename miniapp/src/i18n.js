@@ -57,7 +57,7 @@ export const dict = {
 
     // Katalog
     all: 'Hammasi',
-    catalogSub: 'Oyoq kiyim, ko‘zoynak va atirlar',
+    catalogSub: 'Krasofkalar, ochkilar va atirlar',
     search: 'Brend yoki model nomi…',
     allBrands: 'Barcha brendlar',
     sortDefault: 'Tavsiya',
@@ -214,7 +214,7 @@ export const dict = {
     storyShop: 'За покупками',
 
     all: 'Все',
-    catalogSub: 'Обувь, очки и парфюм',
+    catalogSub: 'Кроссовки, очки и парфюм',
     search: 'Бренд или модель…',
     allBrands: 'Все бренды',
     sortDefault: 'Рекомендуем',
