@@ -32,7 +32,7 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
   const available = inStock(product);
   const fav = useFav((s) => s.ids.includes(product.id));
   const toggleFav = useFav((s) => s.toggle);
-  const showStock = useApp((s) => s.settings?.showStock);
+  const stockVisible = useApp((s) => s.settings?.stockVisible);
   const total = stockTotal(product);
 
   const [ready, setReady] = useState(false);
@@ -106,7 +106,7 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
         <span className="price-new">{money(product.price)}</span>
         {discount > 0 && <span className="price-old">{money(product.oldPrice)}</span>}
       </div>
-      {showStock && available && total !== null && (
+      {stockVisible && available && total !== null && (
         <div className={`card-stock ${total <= 3 ? 'low' : ''}`}>{t.inStockCount(total)}</div>
       )}
       {showVariants &&

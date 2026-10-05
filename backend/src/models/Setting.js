@@ -15,7 +15,7 @@ const PUBLIC_FIELDS = [
   'aboutUz',
   'aboutRu',
   'isOpen',
-  'showStock',
+  'stockVisible',
 ];
 
 export const SettingModel = {
@@ -64,13 +64,13 @@ export const SettingModel = {
       'aboutUz',
       'aboutRu',
       'isOpen',
-      'showStock',
+      'stockVisible',
     ];
     const clean = {};
     for (const key of allowed) {
       if (data[key] === undefined) continue;
       if (key === 'deliveryFee' || key === 'freeDeliveryFrom') clean[key] = Number(data[key]) || 0;
-      else if (key === 'isOpen' || key === 'showStock') clean[key] = Boolean(data[key]);
+      else if (key === 'isOpen' || key === 'stockVisible') clean[key] = Boolean(data[key]);
       else if (key === 'panelPassword') clean[key] = String(data[key]).trim();
       else clean[key] = String(data[key]);
     }

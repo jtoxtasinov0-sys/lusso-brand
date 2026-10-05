@@ -74,10 +74,10 @@ export default function StockPage({ toast }) {
   };
 
   const toggleShow = async () => {
-    const showStock = !settings?.showStock;
+    const stockVisible = !settings?.stockVisible;
     try {
-      setSettings(await api.updateSettings({ showStock }));
-      toast(showStock ? "Mijozlarga qoldiq ko'rsatiladi ✅" : 'Qoldiq mijozlardan yashirildi');
+      setSettings(await api.updateSettings({ stockVisible }));
+      toast(stockVisible ? "Mijozlarga qoldiq ko'rsatiladi ✅" : 'Qoldiq mijozlardan yashirildi');
     } catch (e) {
       toast(e.message, true);
     }
@@ -107,7 +107,7 @@ export default function StockPage({ toast }) {
 
         {settings && (
           <label className="stock-toggle">
-            <input type="checkbox" checked={Boolean(settings.showStock)} onChange={toggleShow} />
+            <input type="checkbox" checked={Boolean(settings.stockVisible)} onChange={toggleShow} />
             <span>Mijozlarga nechta qolgani ko'rinsin</span>
           </label>
         )}

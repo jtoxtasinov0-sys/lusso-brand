@@ -34,7 +34,7 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
 
   const fav = useFav((s) => s.ids.includes(product.id));
   const toggleFav = useFav((s) => s.toggle);
-  const showStock = useApp((s) => s.settings?.showStock);
+  const stockVisible = useApp((s) => s.settings?.stockVisible);
 
   const name = lang === 'ru' ? product.nameRu : product.nameUz;
   const desc = (lang === 'ru' ? product.descRu : product.descUz) || '';
@@ -225,7 +225,7 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
                   })}
                 </div>
 
-                {showStock ? (
+                {stockVisible &&
                   (() => {
                     // Variant tanlangan bo'lsa — o'shaning qoldig'i, bo'lmasa jami
                     const n = variant ? variant.stock : stockTotal(product);
@@ -235,12 +235,7 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
                     ) : (
                       <div className="stock-hint calm">📦 {t.inStockCount(n)}</div>
                     );
-                  })()
-                ) : (
-                  variant &&
-                  variant.stock > 0 &&
-                  variant.stock <= 3 && <div className="stock-hint">⚡ {t.onlyLeft(variant.stock)}</div>
-                )}
+                  })()}
               </div>
             )}
 
