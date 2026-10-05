@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { money } from '../i18n';
 import { haptic } from '../telegram';
-import { useFav } from '../store';
-import { PLACEHOLDER, onImgError, discountOf } from './ProductCard';
+import { useApp, useFav } from '../store';
+import { PLACEHOLDER, onImgError, discountOf, stockTotal } from './ProductCard';
 import Icon from './Icon';
 import ImageViewer from './ImageViewer';
 import { ContactCard } from './ContactSheet';
@@ -34,6 +34,7 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
 
   const fav = useFav((s) => s.ids.includes(product.id));
   const toggleFav = useFav((s) => s.toggle);
+  const showStock = useApp((s) => s.settings?.showStock);
 
   const name = lang === 'ru' ? product.nameRu : product.nameUz;
   const desc = (lang === 'ru' ? product.descRu : product.descUz) || '';
@@ -224,10 +225,21 @@ export default function ProductSheet({ product, lang, t, onClose, onAdd }) {
                   })}
                 </div>
 
-                {variant && variant.stock > 0 && variant.stock <= 3 && (
-                  <div className="stock-hint">
-                    ⚡ {t.onlyLeft(variant.stock)}
-                  </div>
+                {showStock ? (
+                  (() => {
+                    // Variant tanlangan bo'lsa — o'shaning qoldig'i, bo'lmasa jami
+                    const n = variant ? variant.stock : stockTotal(product);
+                    if (n <= 0) return null;
+                    return n <= 3 ? (
+                      <div className="stock-hint">⚡ {t.onlyLeft(n)}</div>
+                    ) : (
+                      <div className="stock-hint calm">📦 {t.inStockCount(n)}</div>
+                    );
+                  })()
+                ) : (
+                  variant &&
+                  variant.stock > 0 &&
+                  variant.stock <= 3 && <div className="stock-hint">⚡ {t.onlyLeft(variant.stock)}</div>
                 )}
               </div>
             )}

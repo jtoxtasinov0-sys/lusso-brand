@@ -41,6 +41,9 @@ router.post('/products', admin.createProduct);
 router.put('/products/:id', admin.updateProduct);
 router.delete('/products/:id', admin.deleteProduct);
 
+// Ombor (qoldiqlar)
+router.put('/stock', admin.updateStock);
+
 // Kategoriyalar
 router.get('/categories', admin.listCategories);
 router.post('/categories', admin.createCategory);

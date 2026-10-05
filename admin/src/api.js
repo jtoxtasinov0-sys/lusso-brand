@@ -97,6 +97,8 @@ export const api = {
   updateProduct: (id, data) => request(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteProduct: (id) => request(`/products/${id}`, { method: 'DELETE' }),
 
+  updateStock: (items) => request('/stock', { method: 'PUT', body: JSON.stringify({ items }) }),
+
   categories: () => request('/categories'),
   createCategory: (data) => request('/categories', { method: 'POST', body: JSON.stringify(data) }),
   updateCategory: (id, data) => request(`/categories/${id}`, { method: 'PUT', body: JSON.stringify(data) }),

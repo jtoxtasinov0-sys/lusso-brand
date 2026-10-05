@@ -1536,3 +1536,147 @@ textarea.input {
     height: 56px;
   }
 }
+
+/* ============ OMBOR ============ */
+.stock-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: center;
+}
+
+.stock-summary b {
+  display: block;
+  font-size: 22px;
+}
+
+.stock-summary span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.stock-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stock-toggle input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--gold-dark);
+}
+
+.stock-card {
+  padding-top: 14px;
+  padding-bottom: 8px;
+}
+
+.stock-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.stock-head img,
+.stock-noimg {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--gold-soft);
+  display: grid;
+  place-items: center;
+}
+
+.stock-head b {
+  display: block;
+  font-size: 14px;
+}
+
+.stock-head .muted {
+  font-size: 12px;
+}
+
+.stock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+
+.stock-row.changed .stock-label::after {
+  content: ' •';
+  color: var(--gold-dark);
+}
+
+.stock-label {
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.stock-page > .card + .card {
+  margin-top: 12px;
+}
+
+.stock-page.has-save {
+  padding-bottom: 80px;
+}
+
+.stock-ctrl .btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 18px;
+}
+
+.stock-ctrl .input {
+  width: 64px;
+  height: 36px;
+  padding: 0 6px;
+  text-align: center;
+}
+
+.stock-save {
+  position: sticky;
+  bottom: 12px;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  padding: 10px;
+  margin-top: 12px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+}
+
+@media (max-width: 640px) {
+  .stock-save {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+}

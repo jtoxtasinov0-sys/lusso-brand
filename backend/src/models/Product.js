@@ -180,6 +180,17 @@ export const ProductModel = {
     return problems;
   },
 
+  // Ombor: bir nechta variant qoldig'ini birdaniga yangilash
+  async setStock(items) {
+    const clean = (Array.isArray(items) ? items : [])
+      .map((i) => ({ id: Number(i.id), stock: Math.max(0, Math.floor(Number(i.stock) || 0)) }))
+      .filter((i) => i.id);
+    await prisma.$transaction(
+      clean.map((i) => prisma.productVariant.update({ where: { id: i.id }, data: { stock: i.stock } }))
+    );
+    return clean.length;
+  },
+
   async lowStock(limit = 3) {
     return prisma.productVariant.findMany({
       where: { stock: { lte: limit } },

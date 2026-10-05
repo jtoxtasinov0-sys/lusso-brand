@@ -28,6 +28,7 @@ export const dict = {
     chooseOption: 'Variant',
     sizeGuide: "O'lcham jadvali",
     onlyLeft: (n) => `Faqat ${n} ta qoldi`,
+    inStockCount: (n) => `Omborda ${n} ta bor`,
     selectFirst: "Avval o'lchamni tanlang",
     selectOptionFirst: 'Avval variantni tanlang',
 
@@ -187,6 +188,7 @@ export const dict = {
     chooseOption: 'Вариант',
     sizeGuide: 'Таблица размеров',
     onlyLeft: (n) => `Осталось всего ${n} шт.`,
+    inStockCount: (n) => `В наличии ${n} шт.`,
     selectFirst: 'Сначала выберите размер',
     selectOptionFirst: 'Сначала выберите вариант',
 

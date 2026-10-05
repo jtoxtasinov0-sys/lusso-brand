@@ -3805,3 +3805,20 @@ body::before {
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.4);
 }
+
+/* Omborda nechta qolgani (admin "Ombor"da yoqilgan bo'lsa) */
+.stock-hint.calm {
+  color: var(--muted);
+  animation: none;
+}
+
+.card-stock {
+  margin-top: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.card-stock.low {
+  color: #d9822b;
+}

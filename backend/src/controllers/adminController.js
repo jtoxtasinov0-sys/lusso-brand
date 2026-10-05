@@ -157,6 +157,15 @@ export async function deleteProduct(req, res) {
   res.json({ ok: true });
 }
 
+// Ombor: variantlar qoldig'ini yangilash — [{ id, stock }]
+export async function updateStock(req, res) {
+  try {
+    res.json({ updated: await ProductModel.setStock(req.body.items) });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
 // ---------------- KATEGORIYALAR ----------------
 export async function listCategories(req, res) {
   res.json(

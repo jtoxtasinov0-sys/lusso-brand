@@ -177,4 +177,5 @@ model Setting {
   aboutUz         String @default("LUSSO BRAND KR — Koreyadagi erkaklar uchun original oyoq kiyim, ko'zoynak va atirlar do'koni.")
   aboutRu         String @default("LUSSO BRAND KR — магазин мужской обуви, очков и парфюма в Корее.")
   isOpen          Boolean @default(true)
+  showStock       Boolean @default(true) // mijozlarga omborda nechta qolgani ko'rinsinmi
 }

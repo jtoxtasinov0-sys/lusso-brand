@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { money } from '../i18n';
 import { haptic } from '../telegram';
-import { useFav } from '../store';
+import { useApp, useFav } from '../store';
 import Icon from './Icon';
 import { frameStyle } from '../framing';
 import { colorOf } from '../colors';
@@ -21,6 +21,10 @@ export const discountOf = (p) =>
 
 export const inStock = (p) => !p.variants?.length || p.variants.some((v) => v.stock > 0);
 
+// Barcha variantlardagi jami qoldiq (variant bo'lmasa — null)
+export const stockTotal = (p) =>
+  p.variants?.length ? p.variants.reduce((s, v) => s + Math.max(0, v.stock), 0) : null;
+
 export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, index = 0 }) {
   const name = lang === 'ru' ? product.nameRu : product.nameUz;
   const img = product.images?.[0]?.url || PLACEHOLDER;
@@ -28,6 +32,8 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
   const available = inStock(product);
   const fav = useFav((s) => s.ids.includes(product.id));
   const toggleFav = useFav((s) => s.toggle);
+  const showStock = useApp((s) => s.settings?.showStock);
+  const total = stockTotal(product);
 
   const [ready, setReady] = useState(false);
   const [added, setAdded] = useState(false);
@@ -100,6 +106,9 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
         <span className="price-new">{money(product.price)}</span>
         {discount > 0 && <span className="price-old">{money(product.oldPrice)}</span>}
       </div>
+      {showStock && available && total !== null && (
+        <div className={`card-stock ${total <= 3 ? 'low' : ''}`}>{t.inStockCount(total)}</div>
+      )}
       {showVariants &&
         (dots.length ? (
           <div className="swatches">

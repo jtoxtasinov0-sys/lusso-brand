@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import OrdersPage from './pages/OrdersPage';
 import ProductsPage from './pages/ProductsPage';
 import ContentPage from './pages/ContentPage';
+import StockPage from './pages/StockPage';
 import UsersPage from './pages/UsersPage';
 import BroadcastPage from './pages/BroadcastPage';
 import SettingsPage from './pages/SettingsPage';
@@ -15,6 +16,7 @@ const MENU = [
   { key: 'dashboard', icon: '📊', label: 'Boshqaruv' },
   { key: 'orders', icon: '📦', label: 'Buyurtmalar' },
   { key: 'products', icon: '🛍', label: 'Mahsulotlar' },
+  { key: 'stock', icon: '🏬', label: 'Ombor' },
   { key: 'content', icon: '📸', label: 'Story / Kategoriya' },
   { key: 'users', icon: '👥', label: 'Mijozlar' },
   { key: 'broadcast', icon: '📢', label: 'Rassilka' },
@@ -100,6 +102,7 @@ export default function App() {
         {page === 'dashboard' && <Dashboard {...props} onGoSettings={() => setPage('settings')} />}
         {page === 'orders' && <OrdersPage {...props} onCountChange={setPending} />}
         {page === 'products' && <ProductsPage {...props} />}
+        {page === 'stock' && <StockPage {...props} />}
         {page === 'content' && <ContentPage {...props} />}
         {page === 'users' && <UsersPage {...props} />}
         {page === 'broadcast' && <BroadcastPage {...props} />}
