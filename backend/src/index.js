@@ -8,6 +8,7 @@ import registerBotHandlers from './routes/bot.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import { serveFromDatabase } from './middlewares/upload.middleware.js';
+import { loadStoredUploads } from './core/uploads.js';
 import { ensureDecants } from './core/decants.js';
 import { renameCategories } from './core/categoryNames.js';
 
@@ -45,6 +46,7 @@ app.use((err, req, res, next) => {
 
 async function start() {
   await connectDatabase();
+  await loadStoredUploads();
   await ensureDecants();
   await renameCategories();
 

@@ -120,13 +120,12 @@ xizmat kerak emas.
 > limit esa 750 soat. Ikkinchi servis qo'shsangiz limit yetmay qoladi —
 > o'shanda `PUBLIC_URL` ni bo'shatib qo'ying yoki Render'ning $7/oy tarifiga o'ting.
 
-**2. Yuklangan rasmlar o'chib ketadi.** Render'da disk vaqtinchalik: har
-deploy'da `backend/uploads` boshlang'ich holatiga qaytadi. Repo'dagi 23 ta
-mahsulot rasmi saqlanib qoladi, lekin **admin paneldan keyin yuklagan
-rasmlaringiz yo'qoladi**.
-
-Yechim: Render Disk (pullik) yoki rasmlarni Cloudinary / Supabase Storage kabi
-tashqi xizmatga yuklash.
+**2. Disk vaqtinchalik.** Render'da har deploy/qayta ishga tushishda
+`backend/uploads` boshlang'ich holatiga qaytadi. Shuning uchun admin paneldan
+yuklangan rasmlar bazaga (`UploadedFile` jadvali) ham yoziladi va diskda
+bo'lmasa bazadan beriladi — ular endi yo'qolmaydi. Bundan oldin yuklanib,
+o'chib ketgan rasmlar mijozlarga ko'rsatilmaydi; ularni admin paneldan qayta
+yuklash kerak.
 
 ---
 

@@ -27,7 +27,10 @@ export const stockTotal = (p) =>
 
 export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, index = 0 }) {
   const name = lang === 'ru' ? product.nameRu : product.nameUz;
-  const img = product.images?.[0]?.url || PLACEHOLDER;
+  const urls = (product.images || []).map((i) => i.url).filter(Boolean);
+  // Rasm ochilmasa — mahsulotning keyingi rasmi ko'rsatiladi
+  const [imgIndex, setImgIndex] = useState(0);
+  const img = urls[imgIndex] || PLACEHOLDER;
   const discount = discountOf(product);
   const available = inStock(product);
   const fav = useFav((s) => s.ids.includes(product.id));
@@ -57,6 +60,7 @@ export default function ProductCard({ product, lang, t, onOpen, onQuickAdd, inde
           className={ready ? 'loaded' : ''}
           onLoad={() => setReady(true)}
           onError={(e) => {
+            if (imgIndex < urls.length - 1) return setImgIndex(imgIndex + 1);
             onImgError(e);
             setReady(true);
           }}

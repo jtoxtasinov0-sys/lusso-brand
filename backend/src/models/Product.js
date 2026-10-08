@@ -1,5 +1,6 @@
 // Mahsulotlar bilan ishlash (Prisma logikasi)
 import prisma from '../database/connection.js';
+import { withLiveImages } from '../core/uploads.js';
 
 // Faqat to'g'ri HEX rang (#rgb / #rrggbb) saqlanadi
 const cleanColor = (c) => (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(String(c || '').trim()) ? String(c).trim() : null);
@@ -30,11 +31,13 @@ export const ProductModel = {
     if (sort === 'price_desc') orderBy = [{ price: 'desc' }];
     if (sort === 'new') orderBy = [{ createdAt: 'desc' }];
 
-    return prisma.product.findMany({ where, include: withRelations, orderBy });
+    const products = await prisma.product.findMany({ where, include: withRelations, orderBy });
+    return products.map(withLiveImages);
   },
 
   async byId(id) {
-    return prisma.product.findUnique({ where: { id: Number(id) }, include: withRelations });
+    const product = await prisma.product.findUnique({ where: { id: Number(id) }, include: withRelations });
+    return product && withLiveImages(product);
   },
 
   async brands() {
@@ -84,7 +87,7 @@ export const ProductModel = {
     });
 
     const rank = new Map(topIds.map((id, i) => [id, i]));
-    return products.sort((a, b) => rank.get(a.id) - rank.get(b.id));
+    return products.map(withLiveImages).sort((a, b) => rank.get(a.id) - rank.get(b.id));
   },
 
   // ---------------- ADMIN ----------------

@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import config from '../config/default.js';
 import prisma from '../database/connection.js';
+import { rememberUpload } from '../core/uploads.js';
 
 if (!fs.existsSync(config.uploadsDir)) fs.mkdirSync(config.uploadsDir, { recursive: true });
 
@@ -33,6 +34,7 @@ async function saveToDatabase(req, res, next) {
     await prisma.uploadedFile.create({
       data: { name: req.file.filename, mime: req.file.mimetype, data },
     });
+    rememberUpload(req.file.filename);
     next();
   } catch (err) {
     next(err);
