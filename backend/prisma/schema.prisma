@@ -87,6 +87,16 @@ model ProductImage {
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
+// Yuklangan rasmlar (mahsulot, story, chek). Render bepul tarifida disk
+// vaqtinchalik — server qayta ishga tushganda fayllar o'chib ketadi, shuning
+// uchun asl nusxa bazada saqlanadi, disk faqat kesh sifatida ishlatiladi.
+model UploadedFile {
+  name      String   @id // "1712345678-123456.jpg" — /uploads/<name>
+  mime      String
+  data      Bytes
+  createdAt DateTime @default(now())
+}
+
 // O'lcham / hajm + zaxira
 model ProductVariant {
   id         Int    @id @default(autoincrement())

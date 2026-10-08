@@ -7,6 +7,7 @@ import bot, { hasBot } from './core/bot.js';
 import registerBotHandlers from './routes/bot.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import { serveFromDatabase } from './middlewares/upload.middleware.js';
 import { ensureDecants } from './core/decants.js';
 import { renameCategories } from './core/categoryNames.js';
 
@@ -21,6 +22,8 @@ app.use(express.json({ limit: '5mb' }));
 // Rasmlar kamdan-kam o'zgaradi — brauzer va Vercel ularni saqlab qolsin,
 // shunda ilova ikkinchi marta ochilganda rasmlar qayta yuklanmaydi
 app.use('/uploads', express.static(config.uploadsDir, { maxAge: '30d' }));
+// Server qayta ishga tushib diskdagi fayl o'chgan bo'lsa — bazadan olinadi
+app.get('/uploads/:name', serveFromDatabase);
 
 app.get('/', (req, res) => {
   res.json({

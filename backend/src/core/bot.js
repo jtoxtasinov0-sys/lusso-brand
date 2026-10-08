@@ -64,6 +64,9 @@ export function toPhoto(photo) {
   if (typeof photo === 'string' && photo.startsWith('/uploads/')) {
     const filePath = path.join(config.uploadsDir, photo.replace('/uploads/', ''));
     if (fs.existsSync(filePath)) return new InputFile(filePath);
+    // Diskda yo'q (server qayta ishga tushgan) — Telegram rasmni serverdan
+    // o'zi oladi, server esa uni bazadan beradi
+    if (config.publicUrl.startsWith('https://')) return config.publicUrl + photo;
   }
   return photo;
 }
